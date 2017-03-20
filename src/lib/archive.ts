@@ -8,7 +8,7 @@ const debug = require('debug')('build:archive');
 
 import { tmpFile, spawnAsync } from './util';
 
-export async function extract(archive: string, dest: string = dirname(archive)) {
+async function extract(archive: string, dest: string = dirname(archive)) {
 
     debug('in extract', 'archive', archive);
     debug('in extract', 'dest', dest);
@@ -27,7 +27,7 @@ export async function extract(archive: string, dest: string = dirname(archive)) 
 
 }
 
-export async function extractTarGz(archive: string, dest: string = dirname(archive)) {
+async function extractTarGz(archive: string, dest: string = dirname(archive)) {
 
     await extract(archive, dest);
 
@@ -36,6 +36,24 @@ export async function extractTarGz(archive: string, dest: string = dirname(archi
     await extract(tar, dest);
 
     await removeAsync(tar);
+
+    return dest;
+
+}
+
+export async function extractGeneric(archive: string, dest: string = dirname(archive)) {
+
+    if(archive.endsWith('.zip')) {
+        await extract(archive, dest);
+    }
+    else if(archive.endsWith('tar.gz')) {
+        await extractTarGz(archive, dest);
+    }
+    else {
+        throw new Error('ERROR_UNKNOWN_EXTENSION');
+    }
+
+    return dest;
 
 }
 

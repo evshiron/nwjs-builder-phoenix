@@ -9,7 +9,7 @@ const debug = require('debug')('build:runner');
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './BuildConfig';
-import { extract, extractTarGz } from './archive';
+import { extractGeneric } from './archive';
 import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync } from './util';
 
 interface IRunnerOptions {
@@ -76,25 +76,7 @@ export class Runner {
             });
         }
 
-        const archivePath = await downloader.fetch();
-
-        const { path: runtimeDir, cleanup } = await tmpDir();
-
-        if(!this.options.mute) {
-            console.info('Extracting NW.js binary...', {
-                runtimeDir,
-            });
-        }
-
-        if(archivePath.endsWith('.zip')) {
-            await extract(archivePath, runtimeDir);
-        }
-        else if(archivePath.endsWith('tar.gz')) {
-            await extractTarGz(archivePath, runtimeDir);
-        }
-        else {
-            throw new Error('ERROR_UNKNOWN_EXTENSION');
-        }
+        const runtimeDir = await downloader.fetchAndExtract();
 
         if(config.ffmpegIntegration) {
             await this.integrateFFmpeg(platform, arch, runtimeDir, pkg, config);
@@ -111,8 +93,6 @@ export class Runner {
         const { code, signal } = await spawnAsync(executable, this.args, {
             detached: this.options.detached,
         });
-
-        cleanup();
 
         if(!this.options.mute) {
             if(this.options.detached) {
@@ -150,22 +130,7 @@ export class Runner {
             });
         }
 
-        const path = await downloader.fetch();
-
-        const { path: ffmpegDir, cleanup } = await tmpDir();
-
-        if(!this.options.mute) {
-            console.info('Extracting FFmpeg prebuilt...', {
-                ffmpegDir,
-            });
-        }
-
-        if(path.endsWith('.zip')) {
-            await extract(path, ffmpegDir);
-        }
-        else {
-            throw new Error('ERROR_UNKNOWN_EXTENSION');
-        }
+        const ffmpegDir = await downloader.fetchAndExtract();
 
         const src = await findFFmpeg(platform, ffmpegDir);
         const dest = await findFFmpeg(platform, runtimeDir);

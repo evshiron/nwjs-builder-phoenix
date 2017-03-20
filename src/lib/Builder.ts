@@ -10,7 +10,7 @@ const plist = require('plist');
 
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
-import { extract, extractTarGz, compress } from './archive';
+import { extractGeneric, compress } from './archive';
 import { BuildConfig } from './BuildConfig';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, cpAsync } from './util';
 
@@ -330,22 +330,7 @@ export class Builder {
             });
         }
 
-        const archivePath = await downloader.fetch();
-
-        const { path: ffmpegDir, cleanup } = await tmpDir();
-
-        if(!this.options.mute) {
-            console.info('Extracting FFmpeg prebuilt...', {
-                ffmpegDir,
-            });
-        }
-
-        if(archivePath.endsWith('.zip')) {
-            await extract(archivePath, ffmpegDir);
-        }
-        else {
-            throw new Error('ERROR_UNKNOWN_EXTENSION');
-        }
+        const ffmpegDir = await downloader.fetchAndExtract();
 
         const src = await findFFmpeg(platform, ffmpegDir);
         const dest = await findFFmpeg(platform, runtimeDir);
@@ -446,25 +431,7 @@ export class Builder {
             });
         }
 
-        const path = await downloader.fetch();
-
-        const { path: runtimeDir, cleanup } = await tmpDir();
-
-        if(!this.options.mute) {
-            console.info('Extracting NW.js binary...', {
-                runtimeDir,
-            });
-        }
-
-        if(path.endsWith('.zip')) {
-            await extract(path, runtimeDir);
-        }
-        else if(path.endsWith('tar.gz')) {
-            await extractTarGz(path, runtimeDir);
-        }
-        else {
-            throw new Error('ERROR_UNKNOWN_EXTENSION');
-        }
+        const runtimeDir = await downloader.fetchAndExtract();
 
         if(config.ffmpegIntegration) {
             await this.integrateFFmpeg(platform, arch, runtimeDir, pkg, config);
@@ -490,8 +457,6 @@ export class Builder {
                 throw new Error('ERROR_UNKNOWN_TARGET');
             }
         }
-
-        cleanup();
 
         if(!this.options.mute) {
             console.info(`Building for ${ platform }, ${ arch } ends.`);

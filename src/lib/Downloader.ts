@@ -1,31 +1,10 @@
 
-import { dirname, basename, join, resolve } from 'path';
-
-import * as request from 'request';
-import * as ProgressBar from 'progress';
-import { ensureDirSync, exists, writeFile } from 'fs-extra-promise';
+import { dirname, basename, resolve } from 'path';
 
 const debug = require('debug')('build:downloader');
-const progress = require('request-progress');
 
-import { Event } from './Event';
+import { DownloaderBase } from './DownloaderBase';
 import { mergeOptions } from './util';
-
-const DIR_CACHES = resolve(dirname(module.filename), '..', '..', 'caches');
-ensureDirSync(DIR_CACHES);
-
-interface IRequestProgress {
-    percent: number;
-    speed: number;
-    size: {
-        total: number,
-        transferred: number,
-    };
-    time: {
-        elapsed: number,
-        remaining: number,
-    };
-}
 
 interface IDownloaderOptions {
     platform?: string;
@@ -37,7 +16,7 @@ interface IDownloaderOptions {
     showProgress?: boolean;
 }
 
-export class Downloader {
+export class Downloader extends DownloaderBase {
 
     public static DEFAULT_OPTIONS: IDownloaderOptions = {
         platform: process.platform,
@@ -49,13 +28,10 @@ export class Downloader {
         showProgress: true,
     };
 
-    public onProgress: Event<IRequestProgress> = new Event('progress');
-
     public options: IDownloaderOptions;
 
-    private destination: string = DIR_CACHES;
-
     constructor(options: IDownloaderOptions) {
+        super();
 
         this.options = mergeOptions(Downloader.DEFAULT_OPTIONS, options);
 
@@ -79,7 +55,7 @@ export class Downloader {
 
         const url = `${ mirror }/${ partVersion }/nwjs${ partFlavor }-${ partVersion }-${ partPlatform }-${ partArch }.${ partExtension }`;
         const filename = basename(url);
-        const path = join(this.destination, filename);
+        const path = resolve(this.destination, filename);
 
         debug('in fetch', 'url', url);
         debug('in fetch', 'filename', filename);
@@ -91,53 +67,6 @@ export class Downloader {
 
         return path;
 
-    }
-
-    protected handlePlatform(platform: string) {
-
-        switch(platform) {
-        case 'win32':
-        case 'win':
-            return 'win';
-        case 'darwin':
-        case 'osx':
-        case 'mac':
-            return 'osx';
-        case 'linux':
-            return 'linux';
-        default:
-            throw new Error('ERROR_UNKNOWN_PLATFORM');
-        }
-
-    }
-
-    protected handleArch(arch: string) {
-
-        switch(arch) {
-        case 'x86':
-        case 'ia32':
-            return 'ia32';
-        case 'x64':
-            return 'x64';
-        default:
-            throw new Error('ERROR_UNKNOWN_PLATFORM');
-        }
-
-    }
-
-    protected getVersions(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            request('https://nwjs.io/versions.json', (err, res, body) => {
-
-                if(err) {
-                    return reject(err);
-                }
-
-                const json = JSON.parse(body);
-                resolve(json);
-
-            });
-        });
     }
 
     protected async handleVersion(version: string) {
@@ -168,82 +97,6 @@ export class Downloader {
         default:
             throw new Error('ERROR_UNKNOWN_PLATFORM');
         }
-
-    }
-
-    protected setDestination(destination: string) {
-        this.destination = destination;
-    }
-
-    protected isFileExists(path: string) {
-        return new Promise((resolve, reject) => {
-            exists(path, resolve);
-        });
-    }
-
-    protected async download(url: string, filename: string, path: string, showProgress: boolean) {
-
-        let bar: ProgressBar = null;
-
-        const onProgress = (state: IRequestProgress) => {
-
-            if(!state.size.total) {
-                return;
-            }
-
-            if(!bar) {
-                bar = new ProgressBar('[:bar] :speedKB/s :etas', {
-                    width: 50,
-                    total: state.size.total,
-                });
-                console.info('');
-            }
-
-            bar.update(state.size.transferred / state.size.total, {
-                speed: (state.speed / 1000).toFixed(2),
-            });
-
-        };
-
-        if(showProgress) {
-            this.onProgress.subscribe(onProgress);
-        }
-
-        debug('in download', 'start downloading', filename);
-
-        await new Promise((resolve, reject) => {
-            progress(request(url, {
-                encoding: null,
-            }, (err, res, data) => {
-
-                if(err) {
-                    return reject(err);
-                }
-
-                if(res.statusCode != 200) {
-                    const e = new Error(`ERROR_STATUS_CODE statusCode = ${ res.statusCode }`);
-                    return reject(e);
-                }
-
-                writeFile(path, data, err => err ? reject(err) : resolve());
-
-            }))
-            .on('progress', (state: IRequestProgress) => {
-                this.onProgress.trigger(state);
-            });
-        });
-
-        debug('in fetch', 'end downloading', filename);
-
-        if(showProgress) {
-            this.onProgress.unsubscribe(onProgress);
-            if(bar) {
-                console.info('');
-                bar.terminate();
-            }
-        }
-
-        return path;
 
     }
 
