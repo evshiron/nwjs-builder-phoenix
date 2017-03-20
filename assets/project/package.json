@@ -1,0 +1,32 @@
+{
+  "name": "project",
+  "version": "0.1.0",
+  "description": "description",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "build --mac --x64 --mirror https://npm.taobao.org/mirrors/nwjs/ ."
+  },
+  "author": "evshiron",
+  "license": "MIT",
+  "build": {
+    "nwVersion": "lts",
+    "targets": [
+      "zip"
+    ],
+    "win": {
+      "versionStrings": {
+        "ProductName": "Project",
+        "LegalCopyright": "copyright"
+      }
+    },
+    "mac": {
+      "displayName": "Project",
+      "copyright": "copyright"
+    }
+  },
+  "devDependencies": {
+    "nwjs-builder-phoenix": "github:evshiron/nwjs-builder-phoenix",
+    "typescript": "^2.2.1"
+  }
+}
