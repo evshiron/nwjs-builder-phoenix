@@ -3,7 +3,7 @@
 
 Options can be defined in the `package.json` of the project under `build` property, see an [example](../assets/project/package.json).
 
-## build <- [BuildConfig](../src/lib/buildConfig.ts)
+## build <- [BuildConfig](../src/lib/BuildConfig.ts)
 
 Name | Type | Description
 --- | --- | ---
@@ -17,7 +17,7 @@ excludes | string[] | Glob patterns for excluded files. Defaults to `[]`.
 appId | string | App identity URI. Defaults to `io.github.nwjs.${ name }`.
 ffmpegIntegration | boolean | Whether to integrate `iteufel/nwjs-ffmpeg-prebuilt`. If `true`, you can NOT use symbols in `nwVersion`. Defaults to `false`.
 
-## build.win <- [WinConfig](../src/lib/winConfig.ts)
+## build.win <- [WinConfig](../src/lib/WinConfig.ts)
 
 Name | Type | Description
 --- | --- | ---
@@ -26,7 +26,7 @@ fileVersion | string | File version. Defaults to `${ productVersion }`
 versionStrings | { [key: string]: string } | `rcedit` version strings. Defaults to `{ ProductName: "${ name }", FileDescription: "${ description }" }`.
 icon | string | .ico icon file. Defaults to `undefined`.
 
-## build.mac <- [MacConfig](../src/lib/macConfig.ts)
+## build.mac <- [MacConfig](../src/lib/MacConfig.ts)
 
 Name | Type | Description
 --- | --- | ---
@@ -37,6 +37,6 @@ description | string | Description in `InfoPlist.strings`. Defaults to `${ descr
 copyright | string | Copyright in `InfoPlist.strings`. Defaults to `""`.
 icon | string | .icns icon file. Defaults to `undefined`.
 
-## build.linux <- [LinuxConfig](../src/lib/linuxConfig.ts)
+## build.linux <- [LinuxConfig](../src/lib/LinuxConfig.ts)
 
 Currently noop.
