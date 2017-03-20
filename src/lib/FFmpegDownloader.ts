@@ -73,16 +73,17 @@ export class FFmpegDownloader extends DownloaderBase {
         debug('in fetch', 'filename', filename);
         debug('in fetch', 'path', path);
 
-        if(!(await this.isFileExists(path))) {
-            await this.download(url, filename, path, showProgress);
+        if(await this.isFileExists(path) && await this.isFileSynced(url, path)) {
+            return path;
         }
+
+        await this.download(url, filename, path, showProgress);
 
         return path;
 
     }
 
     protected async handleVersion(version: string) {
-
         switch(version) {
         case 'lts':
         case 'stable':
@@ -91,7 +92,6 @@ export class FFmpegDownloader extends DownloaderBase {
         default:
             return version[0] == 'v' ? version.slice(1) : version;
         }
-
     }
 
 }

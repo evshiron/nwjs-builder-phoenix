@@ -3,7 +3,7 @@ import { dirname, basename, resolve } from 'path';
 
 import * as request from 'request';
 import * as ProgressBar from 'progress';
-import { ensureDirSync, exists, writeFile } from 'fs-extra-promise';
+import { ensureDirSync, exists, lstatAsync, writeFile } from 'fs-extra-promise';
 
 const debug = require('debug')('build:downloader');
 const progress = require('request-progress');
@@ -100,10 +100,35 @@ export abstract class DownloaderBase {
 
     }
 
+    protected getLocalSize(path: string): Promise<number> {
+        return lstatAsync(path)
+        .then(stat => stat.size);
+    }
+
+    protected getRemoteSize(url: string): Promise<number> {
+        return new Promise((resolve, reject) => {
+            request.head(url)
+            .on('error', reject)
+            .on('response', res => resolve(parseInt(res.headers['content-length'], 10)));
+        });
+    }
+
     protected isFileExists(path: string) {
         return new Promise((resolve, reject) => {
             exists(path, resolve);
         });
+    }
+
+    protected async isFileSynced(url: string, path: string) {
+
+        const localSize = await this.getLocalSize(path);
+        const remoteSize = await this.getRemoteSize(url);
+
+        debug('in isFileSynced', 'localSize', localSize);
+        debug('in isFileSynced', 'remoteSize', remoteSize);
+
+        return localSize == remoteSize;
+
     }
 
     protected async download(url: string, filename: string, path: string, showProgress: boolean) {

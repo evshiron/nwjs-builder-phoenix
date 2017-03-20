@@ -61,9 +61,11 @@ export class Downloader extends DownloaderBase {
         debug('in fetch', 'filename', filename);
         debug('in fetch', 'path', path);
 
-        if(!(await this.isFileExists(path))) {
-            await this.download(url, filename, path, showProgress);
+        if(await this.isFileExists(path) && await this.isFileSynced(url, path)) {
+            return path;
         }
+
+        await this.download(url, filename, path, showProgress);
 
         return path;
 
@@ -83,7 +85,6 @@ export class Downloader extends DownloaderBase {
     }
 
     protected extensionByPlatform(platform: string) {
-
         switch(platform) {
         case 'win32':
         case 'win':
@@ -97,7 +98,6 @@ export class Downloader extends DownloaderBase {
         default:
             throw new Error('ERROR_UNKNOWN_PLATFORM');
         }
-
     }
 
 }
