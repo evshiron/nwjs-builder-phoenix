@@ -64,7 +64,9 @@ export async function compress(dir: string, files: string[], type: string, archi
     debug('in compress', 'type', type);
     debug('in compress', 'archive', archive);
 
-    const { path: listfiles, cleanup } = await tmpFile();
+    const { path: listfiles } = await tmpFile({
+        discardDescriptor: true,
+    });
 
     debug('in compress', 'listfiles', listfiles);
 
@@ -73,8 +75,6 @@ export async function compress(dir: string, files: string[], type: string, archi
     const { code, signal } = await spawnAsync(path7za, [ 'a', `-t${ type }`, resolve(archive), `@${ resolve(listfiles) }` ], {
         cwd: dir,
     });
-
-    cleanup();
 
     return code;
 
