@@ -8,12 +8,18 @@ const debug = require('debug')('build:archive');
 
 import { tmpFile, spawnAsync } from './util';
 
-async function extract(archive: string, dest: string = dirname(archive)) {
+interface IExtractOptions {
+    overwrite: boolean;
+}
+
+async function extract(archive: string, dest: string = dirname(archive), options: IExtractOptions = {
+    overwrite: false,
+}) {
 
     debug('in extract', 'archive', archive);
     debug('in extract', 'dest', dest);
 
-    const { code, signal } = await spawnAsync(path7za, [ 'x', '-y', `-o${ resolve(dest) }`, resolve(archive) ]);
+    const { code, signal } = await spawnAsync(path7za, [ 'x', '-y', `-ao${ options.overwrite ? 'a' : 's' }`, `-o${ resolve(dest) }`, resolve(archive) ]);
 
     if(code == 2) {
         throw new Error(`ERROR_PATH_NOT_FOUND path = ${ archive }`);
@@ -27,7 +33,9 @@ async function extract(archive: string, dest: string = dirname(archive)) {
 
 }
 
-async function extractTarGz(archive: string, dest: string = dirname(archive)) {
+async function extractTarGz(archive: string, dest: string = dirname(archive), options: IExtractOptions = {
+    overwrite: false,
+}) {
 
     await extract(archive, dest);
 
@@ -41,13 +49,15 @@ async function extractTarGz(archive: string, dest: string = dirname(archive)) {
 
 }
 
-export async function extractGeneric(archive: string, dest: string = dirname(archive)) {
+export async function extractGeneric(archive: string, dest: string = dirname(archive), options: IExtractOptions = {
+    overwrite: false,
+}) {
 
     if(archive.endsWith('.zip')) {
-        await extract(archive, dest);
+        await extract(archive, dest, options);
     }
     else if(archive.endsWith('tar.gz')) {
-        await extractTarGz(archive, dest);
+        await extractTarGz(archive, dest, options);
     }
     else {
         throw new Error('ERROR_UNKNOWN_EXTENSION');

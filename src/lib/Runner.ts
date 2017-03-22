@@ -79,7 +79,14 @@ export class Runner {
         const runtimeDir = await downloader.fetchAndExtract();
 
         if(config.ffmpegIntegration) {
-            await this.integrateFFmpeg(platform, arch, runtimeDir, pkg, config);
+
+            // FIXME: Integrate without overwriting extracted files.
+            //await this.integrateFFmpeg(platform, arch, runtimeDir, pkg, config);
+
+            if(!this.options.mute) {
+                console.warn('Running with FFmpeg integration is not supported.');
+            }
+
         }
 
         const executable = await findExecutable(platform, runtimeDir);

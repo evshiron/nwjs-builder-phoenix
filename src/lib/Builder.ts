@@ -313,7 +313,7 @@ export class Builder {
 
     }
 
-    protected async integrateFFmpeg(platform: string, arch: string, runtimeDir: string, pkg: any, config: BuildConfig) {
+    protected async integrateFFmpeg(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
 
         const downloader = new FFmpegDownloader({
             platform, arch,
@@ -333,7 +333,7 @@ export class Builder {
         const ffmpegDir = await downloader.fetchAndExtract();
 
         const src = await findFFmpeg(platform, ffmpegDir);
-        const dest = await findFFmpeg(platform, runtimeDir);
+        const dest = await findFFmpeg(platform, targetDir);
 
         await copyAsync(src, dest);
 
@@ -363,6 +363,10 @@ export class Builder {
         });
 
         await copyAsync(runtimeRoot, targetDir);
+
+        if(config.ffmpegIntegration) {
+            await this.integrateFFmpeg(platform, arch, targetDir, pkg, config);
+        }
 
         await ensureDirAsync(appRoot);
 
@@ -432,10 +436,6 @@ export class Builder {
         }
 
         const runtimeDir = await downloader.fetchAndExtract();
-
-        if(config.ffmpegIntegration) {
-            await this.integrateFFmpeg(platform, arch, runtimeDir, pkg, config);
-        }
 
         if(!this.options.mute) {
             console.info('Building directory target...');
