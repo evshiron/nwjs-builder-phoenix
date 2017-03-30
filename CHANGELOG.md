@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.2.0...v1.2.1) (2017-03-30)
+
+
+### Bug Fixes
+
+* **options:** remove external config support ([248615c](https://github.com/evshiron/nwjs-builder-phoenix/commit/248615c))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.1.1...v1.2.0) (2017-03-30)
 
