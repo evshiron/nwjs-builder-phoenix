@@ -1,5 +1,5 @@
 
-import { dirname, resolve, normalize } from 'path';
+import { dirname, resolve, win32 } from 'path';
 import { spawn } from 'child_process';
 
 export * from './NsisComposer';
@@ -9,7 +9,7 @@ const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');
 
 export async function nsisBuild(script: string) {
 
-    const args = [ normalize(resolve(DIR_NSIS, 'makensis.exe')), normalize(resolve(script)) ];
+    const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), win32.normalize(resolve(script)) ];
     if(process.platform != 'win32') {
         args.unshift('wine');
     }

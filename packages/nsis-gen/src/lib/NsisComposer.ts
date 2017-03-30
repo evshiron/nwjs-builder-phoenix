@@ -1,5 +1,5 @@
 
-import { relative, resolve, normalize } from 'path';
+import { relative, resolve, win32 } from 'path';
 
 import { readdirAsync, lstatAsync } from 'fs-extra-promise';
 
@@ -64,7 +64,7 @@ ${ NsisComposer.DIVIDER }
 Name "${ this.options.appName }"
 Caption "${ this.options.appName }"
 BrandingText "${ this.options.appName }"
-OutFile "${ normalize(resolve(this.options.output)) }"
+OutFile "${ win32.normalize(resolve(this.options.output)) }"
 InstallDir "$PROGRAMFILES\\${ this.options.appName }"
 SetCompressor ${ this.options.solid ? '/SOLID' : '' } ${ this.options.compression }
 XPStyle ${ this.options.xpStyle ? 'on' : 'off' }
@@ -147,7 +147,7 @@ SectionEnd
         const files = await readdirAsync(dir);
 
         if(files.length > 0) {
-            const path = normalize(relative(baseDir, dir));
+            const path = win32.normalize(relative(baseDir, dir));
             lines.push(`SetOutPath "$INSTDIR${ path == '.' ? '' : `\\${ path }` }"`);
         }
 
@@ -157,7 +157,7 @@ SectionEnd
             const stat = await lstatAsync(path);
 
             if(stat.isFile()) {
-                lines.push(`File "${ normalize(path) }"`);
+                lines.push(`File "${ win32.normalize(path) }"`);
             }
             else if(stat.isDirectory()) {
                 pendingFiles.push(path);
