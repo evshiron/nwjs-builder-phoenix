@@ -22,7 +22,6 @@ interface IBuilderOptions {
     x86?: boolean;
     x64?: boolean;
     mirror?: string;
-    config?: string;
     mute?: boolean;
 }
 
@@ -35,7 +34,6 @@ export class Builder {
         x86: false,
         x64: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
-        config: undefined,
         mute: true,
     };
 
@@ -72,12 +70,9 @@ export class Builder {
             throw new Error('ERROR_NO_TASK');
         }
 
-        const configPath = this.options.config ? this.options.config : join(this.dir, 'package.json');
-
-        const pkg: any = await readJsonAsync(configPath);
+        const pkg: any = await readJsonAsync(join(this.dir, 'package.json'));
         const config = new BuildConfig(pkg);
 
-        debug('in build', 'configPath', configPath);
         debug('in build', 'config', config);
 
         for(const [ platform, arch ] of tasks) {

@@ -17,7 +17,6 @@ interface IRunnerOptions {
     x64?: boolean;
     mirror?: string;
     detached?: boolean;
-    config?: string;
     mute?: boolean;
 }
 
@@ -28,7 +27,6 @@ export class Runner {
         x64: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         detached: false,
-        config: undefined,
         mute: true,
     };
 
@@ -50,12 +48,9 @@ export class Runner {
         ? (this.options.x86 ? 'ia32' : 'x64')
         : process.arch;
 
-        const configPath = this.options.config ? this.options.config : join(this.args[0], 'package.json');
-
-        const pkg: any = await readJsonAsync(configPath);
+        const pkg: any = await readJsonAsync(join(this.args[0], 'package.json'));
         const config = new BuildConfig(pkg);
 
-        debug('in run', 'configPath', configPath);
         debug('in run', 'config', config);
 
         const downloader = new Downloader({

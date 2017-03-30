@@ -26,10 +26,6 @@ const argv = require('yargs')
     type: 'boolean',
     default: Runner.DEFAULT_OPTIONS.detached,
 })
-.option('config', {
-    describe: 'Specify external config',
-    default: Runner.DEFAULT_OPTIONS.config,
-})
 .help()
 .argv;
 

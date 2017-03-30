@@ -39,10 +39,6 @@ const argv = require('yargs')
     describe: 'Modify NW.js mirror',
     default: Builder.DEFAULT_OPTIONS.mirror,
 })
-.option('config', {
-    describe: 'Specify external config',
-    default: Builder.DEFAULT_OPTIONS.config,
-})
 .help()
 .argv;
 
