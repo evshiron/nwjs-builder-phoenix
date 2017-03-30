@@ -5,7 +5,7 @@ import { readdirAsync, lstatAsync } from 'fs-extra-promise';
 
 const globby = require('globby');
 
-interface NsisComposerOptions {
+interface INsisComposerOptions {
 
     // Basic.
     appName: string;
@@ -17,9 +17,6 @@ interface NsisComposerOptions {
     // Compression.
     compression: 'zlib' | 'bzip2' | 'lzma';
     solid: boolean;
-
-    // Styles.
-    xpStyle: boolean;
 
     // Files.
     srcDir: string;
@@ -33,7 +30,11 @@ export class NsisComposer {
 
     public static DIVIDER = '################################################################################';
 
-    constructor(protected options: NsisComposerOptions) {
+    protected fixedVersion: string;
+
+    constructor(protected options: INsisComposerOptions) {
+
+        this.fixedVersion = this.fixVersion(this.options.version);
 
     }
 
@@ -67,7 +68,7 @@ BrandingText "${ this.options.appName }"
 OutFile "${ win32.normalize(resolve(this.options.output)) }"
 InstallDir "$PROGRAMFILES\\${ this.options.appName }"
 SetCompressor ${ this.options.solid ? '/SOLID' : '' } ${ this.options.compression }
-XPStyle ${ this.options.xpStyle ? 'on' : 'off' }
+XPStyle on
 `;
 
     }
@@ -80,11 +81,11 @@ XPStyle ${ this.options.xpStyle ? 'on' : 'off' }
 #
 ${ NsisComposer.DIVIDER }
 
-VIProductVersion "${ this.options.version }"
+VIProductVersion "${ this.fixedVersion }"
 VIAddVersionKey "ProductName" "${ this.options.appName }"
 VIAddVersionKey "CompanyName" "${ this.options.companyName }"
 VIAddVersionKey "FileDescription" "${ this.options.description }"
-VIAddVersionKey "FileVersion" "${ this.options.version }"
+VIAddVersionKey "FileVersion" "${ this.fixedVersion }"
 VIAddVersionKey "LegalCopyright" "${ this.options.copyright }"
 `;
 
@@ -137,6 +138,11 @@ SectionEnd
 
         return out.join('\n');
 
+    }
+
+    protected fixVersion(version: string) {
+        // Fix "invalid VIProductVersion format, should be X.X.X.X" for semver.
+        return /^\d+\.\d+\.\d+$/.test(this.options.version) ? `${ this.options.version }.0` : this.options.version;
     }
 
     protected async readdirLines(dir: string, baseDir: string, out: string[]) {

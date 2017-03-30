@@ -5,6 +5,7 @@ export class WinConfig {
     public fileVersion: string = '';
     public versionStrings: {
         ProductName?: undefined,
+        CompanyName?: undefined,
         FileDescription?: undefined,
         LegalCopyright?: undefined,
     } = {};

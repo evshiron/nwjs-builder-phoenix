@@ -7,7 +7,13 @@ export * from './NsisComposer';
 const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');
 
-export async function nsisBuild(script: string) {
+interface INsisBuildOptions {
+    mute: boolean;
+}
+
+export async function nsisBuild(script: string, options: INsisBuildOptions = {
+    mute: false,
+}) {
 
     const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), win32.normalize(resolve(script)) ];
     if(process.platform != 'win32') {
@@ -29,8 +35,10 @@ export async function nsisBuild(script: string) {
 
         });
 
-        child.stdout.pipe(process.stdout);
-        child.stderr.pipe(process.stderr);
+        if(!options.mute) {
+            child.stdout.pipe(process.stdout);
+            child.stderr.pipe(process.stderr);
+        }
 
     });
 
