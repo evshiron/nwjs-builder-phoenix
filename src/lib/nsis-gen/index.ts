@@ -4,7 +4,7 @@ import { spawn } from 'child_process';
 
 export * from './NsisComposer';
 
-const DIR_ASSETS = resolve(dirname(module.filename), '../../assets/');
+const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');
 
 export async function nsisBuild(script: string) {
@@ -19,7 +19,15 @@ export async function nsisBuild(script: string) {
     await new Promise((resolve, reject) => {
 
         child.on('error', reject);
-        child.on('close', (code, signal) => resolve({ code, signal }));
+        child.on('close', (code, signal) => {
+
+            if(code != 0) {
+                return reject(new Error(`ERROR_EXIT_CODE code = ${ code }`));
+            }
+
+            resolve({ code, signal });
+
+        });
 
         child.stdout.pipe(process.stdout);
         child.stderr.pipe(process.stderr);

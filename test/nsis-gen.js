@@ -1,13 +1,14 @@
 
-import { writeFileAsync } from 'fs-extra-promise';
+import { test } from 'ava';
 
-import * as yargs from 'yargs';
+import { writeFileAsync, removeAsync } from 'fs-extra-promise';
 
-import { NsisComposer, nsisBuild } from '../lib';
+import { NsisComposer, nsisBuild } from '../dist/lib/nsis-gen';
+import { tmpName, tmpFile, tmpDir } from '../dist/lib/util';
 
-yargs.argv;
+test('build', async (t) => {
 
-(async () => {
+    const output = await tmpName();
 
     const data = await (new NsisComposer({
 
@@ -26,18 +27,20 @@ yargs.argv;
         xpStyle: true,
 
         // Files.
-        srcDir: '../../assets/project/dist/project-0.1.0-win-x64/',
+        srcDir: './src/',
 
         // Output.
-        output: '../../assets/project/dist/project-0.1.0-win-x64-Setup.exe',
+        output,
 
     }))
     .make();
 
-    const script = '../../assets/project/dist/project-0.1.0-win-x64.nsi';
+    const script = await tmpName();
 
     await writeFileAsync(script, data);
     await nsisBuild(script);
 
-})()
-.catch(console.error);
+    await removeAsync(output);
+    await removeAsync(script);
+
+});
