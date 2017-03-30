@@ -12,6 +12,7 @@ import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { extractGeneric, compress } from './archive';
 import { BuildConfig } from './BuildConfig';
+import { NsisComposer, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, cpAsync } from './util';
 
 interface IBuilderOptions {
@@ -415,6 +416,47 @@ export class Builder {
 
     }
 
+    protected async buildNsisTarget(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
+
+        if(platform != 'win') {
+            console.info(`Skip building nsis target for ${ platform }.`);
+            return;
+        }
+
+        const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
+
+        const data = await (new NsisComposer({
+
+            // Basic.
+            appName: config.win.versionStrings.ProductName,
+            companyName: config.win.versionStrings.CompanyName,
+            description: config.win.versionStrings.FileDescription,
+            version: config.win.productVersion,
+            copyright: config.win.versionStrings.LegalCopyright,
+
+            // Compression.
+            compression: 'lzma',
+            solid: true,
+
+            // Files.
+            srcDir: targetDir,
+
+            // Output.
+            output: targetNsis,
+
+        })).make();
+
+        const script = await tmpName();
+        await writeFileAsync(script, data);
+
+        await nsisBuild(script, {
+            mute: false,
+        });
+
+        await removeAsync(script);
+
+    }
+
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {
 
         const downloader = new Downloader({
@@ -453,6 +495,11 @@ export class Builder {
                 await this.buildArchiveTarget(target, targetDir);
                 break;
             case 'nsis':
+                if(!this.options.mute) {
+                    console.info(`Building nsis target...`);
+                }
+                await this.buildNsisTarget(platform, arch, targetDir, pkg, config);
+                break;
             default:
                 throw new Error('ERROR_UNKNOWN_TARGET');
             }

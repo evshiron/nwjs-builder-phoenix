@@ -12,11 +12,13 @@
   "build": {
     "nwVersion": "lts",
     "targets": [
-      "zip"
+      "zip",
+      "nsis"
     ],
     "win": {
       "versionStrings": {
         "ProductName": "Project",
+        "CompanyName": "nwjs-builder-phoenix",
         "LegalCopyright": "copyright"
       }
     },
