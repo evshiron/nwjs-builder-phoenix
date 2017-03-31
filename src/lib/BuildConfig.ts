@@ -4,6 +4,7 @@ import { normalize } from 'path';
 import { WinConfig } from './WinConfig';
 import { MacConfig } from './MacConfig';
 import { LinuxConfig } from './LinuxConfig';
+import { NsisConfig } from './NsisConfig';
 
 export class BuildConfig {
 
@@ -19,6 +20,7 @@ export class BuildConfig {
     public win: WinConfig = new WinConfig();
     public mac: MacConfig = new MacConfig();
     public linux: LinuxConfig = new LinuxConfig();
+    public nsis: NsisConfig = new NsisConfig();
 
     public appId: string = undefined;
     public ffmpegIntegration: boolean = false;
