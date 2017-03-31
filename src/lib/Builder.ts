@@ -12,6 +12,7 @@ import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { extractGeneric, compress } from './archive';
 import { BuildConfig } from './BuildConfig';
+import { NsisVersions } from './NsisVersions';
 import { NsisComposer, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, cpAsync } from './util';
 
@@ -418,6 +419,8 @@ export class Builder {
             return;
         }
 
+        const versions = new NsisVersions(resolve(this.dir, config.output, 'versions.nsis.json'));
+
         const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
 
         const data = await (new NsisComposer({
@@ -449,6 +452,10 @@ export class Builder {
         });
 
         await removeAsync(script);
+
+        await versions.addVersion(pkg.version, '');
+        await versions.addInstaller(pkg.version, arch, targetNsis);
+        await versions.save();
 
     }
 
