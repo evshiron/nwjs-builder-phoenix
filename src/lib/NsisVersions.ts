@@ -58,6 +58,8 @@ export class NsisVersions {
 
         }
 
+        this.updateLatestVersion();
+
     }
 
     public async addInstaller(version: string, arch: string, path: string) {
