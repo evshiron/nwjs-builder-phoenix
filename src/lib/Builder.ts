@@ -11,11 +11,10 @@ const plist = require('plist');
 
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
-import { extractGeneric, compress } from './archive';
-import { BuildConfig } from './BuildConfig';
-import { NsisVersions } from './NsisVersions';
+import { BuildConfig } from './config';
+import { NsisVersions } from './common/NsisVersions';
 import { NsisComposer, NsisDiffer, nsisBuild } from './nsis-gen';
-import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, cpAsync } from './util';
+import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, copyFileAsync, extractGeneric, compress } from './util';
 
 interface IBuilderOptions {
     win?: boolean;
@@ -293,7 +292,7 @@ export class Builder {
             case 'osx':
             case 'mac':
                 for(const file of files) {
-                    await cpAsync(join(this.dir, file), join(appRoot, file));
+                    await copyFileAsync(join(this.dir, file), join(appRoot, file));
                 }
                 break;
             default:
@@ -304,7 +303,7 @@ export class Builder {
         else {
 
             for(const file of files) {
-                await cpAsync(join(this.dir, file), join(appRoot, file));
+                await copyFileAsync(join(this.dir, file), join(appRoot, file));
             }
 
         }

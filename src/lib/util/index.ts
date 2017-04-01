@@ -9,6 +9,8 @@ import { lstatAsync, ensureDirAsync, readFileAsync, outputFileAsync } from 'fs-e
 const debug = require('debug')('build:util');
 const globby = require('globby');
 
+export * from './archive';
+
 export function mergeOptions(defaults: any, options: any) {
 
     const opts: any = {};
@@ -221,7 +223,7 @@ export function tmpDir(options: any = {}): Promise<{
     });
 }
 
-export async function cpAsync(src: string, dest: string) {
+export async function copyFileAsync(src: string, dest: string) {
 
     const stats = await lstatAsync(src);
 

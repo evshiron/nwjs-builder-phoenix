@@ -6,7 +6,7 @@ import { path7za } from '7zip-bin';
 
 const debug = require('debug')('build:archive');
 
-import { tmpFile, spawnAsync } from './util';
+import { tmpFile, spawnAsync } from './';
 
 interface IExtractOptions {
     overwrite: boolean;

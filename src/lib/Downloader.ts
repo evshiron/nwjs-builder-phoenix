@@ -3,7 +3,7 @@ import { dirname, basename, resolve } from 'path';
 
 const debug = require('debug')('build:downloader');
 
-import { DownloaderBase } from './DownloaderBase';
+import { DownloaderBase } from './common/DownloaderBase';
 import { mergeOptions } from './util';
 
 interface IDownloaderOptions {

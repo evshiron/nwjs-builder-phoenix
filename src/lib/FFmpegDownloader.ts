@@ -8,10 +8,8 @@ import { ensureDirSync, exists, writeFile } from 'fs-extra-promise';
 const debug = require('debug')('build:ffmpegDownloader');
 const progress = require('request-progress');
 
-import { DownloaderBase } from './DownloaderBase';
-import { Event } from './Event';
-import { extractGeneric } from './archive';
-import { mergeOptions } from './util';
+import { Event, DownloaderBase } from './common';
+import { mergeOptions, extractGeneric } from './util';
 
 interface IRequestProgress {
     percent: number;

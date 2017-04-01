@@ -1,7 +1,9 @@
 
 import { test } from 'ava';
 
-import { mergeOptions } from '../dist/lib/util';
+import { removeAsync } from 'fs-extra-promise';
+
+import { mergeOptions, tmpName, tmpFile, tmpDir, compress } from '../dist/lib/util';
 
 test('mergeOptions', async (t) => {
 
@@ -21,5 +23,17 @@ test('mergeOptions', async (t) => {
         b: 123,
         c: '456',
     });
+
+});
+
+test('compress', async (t) => {
+
+    // Don't use `tmpFile`, which keeps the file open and results in exceptions when spawning.
+    const path = await tmpName();
+
+    const code = await compress('./assets/', [ './project/index.html', './project/package.json' ], 'zip', path);
+    t.is(code, 0);
+
+    await removeAsync(path);
 
 });

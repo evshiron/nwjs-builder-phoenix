@@ -9,10 +9,9 @@ const debug = require('debug')('build:downloader');
 const progress = require('request-progress');
 
 import { Event } from './Event';
-import { extractGeneric } from './archive';
-import { mergeOptions } from './util';
+import { mergeOptions, extractGeneric } from '../util';
 
-const DIR_CACHES = resolve(dirname(module.filename), '..', '..', 'caches');
+const DIR_CACHES = resolve(dirname(module.filename), '..', '..', '..', 'caches');
 ensureDirSync(DIR_CACHES);
 
 interface IRequestProgress {

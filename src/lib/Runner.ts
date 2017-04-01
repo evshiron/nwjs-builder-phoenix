@@ -8,9 +8,8 @@ const debug = require('debug')('build:runner');
 
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
-import { BuildConfig } from './BuildConfig';
-import { extractGeneric } from './archive';
-import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync } from './util';
+import { BuildConfig } from './config';
+import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync, extractGeneric } from './util';
 
 interface IRunnerOptions {
     x86?: boolean;
