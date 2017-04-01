@@ -1,5 +1,5 @@
 
-import { dirname, relative } from 'path';
+import { basename, dirname, relative } from 'path';
 import { createHash } from 'crypto';
 
 import { exists, readJsonAsync, writeJsonAsync, createReadStream } from 'fs-extra-promise';
@@ -14,7 +14,7 @@ interface IInstaller {
 
 interface IUpdater {
     arch: string;
-    forVersion: string;
+    fromVersion: string;
     path: string;
     hash: string;
     created: number;
@@ -23,13 +23,14 @@ interface IUpdater {
 interface IVersion {
     version: string;
     changelog: string;
+    source: string;
     installers: IInstaller[];
     updaters: IUpdater[];
 }
 
 interface IData {
     latest: string;
-    versions: Array<IVersion>;
+    versions: IVersion[];
 }
 
 export class NsisVersions {
@@ -43,7 +44,7 @@ export class NsisVersions {
 
     }
 
-    public async addVersion(version: string, changelog: string) {
+    public async addVersion(version: string, changelog: string, source: string) {
 
         const data = await this.getData();
 
@@ -52,6 +53,7 @@ export class NsisVersions {
             data.versions.push({
                 version,
                 changelog,
+                source: basename(source),
                 installers: [],
                 updaters: [],
             });
@@ -59,6 +61,28 @@ export class NsisVersions {
         }
 
         this.updateLatestVersion();
+
+    }
+
+    public async getVersions(): Promise<string[]> {
+
+        const data = await this.getData();
+
+        return data.versions.map(item => item.version);
+
+    }
+
+    public async getVersion(version: string): Promise<IVersion> {
+
+        const data = await this.getData();
+
+        const item = data.versions.find(item => item.version == version);
+
+        if(!item) {
+            throw new Error('ERROR_VERSION_NOT_FOUND');
+        }
+
+        return item;
 
     }
 
@@ -85,7 +109,7 @@ export class NsisVersions {
 
     }
 
-    public async addUpdater(version: string, forVersion: string, arch: string, path: string) {
+    public async addUpdater(version: string, fromVersion: string, arch: string, path: string) {
 
         const data = await this.getData();
 
@@ -95,10 +119,10 @@ export class NsisVersions {
             throw new Error('ERROR_VERSION_NOT_FOUND');
         }
 
-        if(!versionItem.updaters.find(item => item.forVersion == forVersion && item.arch == arch)) {
+        if(!versionItem.updaters.find(item => item.fromVersion == fromVersion && item.arch == arch)) {
 
             versionItem.updaters.push({
-                forVersion,
+                fromVersion,
                 arch,
                 path: relative(this.outputDir, path),
                 hash: await this.hashFile('sha256', path),
