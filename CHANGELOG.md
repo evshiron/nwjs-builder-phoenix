@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.2.1...v1.3.0) (2017-04-01)
+
+
+### Features
+
+* **Builder:** support nsis diff updater building ([#12](https://github.com/evshiron/nwjs-builder-phoenix/issues/12)) ([8f2f914](https://github.com/evshiron/nwjs-builder-phoenix/commit/8f2f914))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.2.0...v1.2.1) (2017-03-30)
 
