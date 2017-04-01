@@ -28,15 +28,15 @@ interface IVersion {
     updaters: IUpdater[];
 }
 
-interface IData {
+interface IVersionInfoData {
     latest: string;
     versions: IVersion[];
 }
 
-export class NsisVersions {
+export class NsisVersionInfo {
 
     protected outputDir: string;
-    protected data: IData;
+    protected data: IVersionInfoData;
 
     constructor(protected path: string) {
 

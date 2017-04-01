@@ -12,7 +12,7 @@ const plist = require('plist');
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
-import { NsisVersions } from './common/NsisVersions';
+import { NsisVersionInfo } from './common';
 import { NsisComposer, NsisDiffer, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, copyFileAsync, extractGeneric, compress } from './util';
 
@@ -336,12 +336,12 @@ export class Builder {
 
     }
 
-    protected async buildNsisDiffUpdater(platform: string, arch: string, versions: NsisVersions, fromVersion: string, toVersion: string, pkg: any, config: BuildConfig) {
+    protected async buildNsisDiffUpdater(platform: string, arch: string, versionInfo: NsisVersionInfo, fromVersion: string, toVersion: string, pkg: any, config: BuildConfig) {
 
         const diffNsis = resolve(this.dir, config.output, `${ pkg.name }-${ toVersion }-from-${ fromVersion }-${ platform }-${ arch }-Update.exe`);
 
-        const fromDir = resolve(this.dir, config.output, (await versions.getVersion(fromVersion)).source);
-        const toDir = resolve(this.dir, config.output, (await versions.getVersion(toVersion)).source);
+        const fromDir = resolve(this.dir, config.output, (await versionInfo.getVersion(fromVersion)).source);
+        const toDir = resolve(this.dir, config.output, (await versionInfo.getVersion(toVersion)).source);
 
         const data = await (new NsisDiffer(fromDir, toDir, {
 
@@ -370,7 +370,7 @@ export class Builder {
 
         await removeAsync(script);
 
-        await versions.addUpdater(toVersion, fromVersion, arch, diffNsis);
+        await versionInfo.addUpdater(toVersion, fromVersion, arch, diffNsis);
 
     }
 
@@ -457,7 +457,7 @@ export class Builder {
             return;
         }
 
-        const versions = new NsisVersions(resolve(this.dir, config.output, 'versions.nsis.json'));
+        const versionInfo = new NsisVersionInfo(resolve(this.dir, config.output, 'versions.nsis.json'));
 
         const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
 
@@ -491,20 +491,20 @@ export class Builder {
 
         await removeAsync(script);
 
-        await versions.addVersion(pkg.version, '', targetDir);
-        await versions.addInstaller(pkg.version, arch, targetNsis);
+        await versionInfo.addVersion(pkg.version, '', targetDir);
+        await versionInfo.addInstaller(pkg.version, arch, targetNsis);
 
         if(config.nsis.diffUpdaters) {
 
-            for(const version of await versions.getVersions()) {
+            for(const version of await versionInfo.getVersions()) {
                 if(semver.gt(pkg.version, version)) {
-                    await this.buildNsisDiffUpdater(platform, arch, versions, version, pkg.version, pkg, config);
+                    await this.buildNsisDiffUpdater(platform, arch, versionInfo, version, pkg.version, pkg, config);
                 }
             }
 
         }
 
-        await versions.save();
+        await versionInfo.save();
 
     }
 
