@@ -3,6 +3,7 @@ import { dirname, resolve, win32 } from 'path';
 import { spawn } from 'child_process';
 
 export * from './NsisComposer';
+export * from './NsisDiffer';
 
 const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');

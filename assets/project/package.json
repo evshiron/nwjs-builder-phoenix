@@ -25,6 +25,9 @@
     "mac": {
       "displayName": "Project",
       "copyright": "copyright"
+    },
+    "nsis": {
+      "diffUpdaters": true
     }
   },
   "devDependencies": {

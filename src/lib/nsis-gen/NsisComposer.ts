@@ -5,7 +5,7 @@ import { readdirAsync, lstatAsync } from 'fs-extra-promise';
 
 const globby = require('globby');
 
-interface INsisComposerOptions {
+export interface INsisComposerOptions {
 
     // Basic.
     appName: string;
@@ -19,7 +19,7 @@ interface INsisComposerOptions {
     solid: boolean;
 
     // Files.
-    srcDir: string;
+    srcDir?: string;
 
     // Output.
     output: string;
@@ -33,6 +33,29 @@ export class NsisComposer {
     protected fixedVersion: string;
 
     constructor(protected options: INsisComposerOptions) {
+
+        if(!this.options.appName) {
+            throw new Error('ERROR_NO_APPNAME');
+        }
+
+        if(!this.options.companyName) {
+            throw new Error('ERROR_NO_COMPANYNAME');
+        }
+
+        if(!this.options.description) {
+            throw new Error('ERROR_NO_DESCRIPTION');
+        }
+
+        if(!this.options.version) {
+            throw new Error('ERROR_NO_VERSION');
+        }
+
+        if(!this.options.copyright) {
+            throw new Error('ERROR_NO_COPYRIGHT');
+        }
+
+        this.options.compression = this.options.compression || 'lzma';
+        this.options.solid = this.options.solid ? true : false;
 
         this.fixedVersion = this.fixVersion(this.options.version);
 
@@ -132,6 +155,10 @@ SectionEnd
     }
 
     protected async makeInstallerFiles(): Promise<string> {
+
+        if(!this.options.srcDir) {
+            throw new Error('ERROR_NO_SRCDIR');
+        }
 
         const out: string[] = [];
         await this.readdirLines(resolve(this.options.srcDir), resolve(this.options.srcDir), out);

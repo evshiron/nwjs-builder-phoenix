@@ -40,3 +40,10 @@ icon | string | .icns icon file. Defaults to `undefined`.
 ## build.linux <- [LinuxConfig](../src/lib/LinuxConfig.ts)
 
 Currently noop.
+
+## build.nsis <- [NsisConfig](../src/lib/NsisConfig.ts)
+
+Name | Type | Description
+--- | --- | ---
+diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
+hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.
