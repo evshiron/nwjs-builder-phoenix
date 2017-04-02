@@ -16,8 +16,7 @@ export class NsisDiffer extends NsisComposer {
     protected async makeInstallerFiles(): Promise<string> {
 
         const result = await dircompare.compare(this.fromDir, this.toDir, {
-            compareSize: true,
-            compareDate: true,
+            compareContent: true,
         });
 
         const lines: string[] = [];
