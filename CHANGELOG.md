@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.3.2...v1.3.3) (2017-04-02)
+
+
+### Bug Fixes
+
+* **nsis-gen:** fix missing distinct files in diff updaters ([c4c7f9d](https://github.com/evshiron/nwjs-builder-phoenix/commit/c4c7f9d))
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.3.1...v1.3.2) (2017-04-02)
 
