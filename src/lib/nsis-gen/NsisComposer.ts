@@ -51,7 +51,7 @@ export class NsisComposer {
         }
 
         if(!this.options.copyright) {
-            this.options.copyright = 'ERROR_NO_COPYRIGHT';
+            this.options.copyright = 'NO_COPYRIGHT';
         }
 
         this.options.compression = this.options.compression || 'lzma';
