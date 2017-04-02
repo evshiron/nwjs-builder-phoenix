@@ -33,6 +33,9 @@ export class NsisDiffer extends NsisComposer {
             else if(diff.type1 == 'directory' && diff.type2 == 'missing') {
                 lines.push(await this.makeRemoveDir(diff.path1, '.' + diff.relativePath, diff.name1));
             }
+            else if(diff.type1 == 'file' && diff.type2 == 'file' && diff.state == 'distinct') {
+                lines.push(await this.makeWriteFile(diff.path2, '.' + diff.relativePath, diff.name2));
+            }
 
         }
 
