@@ -35,23 +35,23 @@ export class NsisComposer {
     constructor(protected options: INsisComposerOptions) {
 
         if(!this.options.appName) {
-            throw new Error('ERROR_NO_APPNAME');
+            this.options.appName = 'NO_APPNAME';
         }
 
         if(!this.options.companyName) {
-            throw new Error('ERROR_NO_COMPANYNAME');
+            this.options.companyName = 'NO_COMPANYNAME';
         }
 
         if(!this.options.description) {
-            throw new Error('ERROR_NO_DESCRIPTION');
+            this.options.description = 'NO_DESCRIPTION';
         }
 
         if(!this.options.version) {
-            throw new Error('ERROR_NO_VERSION');
+            this.options.version = 'NO_VERSION';
         }
 
         if(!this.options.copyright) {
-            throw new Error('ERROR_NO_COPYRIGHT');
+            this.options.copyright = 'ERROR_NO_COPYRIGHT';
         }
 
         this.options.compression = this.options.compression || 'lzma';
