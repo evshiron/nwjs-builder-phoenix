@@ -21,9 +21,6 @@ export interface INsisComposerOptions {
     modern: boolean;
     languages: string[];
 
-    // Files.
-    srcDir?: string;
-
     // Output.
     output: string;
 
@@ -213,54 +210,14 @@ SectionEnd
 
     protected async makeInstallerFiles(): Promise<string> {
 
-        if(!this.options.srcDir) {
-            throw new Error('ERROR_NO_SRCDIR');
-        }
-
-        const out: string[] = [];
-        await this.readdirLines(resolve(this.options.srcDir), resolve(this.options.srcDir), out);
-
-        return out.join('\n');
+        return `SetOutPath "$INSTDIR"
+FILE /r .\\*.*`;
 
     }
 
     protected fixVersion(version: string) {
         // Fix "invalid VIProductVersion format, should be X.X.X.X" for semver.
         return /^\d+\.\d+\.\d+$/.test(this.options.version) ? `${ this.options.version }.0` : this.options.version;
-    }
-
-    protected async readdirLines(dir: string, baseDir: string, out: string[]) {
-
-        const lines = [];
-        const pendingFiles = [];
-
-        const files = await readdirAsync(dir);
-
-        if(files.length > 0) {
-            const path = win32.normalize(relative(baseDir, dir));
-            lines.push(`SetOutPath "$INSTDIR${ path == '.' ? '' : `\\${ path }` }"`);
-        }
-
-        for(const file of files) {
-
-            const path = resolve(dir, file);
-            const stat = await lstatAsync(path);
-
-            if(stat.isFile()) {
-                lines.push(`File "${ win32.normalize(path) }"`);
-            }
-            else if(stat.isDirectory()) {
-                pendingFiles.push(path);
-            }
-
-        }
-
-        for(const file of pendingFiles) {
-            await this.readdirLines(resolve(dir, file), resolve(baseDir), lines);
-        }
-
-        out.push(...lines);
-
     }
 
 }

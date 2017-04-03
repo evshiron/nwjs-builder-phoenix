@@ -367,7 +367,7 @@ export class Builder {
         const script = await tmpName();
         await writeFileAsync(script, data);
 
-        await nsisBuild(script, {
+        await nsisBuild(toDir, script, {
             mute: false,
         });
 
@@ -480,9 +480,6 @@ export class Builder {
             modern: config.nsis.modern,
             languages: config.nsis.languages,
 
-            // Files.
-            srcDir: targetDir,
-
             // Output.
             output: targetNsis,
 
@@ -491,7 +488,7 @@ export class Builder {
         const script = await tmpName();
         await writeFileAsync(script, data);
 
-        await nsisBuild(script, {
+        await nsisBuild(targetDir, script, {
             mute: false,
         });
 

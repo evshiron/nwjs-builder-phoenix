@@ -26,20 +26,23 @@ const options = {
 
 };
 
-test.skip('build', async (t) => {
+test('build', async (t) => {
 
-    const output = await tmpName();
+    const output = await tmpName({
+        postfix: '.exe',
+    });
 
     const data = await (new NsisComposer(Object.assign({}, options, {
-        srcDir: './src/',
         output,
     })))
     .make();
 
-    const script = await tmpName();
+    const script = await tmpName({
+        postfix: '.nsi',
+    });
 
     await writeFileAsync(script, data);
-    await nsisBuild(script);
+    await nsisBuild('./src/', script);
 
     await removeAsync(output);
     await removeAsync(script);
@@ -62,7 +65,7 @@ test('diff', async (t) => {
     });
 
     await writeFileAsync(script, data);
-    await nsisBuild(script);
+    await nsisBuild('./dist/', script);
 
     await removeAsync(output);
     await removeAsync(script);

@@ -12,16 +12,18 @@ interface INsisBuildOptions {
     mute: boolean;
 }
 
-export async function nsisBuild(script: string, options: INsisBuildOptions = {
+export async function nsisBuild(cwd: string, script: string, options: INsisBuildOptions = {
     mute: false,
 }) {
 
-    const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), win32.normalize(resolve(script)) ];
+    const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), '/NOCD', win32.normalize(resolve(script)) ];
     if(process.platform != 'win32') {
         args.unshift('wine');
     }
 
-    const child = spawn(args.shift(), args);
+    const child = spawn(args.shift(), args, {
+        cwd,
+    });
 
     await new Promise((resolve, reject) => {
 
