@@ -356,6 +356,9 @@ export class Builder {
             compression: 'lzma',
             solid: true,
 
+            modern: config.nsis.modern,
+            languages: config.nsis.languages,
+
             // Output.
             output: diffNsis,
 
@@ -473,6 +476,9 @@ export class Builder {
             // Compression.
             compression: 'lzma',
             solid: true,
+
+            modern: config.nsis.modern,
+            languages: config.nsis.languages,
 
             // Files.
             srcDir: targetDir,

@@ -19,6 +19,11 @@ const options = {
     compression: 'lzma',
     solid: true,
 
+    modern: true,
+    languages: [ 'English' ],
+    // FIXME: TradChinese is missing and SimpChinese becomes the default language, what happens?
+    //languages: [ 'English', 'SimpChinese', 'TradChinese' ],
+
 };
 
 test.skip('build', async (t) => {
@@ -43,14 +48,18 @@ test.skip('build', async (t) => {
 
 test('diff', async (t) => {
 
-    const output = await tmpName();
+    const output = await tmpName({
+        postfix: '.exe',
+    });
 
     const data = await (new NsisDiffer('./src/', './dist/', Object.assign({}, options, {
         output,
     })))
     .make();
 
-    const script = await tmpName();
+    const script = await tmpName({
+        postfix: '.nsi',
+    });
 
     await writeFileAsync(script, data);
     await nsisBuild(script);

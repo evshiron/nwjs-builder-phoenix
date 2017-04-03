@@ -18,6 +18,9 @@ export interface INsisComposerOptions {
     compression: 'zlib' | 'bzip2' | 'lzma';
     solid: boolean;
 
+    modern: boolean;
+    languages: string[];
+
     // Files.
     srcDir?: string;
 
@@ -56,6 +59,8 @@ export class NsisComposer {
 
         this.options.compression = this.options.compression || 'lzma';
         this.options.solid = this.options.solid ? true : false;
+        this.options.modern = this.options.modern ? true : false;
+        this.options.languages = this.options.languages && this.options.languages.length > 0 ? this.options.languages : [ 'English' ];
 
         this.fixedVersion = this.fixVersion(this.options.version);
 
@@ -85,13 +90,61 @@ ${ await this.makeUninstallSection() }
 #
 ${ NsisComposer.DIVIDER }
 
+${
+    this.options.modern
+    ? `!include "MUI2.nsh"`
+    : ''
+}
+
 Name "${ this.options.appName }"
 Caption "${ this.options.appName }"
 BrandingText "${ this.options.appName }"
-OutFile "${ win32.normalize(resolve(this.options.output)) }"
-InstallDir "$PROGRAMFILES\\${ this.options.appName }"
 SetCompressor ${ this.options.solid ? '/SOLID' : '' } ${ this.options.compression }
+OutFile "${ win32.normalize(resolve(this.options.output)) }"
+
+InstallDir "$LOCALAPPDATA\\${ this.options.appName }"
+InstallDirRegKey HKCU "Software\\${ this.options.appName }" "InstallDir"
+
+RequestExecutionLevel user
 XPStyle on
+
+${
+    this.options.modern
+    ? `!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+${
+    this.options.languages.map((language) => {
+        return `!insertmacro MUI_LANGUAGE "${ language }"`;
+    }).join('\n')
+}`
+
+    : ''
+}
+
+${
+    this.options.languages.length > 1
+    ? `!insertmacro MUI_RESERVEFILE_LANGDLL`
+    : ''
+}
+
+Function .onInit
+
+    ${
+        this.options.languages.length > 1
+        ? `!insertmacro MUI_LANGDLL_DISPLAY`
+        : ''
+    }
+
+FunctionEnd
+
 `;
 
     }
@@ -127,6 +180,8 @@ Section -Install
 SetShellVarContext current
 SetOverwrite ifnewer
 
+WriteRegStr HKCU "Software\\${ this.options.appName }" "InstallDir" "$INSTDIR"
+
 ${ await this.makeInstallerFiles() }
 
 WriteUninstaller "$INSTDIR\\uninstall.exe"
@@ -148,6 +203,8 @@ Section Uninstall
 
 RMDir /r "$INSTDIR\\*.*"
 RMDir "$INSTDIR"
+
+DeleteRegKey HKCU "Software\\${ this.options.appName }"
 
 SectionEnd
 `;
