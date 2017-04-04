@@ -18,7 +18,6 @@ export interface INsisComposerOptions {
     compression: 'zlib' | 'bzip2' | 'lzma';
     solid: boolean;
 
-    modern: boolean;
     languages: string[];
 
     // Output.
@@ -56,7 +55,6 @@ export class NsisComposer {
 
         this.options.compression = this.options.compression || 'lzma';
         this.options.solid = this.options.solid ? true : false;
-        this.options.modern = this.options.modern ? true : false;
         this.options.languages = this.options.languages && this.options.languages.length > 0 ? this.options.languages : [ 'English' ];
 
         this.fixedVersion = this.fixVersion(this.options.version);
@@ -87,11 +85,7 @@ ${ await this.makeUninstallSection() }
 #
 ${ NsisComposer.DIVIDER }
 
-${
-    this.options.modern
-    ? `!include "MUI2.nsh"`
-    : ''
-}
+!include "MUI2.nsh"
 
 Name "${ this.options.appName }"
 Caption "${ this.options.appName }"
@@ -105,10 +99,17 @@ InstallDirRegKey HKCU "Software\\${ this.options.appName }" "InstallDir"
 RequestExecutionLevel user
 XPStyle on
 
-${
-    this.options.modern
-    ? `!insertmacro MUI_PAGE_WELCOME
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\\${ this.options.appName }"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "StartMenuFolder"
+
+!define MUI_FINISHPAGE_RUN "$INSTDIR\\${ this.options.appName }.exe"
+
+Var StartMenuFolder
+
+!insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -121,9 +122,6 @@ ${
     this.options.languages.map((language) => {
         return `!insertmacro MUI_LANGUAGE "${ language }"`;
     }).join('\n')
-}`
-
-    : ''
 }
 
 ${
@@ -181,7 +179,15 @@ WriteRegStr HKCU "Software\\${ this.options.appName }" "InstallDir" "$INSTDIR"
 
 ${ await this.makeInstallerFiles() }
 
-WriteUninstaller "$INSTDIR\\uninstall.exe"
+!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
+    CreateDirectory "$SMPROGRAMS\\$StartMenuFolder"
+    CreateShortcut "$SMPROGRAMS\\$StartMenuFolder\\${ this.options.appName }.lnk" "$INSTDIR\\${ this.options.appName }.exe"
+    CreateShortcut "$SMPROGRAMS\\$StartMenuFolder\\Uninstall.lnk" "$INSTDIR\\Uninstall.exe"
+
+!insertmacro MUI_STARTMENU_WRITE_END
+
+  WriteUninstaller "$INSTDIR\\Uninstall.exe"
 
 SectionEnd
 `;
@@ -200,6 +206,12 @@ Section Uninstall
 
 RMDir /r "$INSTDIR\\*.*"
 RMDir "$INSTDIR"
+
+!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+
+Delete "$SMPROGRAMS\\$StartMenuFolder\\${ this.options.appName }.lnk"
+Delete "$SMPROGRAMS\\$StartMenuFolder\\Uninstall.lnk"
+RMDir "$SMPROGRAMS\\$StartMenuFolder"
 
 DeleteRegKey HKCU "Software\\${ this.options.appName }"
 

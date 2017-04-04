@@ -1,7 +1,6 @@
 
 export class NsisConfig {
 
-    public modern: boolean = true;
     public languages: string[] = [ 'English' ];
 
     public diffUpdaters: boolean = false;

@@ -19,7 +19,6 @@ const options = {
     compression: 'lzma',
     solid: true,
 
-    modern: true,
     languages: [ 'English' ],
     // FIXME: TradChinese is missing and SimpChinese becomes the default language, what happens?
     //languages: [ 'English', 'SimpChinese', 'TradChinese' ],
