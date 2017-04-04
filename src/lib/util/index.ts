@@ -223,6 +223,12 @@ export function tmpDir(options: any = {}): Promise<{
     });
 }
 
+export function fixWindowsVersion(version: string, build: number = 0) {
+    return /^\d+\.\d+\.\d+$/.test(version)
+    ? `${ version }.${ build }`
+    : version;
+}
+
 export async function copyFileAsync(src: string, dest: string) {
 
     const stats = await lstatAsync(src);

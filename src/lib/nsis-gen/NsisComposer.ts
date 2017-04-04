@@ -3,7 +3,7 @@ import { relative, resolve, win32 } from 'path';
 
 import { readdirAsync, lstatAsync } from 'fs-extra-promise';
 
-const globby = require('globby');
+import { fixWindowsVersion } from '../util';
 
 export interface INsisComposerOptions {
 
@@ -57,7 +57,7 @@ export class NsisComposer {
         this.options.solid = this.options.solid ? true : false;
         this.options.languages = this.options.languages && this.options.languages.length > 0 ? this.options.languages : [ 'English' ];
 
-        this.fixedVersion = this.fixVersion(this.options.version);
+        this.fixedVersion = fixWindowsVersion(this.options.version);
 
     }
 
@@ -225,11 +225,6 @@ SectionEnd
         return `SetOutPath "$INSTDIR"
 FILE /r .\\*.*`;
 
-    }
-
-    protected fixVersion(version: string) {
-        // Fix "invalid VIProductVersion format, should be X.X.X.X" for semver.
-        return /^\d+\.\d+\.\d+$/.test(this.options.version) ? `${ this.options.version }.0` : this.options.version;
     }
 
 }

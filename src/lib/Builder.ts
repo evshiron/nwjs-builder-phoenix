@@ -14,7 +14,7 @@ import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
 import { NsisVersionInfo } from './common';
 import { NsisComposer, NsisDiffer, nsisBuild } from './nsis-gen';
-import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, copyFileAsync, extractGeneric, compress } from './util';
+import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
 interface IBuilderOptions {
     win?: boolean;
@@ -119,8 +119,8 @@ export class Builder {
             const path = join(targetDir, './nw.exe');
 
             const rc = {
-                'product-version': config.win.productVersion,
-                'file-version': config.win.fileVersion,
+                'product-version': fixWindowsVersion(config.win.productVersion),
+                'file-version': fixWindowsVersion(config.win.fileVersion),
                 'version-string': config.win.versionStrings,
                 'icon': config.win.icon,
             };
@@ -349,7 +349,7 @@ export class Builder {
             appName: config.win.versionStrings.ProductName,
             companyName: config.win.versionStrings.CompanyName,
             description: config.win.versionStrings.FileDescription,
-            version: config.win.productVersion,
+            version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
             // Compression.
@@ -469,7 +469,7 @@ export class Builder {
             appName: config.win.versionStrings.ProductName,
             companyName: config.win.versionStrings.CompanyName,
             description: config.win.versionStrings.FileDescription,
-            version: config.win.productVersion,
+            version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
             // Compression.
