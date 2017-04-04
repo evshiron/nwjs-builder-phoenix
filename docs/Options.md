@@ -45,5 +45,7 @@ Currently noop.
 
 Name | Type | Description
 --- | --- | ---
+modern | boolean | Whether to use Modern UI 2. Defaults to `true`.
+languages | string[] | Languages used in Modern UI 2. Multiple languages will result in a language selection dialog on startup. Defaults to `[ 'English' ]`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.
