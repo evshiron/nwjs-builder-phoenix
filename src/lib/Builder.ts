@@ -343,35 +343,55 @@ export class Builder {
         const fromDir = resolve(this.dir, config.output, (await versionInfo.getVersion(fromVersion)).source);
         const toDir = resolve(this.dir, config.output, (await versionInfo.getVersion(toVersion)).source);
 
-        const data = await (new NsisDiffer(fromDir, toDir, {
+        if(config.nsis.customUpdaterScript) {
 
-            // Basic.
-            appName: config.win.versionStrings.ProductName,
-            companyName: config.win.versionStrings.CompanyName,
-            description: config.win.versionStrings.FileDescription,
-            version: config.win.productVersion,
-            copyright: config.win.versionStrings.LegalCopyright,
+            await nsisBuild(toDir, config.nsis.customUpdaterScript, {
+                defines: {
+                    NW_APPNAME: config.win.versionStrings.ProductName,
+                    NW_COMPANYNAME: config.win.versionStrings.CompanyName,
+                    NW_DESCRIPTION: config.win.versionStrings.FileDescription,
+                    NW_VERSION: config.win.productVersion,
+                    NW_COPYRIGHT: config.win.versionStrings.LegalCopyright,
+                    NW_OUTPUT: diffNsis,
+                },
+                mute: false,
+            });
 
-            // Compression.
-            compression: 'lzma',
-            solid: true,
+        }
+        else {
 
-            modern: config.nsis.modern,
-            languages: config.nsis.languages,
+            const data = await (new NsisDiffer(fromDir, toDir, {
 
-            // Output.
-            output: diffNsis,
+                // Basic.
+                appName: config.win.versionStrings.ProductName,
+                companyName: config.win.versionStrings.CompanyName,
+                description: config.win.versionStrings.FileDescription,
+                version: config.win.productVersion,
+                copyright: config.win.versionStrings.LegalCopyright,
 
-        })).make();
+                // Compression.
+                compression: 'lzma',
+                solid: true,
 
-        const script = await tmpName();
-        await writeFileAsync(script, data);
+                modern: config.nsis.modern,
+                languages: config.nsis.languages,
 
-        await nsisBuild(toDir, script, {
-            mute: false,
-        });
+                // Output.
+                output: diffNsis,
 
-        await removeAsync(script);
+            })).make();
+
+            const script = await tmpName();
+            await writeFileAsync(script, data);
+
+            await nsisBuild(toDir, script, {
+                defines: {},
+                mute: false,
+            });
+
+            await removeAsync(script);
+
+        }
 
         await versionInfo.addUpdater(toVersion, fromVersion, arch, diffNsis);
 
@@ -464,35 +484,55 @@ export class Builder {
 
         const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
 
-        const data = await (new NsisComposer({
+        if(config.nsis.customInstallerScript) {
 
-            // Basic.
-            appName: config.win.versionStrings.ProductName,
-            companyName: config.win.versionStrings.CompanyName,
-            description: config.win.versionStrings.FileDescription,
-            version: config.win.productVersion,
-            copyright: config.win.versionStrings.LegalCopyright,
+            await nsisBuild(targetDir, config.nsis.customUpdaterScript, {
+                defines: {
+                    NW_APPNAME: config.win.versionStrings.ProductName,
+                    NW_COMPANYNAME: config.win.versionStrings.CompanyName,
+                    NW_DESCRIPTION: config.win.versionStrings.FileDescription,
+                    NW_VERSION: config.win.productVersion,
+                    NW_COPYRIGHT: config.win.versionStrings.LegalCopyright,
+                    NW_OUTPUT: targetNsis,
+                },
+                mute: false,
+            });
 
-            // Compression.
-            compression: 'lzma',
-            solid: true,
+        }
+        else {
 
-            modern: config.nsis.modern,
-            languages: config.nsis.languages,
+            const data = await (new NsisComposer({
 
-            // Output.
-            output: targetNsis,
+                // Basic.
+                appName: config.win.versionStrings.ProductName,
+                companyName: config.win.versionStrings.CompanyName,
+                description: config.win.versionStrings.FileDescription,
+                version: config.win.productVersion,
+                copyright: config.win.versionStrings.LegalCopyright,
 
-        })).make();
+                // Compression.
+                compression: 'lzma',
+                solid: true,
 
-        const script = await tmpName();
-        await writeFileAsync(script, data);
+                modern: config.nsis.modern,
+                languages: config.nsis.languages,
 
-        await nsisBuild(targetDir, script, {
-            mute: false,
-        });
+                // Output.
+                output: targetNsis,
 
-        await removeAsync(script);
+            })).make();
+
+            const script = await tmpName();
+            await writeFileAsync(script, data);
+
+            await nsisBuild(targetDir, script, {
+                defines: {},
+                mute: false,
+            });
+
+            await removeAsync(script);
+
+        }
 
         await versionInfo.addVersion(pkg.version, '', targetDir);
         await versionInfo.addInstaller(pkg.version, arch, targetNsis);

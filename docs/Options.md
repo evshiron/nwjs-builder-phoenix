@@ -49,3 +49,16 @@ modern | boolean | Whether to use Modern UI 2. Defaults to `true`.
 languages | string[] | Languages used in Modern UI 2. Multiple languages will result in a language selection dialog on startup. Defaults to `[ 'English' ]`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.
+installerScript | string | Path to custom installer script. Defaults to `undefined`.
+updaterScript | string | Path to custom updater script. Defaults to `undefined`.
+
+## Custom NSIS Scripts
+
+Predefined symbols from `nwjs-builder-phoenix` via ` makensis /D`, haven't tested if it works:
+
+* NW_APPNAME
+* NW_COMPANYNAME
+* NW_DESCRIPTION
+* NW_VERSION
+* NW_COPYRIGHT
+* NW_OUTPUT

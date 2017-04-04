@@ -7,6 +7,9 @@ export class NsisConfig {
     public diffUpdaters: boolean = false;
     public hashCalculation: boolean = true;
 
+    public customInstallerScript: string = undefined;
+    public customUpdaterScript: string = undefined;
+
     constructor(options: any = {}) {
 
         Object.keys(this).map((key) => {

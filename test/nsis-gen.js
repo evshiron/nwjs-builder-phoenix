@@ -71,3 +71,9 @@ test('diff', async (t) => {
     await removeAsync(script);
 
 });
+
+test('custom', (t) => {
+
+    // TODO:
+
+});
