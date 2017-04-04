@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.3"></a>
+## [1.4.3](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.4.2...v1.4.3) (2017-04-04)
+
+
+### Bug Fixes
+
+* **Builder:** convert semver to windows version when needed ([bd99c60](https://github.com/evshiron/nwjs-builder-phoenix/commit/bd99c60))
+* **nsis-gen:** remove modern option and always create modern installers ([aea9140](https://github.com/evshiron/nwjs-builder-phoenix/commit/aea9140))
+
+
+
 <a name="1.4.2"></a>
 ## [1.4.2](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.4.1...v1.4.2) (2017-04-04)
 
