@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.3.4...v1.4.0) (2017-04-04)
+
+
+### Bug Fixes
+
+* **nsis-gen:** use paths relative to cwd to specify files in nsis scripts ([15afb8f](https://github.com/evshiron/nwjs-builder-phoenix/commit/15afb8f))
+
+
+### Features
+
+* **nsis-gen:** integrate nsis contribs and make default nsis builds modern ([34c93e6](https://github.com/evshiron/nwjs-builder-phoenix/commit/34c93e6))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.3.3...v1.3.4) (2017-04-02)
 
