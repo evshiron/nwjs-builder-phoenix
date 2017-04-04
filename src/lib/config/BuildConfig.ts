@@ -41,6 +41,9 @@ export class BuildConfig {
                 case 'linux':
                     this.linux = new LinuxConfig(options.linux);
                     break;
+                case 'nsis':
+                    this.nsis = new NsisConfig(options.nsis);
+                    break;
                 default:
                     (<any>this)[key] = options[key];
                     break;
