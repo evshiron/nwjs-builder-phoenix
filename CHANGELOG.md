@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.4.3...v1.5.0) (2017-04-05)
+
+
+### Features
+
+* **Builder:** support concurrent building ([4553108](https://github.com/evshiron/nwjs-builder-phoenix/commit/4553108))
+
+
+
 <a name="1.4.3"></a>
 ## [1.4.3](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.4.2...v1.4.3) (2017-04-04)
 
