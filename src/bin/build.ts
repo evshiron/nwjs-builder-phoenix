@@ -35,6 +35,11 @@ const argv = require('yargs')
     describe: 'Build for x64 arch',
     default: Builder.DEFAULT_OPTIONS.x64,
 })
+.option('chrome-app', {
+    type: 'boolean',
+    describe: 'Build from Chrome App',
+    default: Builder.DEFAULT_OPTIONS.chromeApp,
+})
 .option('mirror', {
     describe: 'Modify NW.js mirror',
     default: Builder.DEFAULT_OPTIONS.mirror,
@@ -57,6 +62,7 @@ const argv = require('yargs')
         linux: argv.linux,
         x86: argv.x86,
         x64: argv.x64,
+        chromeApp: argv['chrome-app'],
         mirror: argv.mirror,
         concurrent: argv.concurrent,
         mute: false,

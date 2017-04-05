@@ -23,6 +23,7 @@ interface IBuilderOptions {
     linux?: boolean;
     x86?: boolean;
     x64?: boolean;
+    chromeApp?: boolean;
     mirror?: string;
     concurrent?: boolean;
     mute?: boolean;
@@ -36,6 +37,7 @@ export class Builder {
         linux: false,
         x86: false,
         x64: false,
+        chromeApp: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         concurrent: false,
         mute: true,
@@ -101,7 +103,7 @@ export class Builder {
         }
         else {
 
-            const pkg: any = await readJsonAsync(join(this.dir, 'package.json'));
+            const pkg: any = await readJsonAsync(join(this.dir, this.options.chromeApp ? 'manifest.json' : 'package.json'));
             const config = new BuildConfig(pkg);
 
             debug('in build', 'config', config);

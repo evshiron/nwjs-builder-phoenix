@@ -14,6 +14,7 @@ import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync, extractGe
 interface IRunnerOptions {
     x86?: boolean;
     x64?: boolean;
+    chromeApp?: boolean;
     mirror?: string;
     detached?: boolean;
     mute?: boolean;
@@ -24,6 +25,7 @@ export class Runner {
     public static DEFAULT_OPTIONS: IRunnerOptions = {
         x86: false,
         x64: false,
+        chromeApp: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         detached: false,
         mute: true,
@@ -47,7 +49,7 @@ export class Runner {
         ? (this.options.x86 ? 'ia32' : 'x64')
         : process.arch;
 
-        const pkg: any = await readJsonAsync(join(this.args[0], 'package.json'));
+        const pkg: any = await readJsonAsync(join(this.args[0], this.options.chromeApp ? 'manifest.json' : 'package.json'));
         const config = new BuildConfig(pkg);
 
         debug('in run', 'config', config);
