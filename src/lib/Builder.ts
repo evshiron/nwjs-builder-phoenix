@@ -578,10 +578,16 @@ export class Builder {
         const runtimeDir = await downloader.fetchAndExtract();
 
         if(!this.options.mute) {
-            console.info('Building directory target...');
+            console.info('Building targets...');
         }
 
+        const started = Date.now();
+
         const targetDir = await this.buildDirTarget(platform, arch, runtimeDir, pkg, config);
+
+        if(!this.options.mute) {
+            console.info(`Building directory target ends within ${ this.getTimeDiff(started) }ms.`);
+        }
 
         // TODO: Consider using `Bluebird.map` to enable concurrent target building.
         for(const target of config.targets) {
@@ -599,7 +605,7 @@ export class Builder {
             case 'nsis':
                 await this.buildNsisTarget(platform, arch, targetDir, pkg, config);
                 if(!this.options.mute) {
-                    console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }.`);
+                    console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }ms.`);
                 }
                 break;
             default:
