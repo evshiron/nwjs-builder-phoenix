@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.5.0...v1.6.0) (2017-04-05)
+
+
+### Features
+
+* **project:** support building and running from chrome apps ([a62bc5b](https://github.com/evshiron/nwjs-builder-phoenix/commit/a62bc5b))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.4.3...v1.5.0) (2017-04-05)
 
