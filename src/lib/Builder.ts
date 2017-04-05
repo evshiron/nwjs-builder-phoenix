@@ -77,7 +77,7 @@ export class Builder {
 
         if(this.options.concurrent) {
 
-            await Bluebird.map(tasks, async ([ platform, arch ], idx) => {
+            await Bluebird.map(tasks, async ([ platform, arch ]) => {
 
                 const options: any = {};
                 options[platform] = true;
@@ -93,7 +93,7 @@ export class Builder {
                 await builder.build();
 
                 if(!this.options.mute) {
-                    console.info(`Building for ${ platform }, ${ arch } ends within ${ ((Date.now() - started) / 1000).toFixed(2) }ms.`);
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }ms.`);
                 }
 
             });
@@ -113,13 +113,17 @@ export class Builder {
                 await this.buildTask(platform, arch, pkg, config);
 
                 if(!this.options.mute) {
-                    console.info(`Building for ${ platform }, ${ arch } ends within ${ ((Date.now() - started) / 1000).toFixed(2) }ms.`);
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }ms.`);
                 }
 
             }
 
         }
 
+    }
+
+    protected getTimeDiff(started: number) {
+        return ((Date.now() - started) / 1000).toFixed(2);
     }
 
     protected combineExecutable(executable: string, nwFile: string) {
@@ -577,24 +581,29 @@ export class Builder {
 
         const targetDir = await this.buildDirTarget(platform, arch, runtimeDir, pkg, config);
 
+        // TODO: Consider using `Bluebird.map` to enable concurrent target building.
         for(const target of config.targets) {
+
+            const started = Date.now();
+
             switch(target) {
             case 'zip':
             case '7z':
-                if(!this.options.mute) {
-                    console.info(`Building ${ target } archive target...`);
-                }
                 await this.buildArchiveTarget(target, targetDir);
+                if(!this.options.mute) {
+                    console.info(`Building ${ target } archive target ends within ${ this.getTimeDiff(started) }ms.`);
+                }
                 break;
             case 'nsis':
-                if(!this.options.mute) {
-                    console.info(`Building nsis target...`);
-                }
                 await this.buildNsisTarget(platform, arch, targetDir, pkg, config);
+                if(!this.options.mute) {
+                    console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }.`);
+                }
                 break;
             default:
                 throw new Error('ERROR_UNKNOWN_TARGET');
             }
+
         }
 
     }
