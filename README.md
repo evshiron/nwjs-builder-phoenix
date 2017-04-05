@@ -20,6 +20,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
   * macOS: TODO
   * Linux: TODO
 * Building for different platforms concurrently
+* Chrome App Support
 * Configurable executable fields and icons for Windows and macOS
 * Integration for `nwjs-ffmpeg-prebuilt`
 * Exclusion of useless files from `node_modules`
