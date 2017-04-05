@@ -7,16 +7,6 @@ const debug = require('debug')('build:commandline:build');
 import { Builder } from '../lib';
 
 const argv = require('yargs')
-.option('x86', {
-    type: 'boolean',
-    describe: 'Build for x86 arch',
-    default: Builder.DEFAULT_OPTIONS.x86,
-})
-.option('x64', {
-    type: 'boolean',
-    describe: 'Build for x64 arch',
-    default: Builder.DEFAULT_OPTIONS.x64,
-})
 .option('win', {
     type: 'boolean',
     describe: 'Build for Windows platform',
@@ -35,9 +25,24 @@ const argv = require('yargs')
     default: Builder.DEFAULT_OPTIONS.linux,
     alias: 'l',
 })
+.option('x86', {
+    type: 'boolean',
+    describe: 'Build for x86 arch',
+    default: Builder.DEFAULT_OPTIONS.x86,
+})
+.option('x64', {
+    type: 'boolean',
+    describe: 'Build for x64 arch',
+    default: Builder.DEFAULT_OPTIONS.x64,
+})
 .option('mirror', {
     describe: 'Modify NW.js mirror',
     default: Builder.DEFAULT_OPTIONS.mirror,
+})
+.option('concurrent', {
+    type: 'boolean',
+    describe: 'Build concurrently',
+    default: Builder.DEFAULT_OPTIONS.concurrent,
 })
 .help()
 .argv;
@@ -53,6 +58,7 @@ const argv = require('yargs')
         x86: argv.x86,
         x64: argv.x64,
         mirror: argv.mirror,
+        concurrent: argv.concurrent,
         mute: false,
     }, argv._.shift());
 

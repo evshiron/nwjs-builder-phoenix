@@ -3,6 +3,7 @@ import { dirname, basename, join, resolve } from 'path';
 
 import * as semver from 'semver';
 import { ensureDirAsync, emptyDir, readFileAsync, readJsonAsync, writeFileAsync, copyAsync, removeAsync, createReadStream, createWriteStream, renameAsync } from 'fs-extra-promise';
+import * as Bluebird from 'bluebird';
 
 const debug = require('debug')('build:builder');
 const globby = require('globby');
@@ -23,6 +24,7 @@ interface IBuilderOptions {
     x86?: boolean;
     x64?: boolean;
     mirror?: string;
+    concurrent?: boolean;
     mute?: boolean;
 }
 
@@ -35,6 +37,7 @@ export class Builder {
         x86: false,
         x64: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
+        concurrent: false,
         mute: true,
     };
 
@@ -64,6 +67,7 @@ export class Builder {
         if(!this.options.mute) {
             console.info('Starting building tasks...', {
                 tasks,
+                concurrent: this.options.concurrent,
             });
         }
 
@@ -71,14 +75,48 @@ export class Builder {
             throw new Error('ERROR_NO_TASK');
         }
 
-        const pkg: any = await readJsonAsync(join(this.dir, 'package.json'));
-        const config = new BuildConfig(pkg);
+        if(this.options.concurrent) {
 
-        debug('in build', 'config', config);
+            await Bluebird.map(tasks, async ([ platform, arch ], idx) => {
 
-        for(const [ platform, arch ] of tasks) {
+                const options: any = {};
+                options[platform] = true;
+                options[arch] = true;
+                options.mirror = this.options.mirror;
+                options.concurrent = false;
+                options.mute = true;
 
-            await this.buildTask(platform, arch, pkg, config);
+                const builder = new Builder(options, this.dir);
+
+                const started = Date.now();
+
+                await builder.build();
+
+                if(!this.options.mute) {
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ ((Date.now() - started) / 1000).toFixed(2) }ms.`);
+                }
+
+            });
+
+        }
+        else {
+
+            const pkg: any = await readJsonAsync(join(this.dir, 'package.json'));
+            const config = new BuildConfig(pkg);
+
+            debug('in build', 'config', config);
+
+            for(const [ platform, arch ] of tasks) {
+
+                const started = Date.now();
+
+                await this.buildTask(platform, arch, pkg, config);
+
+                if(!this.options.mute) {
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ ((Date.now() - started) / 1000).toFixed(2) }ms.`);
+                }
+
+            }
 
         }
 
@@ -367,7 +405,7 @@ export class Builder {
         await writeFileAsync(script, data);
 
         await nsisBuild(toDir, script, {
-            mute: false,
+            mute: this.options.mute,
         });
 
         await removeAsync(script);
@@ -455,7 +493,9 @@ export class Builder {
     protected async buildNsisTarget(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
 
         if(platform != 'win') {
-            console.info(`Skip building nsis target for ${ platform }.`);
+            if(!this.options.mute) {
+                console.info(`Skip building nsis target for ${ platform }.`);
+            }
             return;
         }
 
@@ -487,7 +527,7 @@ export class Builder {
         await writeFileAsync(script, data);
 
         await nsisBuild(targetDir, script, {
-            mute: false,
+            mute: this.options.mute,
         });
 
         await removeAsync(script);
@@ -555,10 +595,6 @@ export class Builder {
             default:
                 throw new Error('ERROR_UNKNOWN_TARGET');
             }
-        }
-
-        if(!this.options.mute) {
-            console.info(`Building for ${ platform }, ${ arch } ends.`);
         }
 
     }

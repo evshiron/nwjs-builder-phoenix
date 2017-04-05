@@ -6,7 +6,7 @@ import { spawnAsync } from '../dist/lib/util';
 
 const dir = './assets/project/';
 
-test('commandline', async (t) => {
+test.skip('commandline', async (t) => {
 
     const mirror = process.env.CI ? '' : '--mirror https://npm.taobao.org/mirrors/nwjs/';
 
@@ -17,7 +17,7 @@ test('commandline', async (t) => {
 
 });
 
-test('module', async (t) => {
+test.skip('module', async (t) => {
 
     const mirror = process.env.CI ? undefined : 'https://npm.taobao.org/mirrors/nwjs/';
 
@@ -25,6 +25,24 @@ test('module', async (t) => {
         win: true,
         x64: true,
         mirror,
+    }, dir);
+
+    await builder.build();
+
+});
+
+test('concurrent', async (t) => {
+
+    const mirror = process.env.CI ? undefined : 'https://npm.taobao.org/mirrors/nwjs/';
+
+    const builder = new Builder({
+        win: true,
+        mac: true,
+        linux: true,
+        x64: true,
+        mirror,
+        concurrent: true,
+        mute: false,
     }, dir);
 
     await builder.build();
