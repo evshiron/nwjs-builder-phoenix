@@ -71,7 +71,7 @@ The above code snippet enables `npm run dist` and `npm run start`/`npm start`. T
 
 * Well done.
 
-This should be the common use case, read the following Options section and configure things if needed.
+This should be the common use case, read the following Options section and [FAQs](./docs/FAQs.md) if something is missing.
 
 See also [project for testing](./assets/project/) and [test cases](./test/) for reference.
 
