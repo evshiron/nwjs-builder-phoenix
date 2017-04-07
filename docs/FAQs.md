@@ -3,7 +3,7 @@
 
 > Icons on Windows?
 
-* Prepare different sizes (eg. 32x32, 48x48, 64x64, 128x128, 256x256, etc.) of `.png`s and use `icotool` or some other tools to create a proper `.ico` file. 
+* Prepare different sizes (e.g. 32x32, 48x48, 64x64, 128x128, 256x256, etc.) of `.png`s and use `icotool` or some other tools to create a proper `.ico` file.
 * Set the path of `.ico` to `package.json:build.win.icon`.
 * Set the path of a `.png` to `package.json:window.icon`.
 * Save and build.
