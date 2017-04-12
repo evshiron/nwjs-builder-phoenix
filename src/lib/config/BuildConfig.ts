@@ -24,6 +24,7 @@ export class BuildConfig {
 
     public appId: string = undefined;
     public ffmpegIntegration: boolean = false;
+    public strippedProperties: string[] = [ 'scripts', 'devDependencies', 'build' ];
 
     constructor(pkg: any = {}) {
 

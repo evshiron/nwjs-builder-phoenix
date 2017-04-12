@@ -15,6 +15,9 @@
       "zip",
       "nsis7z"
     ],
+    "strippedProperties": [
+      "build"
+    ],
     "win": {
       "versionStrings": {
         "ProductName": "Project",

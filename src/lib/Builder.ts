@@ -352,6 +352,22 @@ export class Builder {
 
         }
 
+        // Here we overwrite `package.json` with a stripped one.
+
+        await writeFileAsync(join(appRoot, 'package.json'), (() => {
+
+            const json: any = {};
+
+            for(const key in pkg) {
+                if(pkg.hasOwnProperty(key) && config.strippedProperties.indexOf(key) == -1) {
+                    json[key] = pkg[key];
+                }
+            }
+
+            return JSON.stringify(json);
+
+        })());
+
     }
 
     protected async integrateFFmpeg(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
