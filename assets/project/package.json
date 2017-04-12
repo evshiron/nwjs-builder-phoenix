@@ -13,7 +13,7 @@
     "nwVersion": "lts",
     "targets": [
       "zip",
-      "nsis"
+      "nsis7z"
     ],
     "win": {
       "versionStrings": {

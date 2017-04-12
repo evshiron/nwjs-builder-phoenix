@@ -14,7 +14,7 @@ import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
 import { NsisVersionInfo } from './common';
-import { NsisComposer, NsisDiffer, nsisBuild } from './nsis-gen';
+import { NsisComposer, NsisDiffer, Nsis7Zipper, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
 interface IBuilderOptions {
@@ -482,17 +482,17 @@ export class Builder {
 
     protected async buildArchiveTarget(type: string, targetDir: string) {
 
-        const targetZip = join(dirname(targetDir), `${ basename(targetDir) }.${ type }`);
+        const targetArchive = join(dirname(targetDir), `${ basename(targetDir) }.${ type }`);
 
-        await removeAsync(targetZip);
+        await removeAsync(targetArchive);
 
         const files = await globby([ '**/*' ], {
             cwd: targetDir,
         });
 
-        await compress(targetDir, files, type, targetZip);
+        await compress(targetDir, files, type, targetArchive);
 
-        return targetZip;
+        return targetArchive;
 
     }
 
@@ -510,6 +510,67 @@ export class Builder {
         const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
 
         const data = await (new NsisComposer({
+
+            // Basic.
+            appName: config.win.versionStrings.ProductName,
+            companyName: config.win.versionStrings.CompanyName,
+            description: config.win.versionStrings.FileDescription,
+            version: fixWindowsVersion(config.win.productVersion),
+            copyright: config.win.versionStrings.LegalCopyright,
+
+            // Compression.
+            compression: 'lzma',
+            solid: true,
+
+            languages: config.nsis.languages,
+
+            // Output.
+            output: targetNsis,
+
+        })).make();
+
+        const script = await tmpName();
+        await writeFileAsync(script, data);
+
+        await nsisBuild(targetDir, script, {
+            mute: this.options.mute,
+        });
+
+        await removeAsync(script);
+
+        await versionInfo.addVersion(pkg.version, '', targetDir);
+        await versionInfo.addInstaller(pkg.version, arch, targetNsis);
+
+        if(config.nsis.diffUpdaters) {
+
+            for(const version of await versionInfo.getVersions()) {
+                if(semver.gt(pkg.version, version)) {
+                    await this.buildNsisDiffUpdater(platform, arch, versionInfo, version, pkg.version, pkg, config);
+                }
+            }
+
+        }
+
+        await versionInfo.save();
+
+    }
+
+    protected async buildNsis7zTarget(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
+
+        if(platform != 'win') {
+            if(!this.options.mute) {
+                console.info(`Skip building nsis7z target for ${ platform }.`);
+            }
+            return;
+        }
+
+        const sourceArchive = await this.buildArchiveTarget('7z', targetDir);
+
+        const versionInfo = new NsisVersionInfo(resolve(this.dir, config.output, 'versions.nsis.json'));
+
+        const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
+
+        const data = await (new Nsis7Zipper(sourceArchive, {
 
             // Basic.
             appName: config.win.versionStrings.ProductName,
@@ -606,6 +667,12 @@ export class Builder {
                 await this.buildNsisTarget(platform, arch, targetDir, pkg, config);
                 if(!this.options.mute) {
                     console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }ms.`);
+                }
+                break;
+            case 'nsis7z':
+                await this.buildNsis7zTarget(platform, arch, targetDir, pkg, config);
+                if(!this.options.mute) {
+                    console.info(`Building nsis7z target ends within ${ this.getTimeDiff(started) }ms.`);
                 }
                 break;
             default:

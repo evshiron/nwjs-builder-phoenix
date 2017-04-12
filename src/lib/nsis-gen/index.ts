@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 
 export * from './NsisComposer';
 export * from './NsisDiffer';
+export * from './Nsis7Zipper';
 
 const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');

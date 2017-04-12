@@ -70,7 +70,23 @@ ${ NsisComposer.DIVIDER }
 #
 ${ NsisComposer.DIVIDER }
 
-${ NsisComposer.DIVIDER }
+${ await this.makeGeneralSection() }
+
+${ await this.makeModernUISection() }
+
+${ await this.makeVersionSection() }
+
+${ await this.makeHookSection() }
+
+${ await this.makeInstallSection() }
+
+${ await this.makeUninstallSection() }
+`;
+
+    }
+
+    protected async makeGeneralSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
 # General
 #
@@ -86,9 +102,11 @@ InstallDir "$LOCALAPPDATA\\${ this.options.appName }"
 InstallDirRegKey HKCU "Software\\${ this.options.appName }" "InstallDir"
 
 RequestExecutionLevel user
-XPStyle on
+XPStyle on`;
+    }
 
-${ NsisComposer.DIVIDER }
+    protected async makeModernUISection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
 # Modern UI
 #
@@ -125,11 +143,13 @@ ${
     this.options.languages.length > 1
     ? `!insertmacro MUI_RESERVEFILE_LANGDLL`
     : ''
-}
+}`;
+    }
 
-${ NsisComposer.DIVIDER }
+    protected async makeVersionSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
-# Resources
+# Versions
 #
 ${ NsisComposer.DIVIDER }
 
@@ -138,9 +158,11 @@ VIAddVersionKey "ProductName" "${ this.options.appName }"
 VIAddVersionKey "CompanyName" "${ this.options.companyName }"
 VIAddVersionKey "FileDescription" "${ this.options.description }"
 VIAddVersionKey "FileVersion" "${ this.fixedVersion }"
-VIAddVersionKey "LegalCopyright" "${ this.options.copyright }"
+VIAddVersionKey "LegalCopyright" "${ this.options.copyright }"`;
+    }
 
-${ NsisComposer.DIVIDER }
+    protected async makeHookSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
 # Hooks
 #
@@ -154,9 +176,11 @@ Function .onInit
         : ''
     }
 
-FunctionEnd
+FunctionEnd`;
+    }
 
-${ NsisComposer.DIVIDER }
+    protected async makeInstallSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
 # Install
 #
@@ -181,9 +205,11 @@ ${ await this.makeInstallerFiles() }
 
   WriteUninstaller "$INSTDIR\\Uninstall.exe"
 
-SectionEnd
+SectionEnd`;
+    }
 
-${ NsisComposer.DIVIDER }
+    protected async makeUninstallSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
 #
 # Uninstall
 #
@@ -191,6 +217,7 @@ ${ NsisComposer.DIVIDER }
 
 Section Uninstall
 
+# FIXME: Remove only files installed.
 RMDir /r "$INSTDIR"
 
 !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
@@ -201,16 +228,12 @@ RMDir "$SMPROGRAMS\\$StartMenuFolder"
 
 DeleteRegKey HKCU "Software\\${ this.options.appName }"
 
-SectionEnd
-`;
-
+SectionEnd`;
     }
 
     protected async makeInstallerFiles(): Promise<string> {
-
         return `SetOutPath "$INSTDIR"
 FILE /r .\\*.*`;
-
     }
 
 }
