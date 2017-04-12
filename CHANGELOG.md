@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.7.1...v1.8.0) (2017-04-12)
+
+
+### Features
+
+* **Builder:** strip some properties from package.json ([c666496](https://github.com/evshiron/nwjs-builder-phoenix/commit/c666496))
+
+
+
 <a name="1.7.1"></a>
 ## [1.7.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.7.0...v1.7.1) (2017-04-12)
 
