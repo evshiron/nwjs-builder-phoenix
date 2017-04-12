@@ -11,7 +11,7 @@ nwVersion | string | Used NW.js version. Support `lts`, `stable` and `latest` sy
 nwFlavor | string | Used NW.js flavor for builder. Runner will always use `sdk`. `normal` or `sdk`. Defaults to `normal`.
 output | string | Output directory relative to the project root. Defaults to `./dist/`.
 packed | boolean | Whether to pack app or not. Packed app needed to be extracted at launch time. Defaults to `false`.
-targets | string[] | Target formats to build. `zip`, `7z`, etc. Defaults to `[]`.
+targets | string[] | Target formats to build. `zip`, `7z`, `nsis` and `nsis7z`, etc. Defaults to `[]`.
 files | string[] | Glob patterns for included files. Exclude `${ output }` automatically. Defaults to `[ '**/*' ]`.
 excludes | string[] | Glob patterns for excluded files. Defaults to `[]`.
 appId | string | App identity URI. Defaults to `io.github.nwjs.${ name }`.

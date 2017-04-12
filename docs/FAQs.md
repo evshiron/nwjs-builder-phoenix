@@ -19,3 +19,9 @@ Please follow [evshiron/nwjs-builder-phoenix#7](https://github.com/evshiron/nwjs
 Simply add `--chrome-app` to the commandline arguments which enables support for Chrome Apps.
 
 Also configurations should be set in `manifest.json` instead of `package.json` but within the same `build` property.
+
+> What's `nsis` target and what's the difference with `nsis` and `nsis7z` target?
+
+`nsis` target will build NSIS installers (and updaters when `package.json:build.nsis.diffUpdaters` is `true`) for Windows.
+
+`nsis7z` target will use `7za` to compress and [Nsis7z plug-in](http://nsis.sourceforge.net/Nsis7z_plug-in) to extract, instead of the built-in LZMA compression, resulting in a better and faster compression. But it doesn't list installed files, onlya percentage indicating the progress of extraction when installing.
