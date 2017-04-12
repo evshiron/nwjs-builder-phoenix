@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.7.0...v1.7.1) (2017-04-12)
+
+
+### Bug Fixes
+
+* **assets:** add missing nsis assets ([e2f572b](https://github.com/evshiron/nwjs-builder-phoenix/commit/e2f572b))
+
+
+
 <a name="1.7.0"></a>
 # [1.7.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.6.0...v1.7.0) (2017-04-12)
 
