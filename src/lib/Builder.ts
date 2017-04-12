@@ -480,23 +480,23 @@ export class Builder {
 
     }
 
-    protected async buildArchiveTarget(type: string, targetDir: string) {
+    protected async buildArchiveTarget(type: string, sourceDir: string) {
 
-        const targetArchive = join(dirname(targetDir), `${ basename(targetDir) }.${ type }`);
+        const targetArchive = join(dirname(sourceDir), `${ basename(sourceDir) }.${ type }`);
 
         await removeAsync(targetArchive);
 
         const files = await globby([ '**/*' ], {
-            cwd: targetDir,
+            cwd: sourceDir,
         });
 
-        await compress(targetDir, files, type, targetArchive);
+        await compress(sourceDir, files, type, targetArchive);
 
         return targetArchive;
 
     }
 
-    protected async buildNsisTarget(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
+    protected async buildNsisTarget(platform: string, arch: string, sourceDir: string, pkg: any, config: BuildConfig) {
 
         if(platform != 'win') {
             if(!this.options.mute) {
@@ -507,7 +507,7 @@ export class Builder {
 
         const versionInfo = new NsisVersionInfo(resolve(this.dir, config.output, 'versions.nsis.json'));
 
-        const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
+        const targetNsis = resolve(dirname(sourceDir), `${ basename(sourceDir) }-Setup.exe`);
 
         const data = await (new NsisComposer({
 
@@ -532,13 +532,13 @@ export class Builder {
         const script = await tmpName();
         await writeFileAsync(script, data);
 
-        await nsisBuild(targetDir, script, {
+        await nsisBuild(sourceDir, script, {
             mute: this.options.mute,
         });
 
         await removeAsync(script);
 
-        await versionInfo.addVersion(pkg.version, '', targetDir);
+        await versionInfo.addVersion(pkg.version, '', sourceDir);
         await versionInfo.addInstaller(pkg.version, arch, targetNsis);
 
         if(config.nsis.diffUpdaters) {
@@ -555,7 +555,7 @@ export class Builder {
 
     }
 
-    protected async buildNsis7zTarget(platform: string, arch: string, targetDir: string, pkg: any, config: BuildConfig) {
+    protected async buildNsis7zTarget(platform: string, arch: string, sourceDir: string, pkg: any, config: BuildConfig) {
 
         if(platform != 'win') {
             if(!this.options.mute) {
@@ -564,11 +564,11 @@ export class Builder {
             return;
         }
 
-        const sourceArchive = await this.buildArchiveTarget('7z', targetDir);
+        const sourceArchive = await this.buildArchiveTarget('7z', sourceDir);
 
         const versionInfo = new NsisVersionInfo(resolve(this.dir, config.output, 'versions.nsis.json'));
 
-        const targetNsis = resolve(dirname(targetDir), `${ basename(targetDir) }-Setup.exe`);
+        const targetNsis = resolve(dirname(sourceDir), `${ basename(sourceDir) }-Setup.exe`);
 
         const data = await (new Nsis7Zipper(sourceArchive, {
 
@@ -593,13 +593,13 @@ export class Builder {
         const script = await tmpName();
         await writeFileAsync(script, data);
 
-        await nsisBuild(targetDir, script, {
+        await nsisBuild(sourceDir, script, {
             mute: this.options.mute,
         });
 
         await removeAsync(script);
 
-        await versionInfo.addVersion(pkg.version, '', targetDir);
+        await versionInfo.addVersion(pkg.version, '', sourceDir);
         await versionInfo.addInstaller(pkg.version, arch, targetNsis);
 
         if(config.nsis.diffUpdaters) {
