@@ -1,6 +1,12 @@
 
 # FAQs
 
+> Why do you set `package.json:build.packed` to `false` by default?
+
+NW.js is not Electron. Using a zip file in NW.js, no matter as a separated `.nw` or combined with the executable, will require unzipping at every time the app launches, which results in a longer launch time, current working directory change and possibly slient crashes if unzipped path is longer than 255/260 characters.
+
+If you want to reduce the amount of files, try using `webpack` or something like that to pack project sources and most of node modules into bundles. `devDependencies` are ignored automatically (so if a node module is packed into bundles, make it `devDependencies`).
+
 > Icons on Windows?
 
 * Prepare different sizes (e.g. 32x32, 48x48, 64x64, 128x128, 256x256, etc.) of `.png`s and use `icotool` or some other tools to create a proper `.ico` file.
