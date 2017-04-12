@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.6.0...v1.7.0) (2017-04-12)
+
+
+### Features
+
+* **nsis-gen:** support nsis7z compression ([13b0529](https://github.com/evshiron/nwjs-builder-phoenix/commit/13b0529))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.5.0...v1.6.0) (2017-04-05)
 
