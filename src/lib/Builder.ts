@@ -412,6 +412,9 @@ export class Builder {
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
+            icon: config.nsis.icon,
+            unIcon: config.nsis.unIcon,
+
             // Compression.
             compression: 'lzma',
             solid: true,
@@ -534,6 +537,9 @@ export class Builder {
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
+            icon: config.nsis.icon,
+            unIcon: config.nsis.unIcon,
+
             // Compression.
             compression: 'lzma',
             solid: true,
@@ -594,6 +600,9 @@ export class Builder {
             description: config.win.versionStrings.FileDescription,
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
+
+            icon: config.nsis.icon,
+            unIcon: config.nsis.unIcon,
 
             // Compression.
             compression: 'lzma',

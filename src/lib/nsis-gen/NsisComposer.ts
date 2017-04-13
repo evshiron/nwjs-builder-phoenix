@@ -14,6 +14,9 @@ export interface INsisComposerOptions {
     version: string;
     copyright: string;
 
+    icon: string;
+    unIcon: string;
+
     // Compression.
     compression: 'zlib' | 'bzip2' | 'lzma';
     solid: boolean;
@@ -95,6 +98,17 @@ ${ NsisComposer.DIVIDER }
 Name "${ this.options.appName }"
 Caption "${ this.options.appName }"
 BrandingText "${ this.options.appName } ${ this.fixedVersion }"
+${
+    this.options.icon
+    ? `Icon "${ win32.normalize(resolve(this.options.icon)) }"`
+    : ''
+}
+${
+    this.options.unIcon
+    ? `UninstallIcon "${ win32.normalize(resolve(this.options.unIcon)) }"`
+    : ''
+}
+
 SetCompressor ${ this.options.solid ? '/SOLID' : '' } ${ this.options.compression }
 OutFile "${ win32.normalize(resolve(this.options.output)) }"
 

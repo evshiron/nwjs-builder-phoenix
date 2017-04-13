@@ -1,6 +1,9 @@
 
 export class NsisConfig {
 
+    public icon: string = undefined;
+    public unIcon: string = undefined;
+
     public languages: string[] = [ 'English' ];
 
     public diffUpdaters: boolean = false;
