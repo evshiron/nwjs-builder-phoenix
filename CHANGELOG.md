@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.0"></a>
+# [1.9.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.8.0...v1.9.0) (2017-04-14)
+
+
+### Features
+
+* **nsis-gen:** custom icons for installer and uninstaller ([958e88d](https://github.com/evshiron/nwjs-builder-phoenix/commit/958e88d))
+
+
+
 <a name="1.8.0"></a>
 # [1.8.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.7.1...v1.8.0) (2017-04-12)
 
