@@ -10,8 +10,8 @@ If you want to reduce the amount of files, try using `webpack` or something like
 > Icons on Windows?
 
 * Prepare different sizes (e.g. 32x32, 48x48, 64x64, 128x128, 256x256, etc.) of `.png`s and use `icotool` or some other tools to create a proper `.ico` file.
-* Set the path of `.ico` to `package.json:build.win.icon`.
-* Set the path of a `.png` to `package.json:window.icon`.
+* Set `package.json:build.win.icon` to the path of the `.ico` file.
+* Set `package.json:window.icon` to the path of a `.png` file.
 * Save and build.
 
 Windows Explorer might not reflect the changes immediately, if you have everything done and still see a default icon, check with something like Resource Hacker and restart Windows Explorer.
@@ -30,4 +30,4 @@ Also configurations should be set in `manifest.json` instead of `package.json` b
 
 `nsis` target will build NSIS installers (and updaters when `package.json:build.nsis.diffUpdaters` is `true`) for Windows.
 
-`nsis7z` target will use `7za` to compress and [Nsis7z plug-in](http://nsis.sourceforge.net/Nsis7z_plug-in) to extract, instead of the built-in LZMA compression, resulting in a better and faster compression. But it doesn't list installed files, onlya percentage indicating the progress of extraction when installing.
+`nsis7z` target will use `7za` to compress and [Nsis7z plug-in](http://nsis.sourceforge.net/Nsis7z_plug-in) to extract, instead of the built-in LZMA compression, resulting in a better and faster compression. But it doesn't list installed files, only a percentage indicating the progress of extraction when installing.
