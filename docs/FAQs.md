@@ -5,7 +5,7 @@
 
 NW.js is not Electron. Using a zip file in NW.js, no matter as a separated `.nw` or combined with the executable, will require unzipping at every time the app launches, which results in a longer launch time, current working directory change and possibly slient crashes if unzipped path is longer than 255/260 characters.
 
-If you want to reduce the amount of files, try using `webpack` or something like that to pack project sources and most of node modules into bundles. `devDependencies` are ignored automatically (so if a node module is packed into bundles, make it `devDependencies`).
+If you want to reduce the amount of files, try using `webpack` or something like that to pack project sources and most of node modules into bundles. `devDependencies` are ignored automatically (so if a node module is supposed to be packed into bundles, make it a `devDependency`).
 
 > Icons on Windows?
 
@@ -26,7 +26,7 @@ Simply add `--chrome-app` to the commandline arguments which enables support for
 
 Also configurations should be set in `manifest.json` instead of `package.json` but within the same `build` property.
 
-> What's `nsis` target and what's the difference with `nsis` and `nsis7z` target?
+> What's `nsis` target? What's the difference between `nsis` and `nsis7z` targets?
 
 `nsis` target will build NSIS installers (and updaters when `package.json:build.nsis.diffUpdaters` is `true`) for Windows.
 
