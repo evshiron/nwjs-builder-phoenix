@@ -95,6 +95,8 @@ ${ await this.makeUninstallSection() }
 #
 ${ NsisComposer.DIVIDER }
 
+Unicode true
+
 Name "${ this.options.appName }"
 Caption "${ this.options.appName }"
 BrandingText "${ this.options.appName } ${ this.fixedVersion }"
@@ -168,11 +170,11 @@ ${
 ${ NsisComposer.DIVIDER }
 
 VIProductVersion "${ this.fixedVersion }"
-VIAddVersionKey "ProductName" "${ this.options.appName }"
-VIAddVersionKey "CompanyName" "${ this.options.companyName }"
-VIAddVersionKey "FileDescription" "${ this.options.description }"
-VIAddVersionKey "FileVersion" "${ this.fixedVersion }"
-VIAddVersionKey "LegalCopyright" "${ this.options.copyright }"`;
+VIAddVersionKey /LANG=0 "ProductName" "${ this.options.appName }"
+VIAddVersionKey /LANG=0 "CompanyName" "${ this.options.companyName }"
+VIAddVersionKey /LANG=0 "FileDescription" "${ this.options.description }"
+VIAddVersionKey /LANG=0 "FileVersion" "${ this.fixedVersion }"
+VIAddVersionKey /LANG=0 "LegalCopyright" "${ this.options.copyright }"`;
     }
 
     protected async makeHookSection(): Promise<string> {

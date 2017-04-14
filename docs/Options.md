@@ -48,6 +48,6 @@ Name | Type | Description
 --- | --- | ---
 icon | string | .ico icon file for NSIS installers. Defaults to `undefined`.
 unIcon | string | .ico icon file for NSIS uninstallers. Defaults to `undefined`.
-languages | string[] | Languages for NSIS installers. Multiple languages will result in a language selection dialog on startup. Defaults to `[ 'English' ]`.
+languages | string[] | Languages for NSIS installers. Multiple languages will result in a language selection dialog on startup. See [/assets/nsis/Contrib/Language files/](../assets/nsis/Contrib/Language files/) for available values. Defaults to `[ 'English' ]`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.

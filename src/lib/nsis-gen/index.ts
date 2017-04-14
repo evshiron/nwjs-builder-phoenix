@@ -17,7 +17,7 @@ export async function nsisBuild(cwd: string, script: string, options: INsisBuild
     mute: false,
 }) {
 
-    const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), '/NOCD', win32.normalize(resolve(script)) ];
+    const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), '/NOCD', '/INPUTCHARSET', 'UTF8', win32.normalize(resolve(script)) ];
     if(process.platform != 'win32') {
         args.unshift('wine');
     }
