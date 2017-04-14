@@ -16,7 +16,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 * Building for Windows, macOS and Linux
   * Common: `zip`, `7z`
-  * Windows: `nsis`
+  * Windows: `nsis`, `nsis7z`
   * macOS: TODO
   * Linux: TODO
 * Building for different platforms concurrently
