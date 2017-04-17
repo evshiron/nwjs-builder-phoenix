@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.2"></a>
+## [1.9.2](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.9.1...v1.9.2) (2017-04-17)
+
+
+### Bug Fixes
+
+* **nsis-gen:** fix missing option to create desktop shortcut ([82c6a86](https://github.com/evshiron/nwjs-builder-phoenix/commit/82c6a86))
+
+
+
 <a name="1.9.1"></a>
 ## [1.9.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.9.0...v1.9.1) (2017-04-14)
 
