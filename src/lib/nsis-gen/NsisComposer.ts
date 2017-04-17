@@ -130,17 +130,25 @@ ${ NsisComposer.DIVIDER }
 
 !include "MUI2.nsh"
 
+Function CreateDesktopShortcut
+    CreateShortcut "$DESKTOP\\${ this.options.appName }.lnk" "$INSTDIR\\${ this.options.appName }.exe"
+FunctionEnd
+
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\\${ this.options.appName }"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "StartMenuFolder"
 
-!define MUI_FINISHPAGE_RUN "$INSTDIR\\${ this.options.appName }.exe"
+!define MUI_FINISHPAGE_SHOWREADME ""
+!define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
+!define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
 
 Var StartMenuFolder
 
+!define MUI_FINISHPAGE_RUN "$INSTDIR\\${ this.options.appName }.exe"
+
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
-!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+!insertmacro MUI_PAGE_STARTMENU "Application" $StartMenuFolder
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -211,7 +219,7 @@ WriteRegStr HKCU "Software\\${ this.options.appName }" "InstallDir" "$INSTDIR"
 
 ${ await this.makeInstallerFiles() }
 
-!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+!insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
 
     CreateDirectory "$SMPROGRAMS\\$StartMenuFolder"
     CreateShortcut "$SMPROGRAMS\\$StartMenuFolder\\${ this.options.appName }.lnk" "$INSTDIR\\${ this.options.appName }.exe"
@@ -236,11 +244,13 @@ Section Uninstall
 # FIXME: Remove only files installed.
 RMDir /r "$INSTDIR"
 
-!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+!insertmacro MUI_STARTMENU_GETFOLDER "Application" $StartMenuFolder
 
 Delete "$SMPROGRAMS\\$StartMenuFolder\\${ this.options.appName }.lnk"
 Delete "$SMPROGRAMS\\$StartMenuFolder\\Uninstall.lnk"
 RMDir "$SMPROGRAMS\\$StartMenuFolder"
+
+Delete "$DESKTOP\\${ this.options.appName }.lnk"
 
 DeleteRegKey HKCU "Software\\${ this.options.appName }"
 
