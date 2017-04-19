@@ -9,7 +9,7 @@ If you want to reduce the amount of files, try using `webpack` or something like
 
 > Icons on Windows?
 
-* Prepare different sizes (e.g. 32x32, 48x48, 64x64, 128x128, 256x256, etc.) of `.png`s and use `icotool` or some other tools to create a proper `.ico` file.
+* Prepare an `.png` file with 256x256 resolution, and use [iConvertIcons](https://iconverticons.com/online/) or something like that to generate ready-to-use `.ico` and `.icns`.
 * Set `package.json:build.win.icon` to the path of the `.ico` file.
 * Set `package.json:window.icon` to the path of a `.png` file.
 * Save and build.

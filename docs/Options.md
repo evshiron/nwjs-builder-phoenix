@@ -25,7 +25,7 @@ Name | Type | Description
 productVersion | string | Product version. Defaults to `${ version }`.
 fileVersion | string | File version. Defaults to `${ productVersion }`
 versionStrings | { [key: string]: string } | `rcedit` version strings. Defaults to `{ ProductName: "${ name }", FileDescription: "${ description }" }`.
-icon | string | .ico icon file. Defaults to `undefined`.
+icon | string | .ico icon file relative to the project root. Defaults to `undefined`.
 
 ## build.mac <- [MacConfig](../src/lib/config/MacConfig.ts)
 
@@ -36,7 +36,7 @@ displayName | string | DisplayName in `Info.plist`. Defaults to `${ name }`.
 version | string | Version in `Info.plist`. Defaults to `${ version }`.
 description | string | Description in `InfoPlist.strings`. Defaults to `${ description }`.
 copyright | string | Copyright in `InfoPlist.strings`. Defaults to `""`.
-icon | string | .icns icon file. Defaults to `undefined`.
+icon | string | .icns icon file relative to the project root. Defaults to `undefined`.
 
 ## build.linux <- [LinuxConfig](../src/lib/config/LinuxConfig.ts)
 
@@ -46,8 +46,8 @@ Currently noop.
 
 Name | Type | Description
 --- | --- | ---
-icon | string | .ico icon file for NSIS installers. Defaults to `undefined`.
-unIcon | string | .ico icon file for NSIS uninstallers. Defaults to `undefined`.
+icon | string | .ico icon file for NSIS installers relative to the project root. Defaults to `undefined`.
+unIcon | string | .ico icon file for NSIS uninstallers relative to the project root. Defaults to `undefined`.
 languages | string[] | Languages for NSIS installers. Multiple languages will result in a language selection dialog on startup. See [/assets/nsis/Contrib/Language files/](../assets/nsis/Contrib/Language%20files/) for available values. Defaults to `[ 'English' ]`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.

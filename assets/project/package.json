@@ -23,11 +23,13 @@
         "ProductName": "Project",
         "CompanyName": "nwjs-builder-phoenix",
         "LegalCopyright": "copyright"
-      }
+      },
+      "icon": "./assets/pd.ico"
     },
     "mac": {
       "displayName": "Project",
-      "copyright": "copyright"
+      "copyright": "copyright",
+      "icon": "./assets/pd.icns"
     },
     "nsis": {
       "diffUpdaters": true
@@ -36,5 +38,8 @@
   "devDependencies": {
     "nwjs-builder-phoenix": "github:evshiron/nwjs-builder-phoenix",
     "typescript": "^2.2.1"
+  },
+  "window": {
+    "icon": "./assets/pd.png"
   }
 }
