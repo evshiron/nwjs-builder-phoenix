@@ -1,5 +1,5 @@
 
-import { dirname, basename, join, resolve } from 'path';
+import { dirname, basename, resolve } from 'path';
 
 import * as semver from 'semver';
 import { ensureDirAsync, emptyDir, readFileAsync, readJsonAsync, writeFileAsync, copyAsync, removeAsync, createReadStream, createWriteStream, renameAsync } from 'fs-extra-promise';
@@ -103,7 +103,7 @@ export class Builder {
         }
         else {
 
-            const pkg: any = await readJsonAsync(join(this.dir, this.options.chromeApp ? 'manifest.json' : 'package.json'));
+            const pkg: any = await readJsonAsync(resolve(this.dir, this.options.chromeApp ? 'manifest.json' : 'package.json'));
             const config = new BuildConfig(pkg);
 
             debug('in build', 'config', config);
@@ -158,15 +158,18 @@ export class Builder {
     }
 
     protected updateWinResources(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+
+        const pathResolve = resolve;
+
         return new Promise((resolve, reject) => {
 
-            const path = join(targetDir, './nw.exe');
+            const path = pathResolve(targetDir, 'nw.exe');
 
             const rc = {
                 'product-version': fixWindowsVersion(config.win.productVersion),
                 'file-version': fixWindowsVersion(config.win.fileVersion),
                 'version-string': config.win.versionStrings,
-                'icon': config.win.icon,
+                'icon': config.win.icon ? pathResolve(this.dir, config.win.icon) : undefined,
             };
 
             rcedit(path, rc, (err: Error) => err ? reject(err) : resolve());
@@ -176,8 +179,8 @@ export class Builder {
 
     protected renameWinApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-        const src = join(targetDir, 'nw.exe');
-        const dest = join(targetDir, `${ config.win.versionStrings.ProductName }.exe`);
+        const src = resolve(targetDir, 'nw.exe');
+        const dest = resolve(targetDir, `${ config.win.versionStrings.ProductName }.exe`);
 
         return renameAsync(src, dest);
 
@@ -185,7 +188,7 @@ export class Builder {
 
     protected async updatePlist(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-        const path = join(targetDir, './nwjs.app/Contents/Info.plist');
+        const path = resolve(targetDir, './nwjs.app/Contents/Info.plist');
 
         const plist = await this.readPlist(path);
 
@@ -201,13 +204,13 @@ export class Builder {
 
     protected async updateMacIcon(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-        const path = join(targetDir, './nwjs.app/Contents/Resources/app.icns');
+        const path = resolve(targetDir, './nwjs.app/Contents/Resources/app.icns');
 
         if(!config.mac.icon) {
             return;
         }
 
-        await copyAsync(config.mac.icon, path);
+        await copyAsync(resolve(this.dir, config.mac.icon), path);
 
     }
 
@@ -219,7 +222,7 @@ export class Builder {
 
         for(const file of files) {
 
-            const path = join(targetDir, file);
+            const path = resolve(targetDir, file);
 
             const strings = <string>(await readFileAsync(path, {
                 encoding: 'ucs2',
@@ -250,8 +253,8 @@ export class Builder {
 
     protected renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-            const src = join(targetDir, 'nwjs.app');
-            const dest = join(targetDir, `${ config.mac.displayName }.app`);
+            const src = resolve(targetDir, 'nwjs.app');
+            const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
 
             return renameAsync(src, dest);
 
@@ -259,8 +262,8 @@ export class Builder {
 
     protected renameLinuxApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-        const src = join(targetDir, 'nw');
-        const dest = join(targetDir, `${ pkg.name }`);
+        const src = resolve(targetDir, 'nw');
+        const dest = resolve(targetDir, `${ pkg.name }`);
 
         return renameAsync(src, dest);
 
@@ -336,7 +339,7 @@ export class Builder {
             case 'osx':
             case 'mac':
                 for(const file of files) {
-                    await copyFileAsync(join(this.dir, file), join(appRoot, file));
+                    await copyFileAsync(resolve(this.dir, file), resolve(appRoot, file));
                 }
                 break;
             default:
@@ -347,14 +350,14 @@ export class Builder {
         else {
 
             for(const file of files) {
-                await copyFileAsync(join(this.dir, file), join(appRoot, file));
+                await copyFileAsync(resolve(this.dir, file), resolve(appRoot, file));
             }
 
         }
 
         // Here we overwrite `package.json` with a stripped one.
 
-        await writeFileAsync(join(appRoot, 'package.json'), (() => {
+        await writeFileAsync(resolve(appRoot, 'package.json'), (() => {
 
             const json: any = {};
 
@@ -412,8 +415,8 @@ export class Builder {
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
-            icon: config.nsis.icon,
-            unIcon: config.nsis.unIcon,
+            icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
+            unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
 
             // Compression.
             compression: 'lzma',
@@ -441,9 +444,9 @@ export class Builder {
 
     protected async buildDirTarget(platform: string, arch: string, runtimeDir: string, pkg: any, config: BuildConfig): Promise<string> {
 
-        const targetDir = join(this.dir, config.output, `${ pkg.name }-${ pkg.version }-${ platform }-${ arch }`);
+        const targetDir = resolve(this.dir, config.output, `${ pkg.name }-${ pkg.version }-${ platform }-${ arch }`);
         const runtimeRoot = await findRuntimeRoot(platform, runtimeDir);
-        const appRoot = join(targetDir, (() => {
+        const appRoot = resolve(targetDir, (() => {
             switch(platform) {
             case 'win32':
             case 'win':
@@ -501,7 +504,7 @@ export class Builder {
 
     protected async buildArchiveTarget(type: string, sourceDir: string) {
 
-        const targetArchive = join(dirname(sourceDir), `${ basename(sourceDir) }.${ type }`);
+        const targetArchive = resolve(dirname(sourceDir), `${ basename(sourceDir) }.${ type }`);
 
         await removeAsync(targetArchive);
 
@@ -537,8 +540,8 @@ export class Builder {
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
-            icon: config.nsis.icon,
-            unIcon: config.nsis.unIcon,
+            icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
+            unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
 
             // Compression.
             compression: 'lzma',
@@ -601,8 +604,8 @@ export class Builder {
             version: fixWindowsVersion(config.win.productVersion),
             copyright: config.win.versionStrings.LegalCopyright,
 
-            icon: config.nsis.icon,
-            unIcon: config.nsis.unIcon,
+            icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
+            unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
 
             // Compression.
             compression: 'lzma',

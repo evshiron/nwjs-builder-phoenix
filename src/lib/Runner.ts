@@ -1,5 +1,5 @@
 
-import { join } from 'path';
+import { resolve } from 'path';
 import { spawn } from 'child_process';
 
 import { copyAsync, readJsonAsync, chmodAsync } from 'fs-extra-promise';
@@ -49,7 +49,7 @@ export class Runner {
         ? (this.options.x86 ? 'ia32' : 'x64')
         : process.arch;
 
-        const pkg: any = await readJsonAsync(join(this.args[0], this.options.chromeApp ? 'manifest.json' : 'package.json'));
+        const pkg: any = await readJsonAsync(resolve(this.args[0], this.options.chromeApp ? 'manifest.json' : 'package.json'));
         const config = new BuildConfig(pkg);
 
         debug('in run', 'config', config);
