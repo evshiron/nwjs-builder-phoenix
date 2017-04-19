@@ -316,6 +316,8 @@ export class Builder {
 
         const files = await globby(config.files, {
             cwd: this.dir,
+            // TODO: https://github.com/isaacs/node-glob#options, warn for cyclic links.
+            follow: true,
             mark: true,
             ignore,
         });

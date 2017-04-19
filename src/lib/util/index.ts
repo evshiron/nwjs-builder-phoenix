@@ -233,7 +233,7 @@ export async function copyFileAsync(src: string, dest: string) {
 
     const stats = await lstatAsync(src);
 
-    if(stats.isDirectory()) {
+    if(stats.isDirectory() || stats.isSymbolicLink()) {
         //await ensureDirAsync(dest);
     }
     else {
