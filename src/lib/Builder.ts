@@ -465,7 +465,9 @@ export class Builder {
             emptyDir(targetDir, err => err ? reject(err) : resolve());
         });
 
-        await copyAsync(runtimeRoot, targetDir);
+        await copyAsync(runtimeRoot, targetDir, {
+            dereference: true,
+        });
 
         if(config.ffmpegIntegration) {
             await this.integrateFFmpeg(platform, arch, targetDir, pkg, config);
