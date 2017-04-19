@@ -5,7 +5,28 @@
 
 NW.js is not Electron. Using a zip file in NW.js, no matter as a separated `.nw` or combined with the executable, will require unzipping at every time the app launches, which results in a longer launch time, current working directory change and possibly slient crashes if unzipped path is longer than 255/260 characters.
 
-If you want to reduce the amount of files, try using `webpack` or something like that to pack project sources and most of node modules into bundles. `devDependencies` are ignored automatically (so if a node module is supposed to be packed into bundles, make it a `devDependency`).
+If you want to reduce the amount of files, try using `webpack` or something like that to build sources, uglify and pack most node modules into bundles. `devDependencies` are ignored by `nwjs-builder-phoenix` automatically (so if a node module is supposed to be packed into bundles, e.g. native addons, make it a `dependency`).
+
+Use the following code snippet to avoid packing `dependencies` into bundles.
+
+```javascript
+// webpack.config.js
+
+const { dependencies } = require('./package.json');
+
+const externals = {};
+Object.keys(dependencies || {}).map((dependency) => {
+    externals[dependency] = `commonjs2 ${ dependency }`;
+});
+
+module.exports = {
+    // I think `electron-renderer` works well with NW.js projects.
+    // If there is any better option, please tell me :)
+    target: 'electron-renderer',
+    externals,
+};
+
+```
 
 > Icons on Windows?
 
