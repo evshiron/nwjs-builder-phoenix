@@ -24,7 +24,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 * Configurable executable fields and icons for Windows and macOS
 * Integration for `nwjs-ffmpeg-prebuilt`
 * Exclusion of useless files from `node_modules`
-* TODO Auto Updater inspired by `electron-updater`
+* [Auto Updater](./packages/nsis-compat-tester/) inspired by `electron-updater`
 * TODO Rebuilding native modules
 * Ideas appreciated :)
 

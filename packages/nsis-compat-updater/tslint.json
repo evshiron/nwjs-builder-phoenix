@@ -1,0 +1,29 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "one-line": [
+            false
+        ],
+        "max-classes-per-file": [
+            false
+        ],
+        "max-line-length": [
+            false
+        ],
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
+        "whitespace": [
+            true,
+            "check-operator",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type",
+            "check-preblock"
+        ]
+    }
+}

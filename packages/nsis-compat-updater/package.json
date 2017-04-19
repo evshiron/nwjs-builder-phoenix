@@ -1,0 +1,39 @@
+{
+  "name": "nsis-compat-updater",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/lib/index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "test": "npm run build && ava --verbose",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evshiron/nwjs-builder-phoenix.git"
+  },
+  "author": "evshiron",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evshiron/nwjs-builder-phoenix/issues"
+  },
+  "homepage": "https://github.com/evshiron/nwjs-builder-phoenix#readme",
+  "devDependencies": {
+    "@types/bluebird-global": "^3.5.1",
+    "@types/node": "^7.0.12",
+    "@types/semver": "^5.3.31",
+    "@types/tmp": "0.0.32",
+    "ava": "^0.18.2",
+    "nwjs-builder-phoenix": "^1.9.3",
+    "tslint": "^5.0.0",
+    "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "debug": "^2.6.3",
+    "got": "^6.7.1",
+    "progress-stream": "^1.2.0",
+    "semver": "^5.3.0",
+    "tmp": "0.0.31"
+  }
+}

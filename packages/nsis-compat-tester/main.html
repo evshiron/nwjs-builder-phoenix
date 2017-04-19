@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+
+document.write(`<p>App launches.</p>`);
+
+const { NsisCompatUpdater } = require('nsis-compat-updater');
+
+const updater = new NsisCompatUpdater('http://127.0.0.1:8080/versions.nsis.json', nw.App.manifest.version, 'x86');
+
+updater.checkForUpdates()
+.then((version) => {
+
+    document.write(`<p>Version: ${ version }</p>`);
+
+    if(version && confirm(`New version of ${ version.version } is available, download now?`)) {
+
+        return updater.downloadUpdate(version.version)
+        .then((path) => {
+
+            document.write(`<p>Path: ${ path }</p>`);
+
+            if(confirm(`New version of ${ version.version } is downloaded, install now?`)) {
+                return updater.quitAndInstall(path);
+            }
+            else {
+                return updater.installWhenQuit(path);
+            }
+
+        });
+
+    }
+    else {
+
+        nw.Window.open('./app/index.html', {
+            width: 640,
+            height: 480,
+            new_instance: true,
+        });
+
+        nw.Window.get().close();
+
+    }
+
+})
+.catch((err) => {
+    document.write(`<p>[ERROR] ${ err.message }</p>`);
+});
+
+</script>
+</body>
+</html>
