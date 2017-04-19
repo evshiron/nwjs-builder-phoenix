@@ -1,0 +1,10 @@
+.*
+*.log
+node_modules
+/packages
+/assets/project
+/caches
+/coverage
+/docs
+/src
+/test

@@ -21,7 +21,7 @@
   "build": {
     "nwFlavor": "sdk",
     "targets": [
-      "nsis"
+      "nsis7z"
     ],
     "nsis": {
       "diffUpdaters": true

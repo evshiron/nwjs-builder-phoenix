@@ -16,16 +16,17 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 * Building for Windows, macOS and Linux
   * Common: `zip`, `7z`
-  * Windows: `nsis`, `nsis7z`
+  * Windows: `nsis`, [`nsis7z`](./docs/FAQs.md)
   * macOS: TODO
   * Linux: TODO
 * Building for different platforms concurrently
-* Chrome App Support
 * Configurable executable fields and icons for Windows and macOS
-* Integration for `nwjs-ffmpeg-prebuilt`
-* Exclusion of useless files from `node_modules`
-* [Auto Updater](./packages/nsis-compat-tester/) inspired by `electron-updater`
+* Exclusion of loose files from `node_modules`
+* [Chrome App support](./docs/FAQs.md)
+* `nwjs-ffmpeg-prebuilt` integration
+* [Auto Updater](./packages/nsis-compat-tester/)
 * TODO Rebuilding native modules
+* TODO Code signing
 * Ideas appreciated :)
 
 ## Getting Started
@@ -88,7 +89,11 @@ Also [see all available options here](./docs/Options.md).
 * `nwjs-builder-phoenix` supports node.js 4.x and later versions only.
 * `nwjs-builder-phoenix` writes with TypeScript and benefits from strong typing and async/await functions.
 
-## Known Mirrors
+## Development
+
+To be done.
+
+## Available Mirrors
 
 If you have difficulties connecting to the official download source, you can specify a mirror via `--mirror` argument of both `build` and `run`, or by setting `NWJS_MIRROR` environment variable. Environment variables like `HTTP_PROXY`, `HTTPS_PROXY` and `ALL_PROXY` should be useful too.
 

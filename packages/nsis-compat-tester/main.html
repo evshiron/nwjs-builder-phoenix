@@ -24,7 +24,7 @@ const updater = new NsisCompatUpdater('http://127.0.0.1:8080/versions.nsis.json'
 updater.checkForUpdates()
 .then((version) => {
 
-    document.write(`<p>Version: ${ version }</p>`);
+    document.write(`<p>Available Version: ${ version ? version.version : 'current' }</p>`);
 
     if(version && confirm(`New version of ${ version.version } is available, download now?`)) {
 
