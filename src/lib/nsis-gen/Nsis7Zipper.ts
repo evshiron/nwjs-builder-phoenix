@@ -6,7 +6,7 @@ import { NsisComposer, INsisComposerOptions } from './NsisComposer';
 export class Nsis7Zipper extends NsisComposer {
 
     constructor(protected path: string, options: INsisComposerOptions) {
-        super(options);
+        super((options.solid = false, options));
 
     }
 
