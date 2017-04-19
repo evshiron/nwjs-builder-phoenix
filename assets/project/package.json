@@ -36,7 +36,7 @@
     }
   },
   "devDependencies": {
-    "nwjs-builder-phoenix": "github:evshiron/nwjs-builder-phoenix",
+    "nwjs-builder-phoenix": "^1.9.3",
     "typescript": "^2.2.1"
   },
   "window": {
