@@ -245,6 +245,7 @@ export class NsisCompatUpdater {
         if(!this.versionInfo) {
 
             const versionInfo = await got(this.seed, {
+                retries: 1,
                 timeout: 5000,
             })
             .then((res: any) => JSON.parse(res.body));
