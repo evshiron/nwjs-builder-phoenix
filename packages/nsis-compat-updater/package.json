@@ -2,11 +2,11 @@
   "name": "nsis-compat-updater",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/lib/index.js",
+  "main": "./dist/bundle.js",
   "scripts": {
     "prepublish": "npm run build",
-    "test": "npm run build && ava --verbose",
-    "build": "tsc"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -23,17 +23,16 @@
     "@types/node": "^7.0.12",
     "@types/semver": "^5.3.31",
     "@types/tmp": "0.0.32",
-    "ava": "^0.18.2",
-    "nwjs-builder-phoenix": "^1.9.3",
-    "tslint": "^5.0.0",
-    "typescript": "^2.2.2"
-  },
-  "dependencies": {
+    "awesome-typescript-loader": "^3.1.2",
     "bluebird": "^3.5.0",
     "debug": "^2.6.3",
     "got": "^6.7.1",
+    "nwjs-builder-phoenix": "^1.9.3",
     "progress-stream": "^1.2.0",
     "semver": "^5.3.0",
-    "tmp": "0.0.31"
+    "tmp": "0.0.31",
+    "tslint": "^5.0.0",
+    "typescript": "^2.2.2",
+    "webpack": "^2.4.1"
   }
 }
