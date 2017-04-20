@@ -13,6 +13,8 @@ const debug = require('debug/src/browser')('nsis-compat-updater');
 const got = require('got');
 const progressStream = require('progress-stream');
 
+import { Event } from './Event';
+
 interface IInstaller {
     arch: string;
     path: string;
@@ -53,6 +55,8 @@ interface IStreamProgress {
 }
 
 export class NsisCompatUpdater {
+
+    public onDownloadProgress: Event<IStreamProgress> = new Event('downloadProgress');
 
     protected versionInfo: IVersionInfo;
 
@@ -269,9 +273,7 @@ export class NsisCompatUpdater {
             time: 1000,
         });
 
-        progress.on('progress', onProgress ? onProgress : (state: IStreamProgress) => {
-            debug('in handleProgress', 'state.speed', state.speed);
-        });
+        progress.on('progress', this.onDownloadProgress.trigger);
 
         await new Promise((resolve, reject) => {
             stream.pipe(progress)

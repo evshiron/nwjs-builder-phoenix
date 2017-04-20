@@ -40,6 +40,17 @@ interface IVersion {
     updaters: IUpdater[];
 }
 
+interface IStreamProgress {
+    percentage: number;
+    transferred: number;
+    length: number;
+    remaining: number;
+    eta: number;
+    runtime: number;
+    delta: number;
+    speed: number;
+}
+
 ```
 
 ### `new NsisCompatUpdater(feed: string, version: string, arch: 'x86' | 'x64')`
@@ -47,6 +58,10 @@ interface IVersion {
 ```javascript
 const updater = new NsisCompatUpdater(feed, version, arch);
 ```
+
+### `updater.onDownloadProgress.subscribe((state: IStreamProgress) => void)`
+
+### `updater.onDownloadProgress.unsubscribe((state: IStreamProgress) => void)`
 
 ### `updater.checkForUpdates(): Promise<IVersion | null>`
 
