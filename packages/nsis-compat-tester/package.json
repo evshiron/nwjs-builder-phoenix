@@ -12,7 +12,9 @@
   "author": "evshiron",
   "license": "MIT",
   "dependencies": {
-    "nsis-compat-updater": "^1.0.0"
+    "element-ui": "^1.2.9",
+    "nsis-compat-updater": "^1.0.0",
+    "vue": "^2.2.6"
   },
   "devDependencies": {
     "http-server": "^0.9.0",
