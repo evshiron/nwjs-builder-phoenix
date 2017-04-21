@@ -224,9 +224,13 @@ export class Builder {
 
             const path = resolve(targetDir, file);
 
-            const strings = <string>(await readFileAsync(path, {
-                encoding: 'ucs2',
-            }));
+            // Different versions has different encodings for `InforPlist.strings`.
+            // We determine encoding by evaluating bytes of `CF` here.
+            const data = await readFileAsync(path);
+            const encoding = data.indexOf(Buffer.from('43004600', 'hex')) >= 0
+            ? 'ucs2' : 'utf-8';
+
+            const strings = data.toString(encoding);
 
             const newStrings = strings.replace(/([A-Za-z]+)\s+=\s+"(.+?)";/g, (match: string, key: string, value: string) => {
                 switch(key) {
@@ -245,7 +249,7 @@ export class Builder {
                 }
             });
 
-            await writeFileAsync(path, Buffer.from(newStrings, 'ucs2'));
+            await writeFileAsync(path, Buffer.from(newStrings, encoding));
 
         }
 
