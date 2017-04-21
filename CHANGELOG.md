@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.10.1"></a>
+## [1.10.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.0...v1.10.1) (2017-04-21)
+
+
+### Bug Fixes
+
+* **Builder:** fix fixMacMeta for later NW.js versions ([a4d0563](https://github.com/evshiron/nwjs-builder-phoenix/commit/a4d0563))
+* **nsis-compat-tester:** beautify using vue and element-ui ([c193e94](https://github.com/evshiron/nwjs-builder-phoenix/commit/c193e94))
+* **nsis-compat-updater:** reduce retries for quicker responding ([395a8c1](https://github.com/evshiron/nwjs-builder-phoenix/commit/395a8c1))
+
+
+### Features
+
+* **nsis-compat-updater:** employ webpack to reduce file sizes ([c3945bb](https://github.com/evshiron/nwjs-builder-phoenix/commit/c3945bb))
+* **nsis-compat-updater:** expose download progress event ([db359ab](https://github.com/evshiron/nwjs-builder-phoenix/commit/db359ab))
+
+
+
 <a name="1.10.0"></a>
 # [1.10.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.9.4...v1.10.0) (2017-04-19)
 
