@@ -91,7 +91,15 @@ Also [see all available options here](./docs/Options.md).
 
 ## Development
 
-To be done.
+```bash
+git clone https://github.com/evshiron/nwjs-builder-phoenix
+cd nwjs-builder-phoenix
+npm install
+
+npm test
+```
+
+By the way, I use some custom strings in NSIS scripts which might not be fully translated, if anyone is interested in translating them into languages that aren't available, feel free to fork and send PRs.
 
 ## Available Mirrors
 

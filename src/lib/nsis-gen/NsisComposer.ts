@@ -75,6 +75,8 @@ ${ NsisComposer.DIVIDER }
 
 ${ await this.makeGeneralSection() }
 
+${ await this.makeStringsSection() }
+
 ${ await this.makeModernUISection() }
 
 ${ await this.makeVersionSection() }
@@ -121,6 +123,25 @@ RequestExecutionLevel user
 XPStyle on`;
     }
 
+    protected async makeStringsSection(): Promise<string> {
+        return `${ NsisComposer.DIVIDER }
+#
+# Strings
+#
+${ NsisComposer.DIVIDER }
+
+# FIXME: More translations.
+
+LangString CREATE_DESKTOP_SHORTCUT 1033 "Create Desktop Shortcut"
+LangString CREATE_DESKTOP_SHORTCUT 2052 "创建桌面快捷方式"
+LangString CREATE_DESKTOP_SHORTCUT 1028 "建立桌面捷徑"
+
+LangString INSTALLING 1033 "Installing"
+LangString INSTALLING 2052 "正在安装"
+LangString INSTALLING 1028 "安裝中"
+`;
+    }
+
     protected async makeModernUISection(): Promise<string> {
         return `${ NsisComposer.DIVIDER }
 #
@@ -139,7 +160,7 @@ FunctionEnd
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "StartMenuFolder"
 
 !define MUI_FINISHPAGE_SHOWREADME ""
-!define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
+!define MUI_FINISHPAGE_SHOWREADME_TEXT "$(CREATE_DESKTOP_SHORTCUT)"
 !define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
 
 Var StartMenuFolder
@@ -241,7 +262,7 @@ ${ NsisComposer.DIVIDER }
 
 Section Uninstall
 
-# FIXME: Remove only files installed.
+# FIXME: Remove installed files only.
 RMDir /r "$INSTDIR"
 
 !insertmacro MUI_STARTMENU_GETFOLDER "Application" $StartMenuFolder

@@ -13,10 +13,8 @@ export class Nsis7Zipper extends NsisComposer {
     protected async makeInstallerFiles(): Promise<string> {
         return `SetOutPath "$INSTDIR"
 SetCompress off
-DetailPrint "Extracting archive..."
 File "${ win32.normalize(resolve(this.path)) }"
-DetailPrint "Installing archive..."
-Nsis7z::ExtractWithDetails "$OUTDIR\\${ basename(this.path) }" "Installing %s..."
+Nsis7z::ExtractWithDetails "$OUTDIR\\${ basename(this.path) }" "$(INSTALLING) %s..."
 Delete "$OUTDIR\\${ basename(this.path) }"`;
     }
 
