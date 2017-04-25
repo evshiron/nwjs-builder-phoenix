@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.10.2"></a>
+## [1.10.2](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.1...v1.10.2) (2017-04-25)
+
+
+### Bug Fixes
+
+* **Builder:** keep symlinks for latest NW.js versions ([7f3a01b](https://github.com/evshiron/nwjs-builder-phoenix/commit/7f3a01b))
+
+
+
 <a name="1.10.1"></a>
 ## [1.10.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.0...v1.10.1) (2017-04-21)
 
