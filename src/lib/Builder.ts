@@ -472,7 +472,7 @@ export class Builder {
         });
 
         await copyAsync(runtimeRoot, targetDir, {
-            dereference: true,
+            //dereference: true,
         });
 
         if(config.ffmpegIntegration) {
