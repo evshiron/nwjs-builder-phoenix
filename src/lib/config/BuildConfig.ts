@@ -54,7 +54,7 @@ export class BuildConfig {
 
         this.output = normalize(this.output);
 
-        this.appId = `io.github.nwjs.${ pkg.name }`;
+        this.appId = this.appId ? this.appId : `io.github.nwjs.${ pkg.name }`;
 
         this.win.versionStrings.ProductName = this.win.versionStrings.ProductName ? this.win.versionStrings.ProductName : pkg.name;
         this.win.versionStrings.FileDescription = this.win.versionStrings.FileDescription ? this.win.versionStrings.FileDescription : pkg.description;
