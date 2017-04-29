@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.11.0"></a>
+# [1.11.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.3...v1.11.0) (2017-04-29)
+
+
+### Features
+
+* **nsis-gen:** custom default installation directory ([5fa8042](https://github.com/evshiron/nwjs-builder-phoenix/commit/5fa8042))
+* **nsis-gen:** i18n support for custom strings ([c70d6e3](https://github.com/evshiron/nwjs-builder-phoenix/commit/c70d6e3))
+
+
+
 <a name="1.10.3"></a>
 ## [1.10.3](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.2...v1.10.3) (2017-04-28)
 
