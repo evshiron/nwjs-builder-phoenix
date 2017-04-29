@@ -6,6 +6,8 @@ export class NsisConfig {
 
     public languages: string[] = [ 'English' ];
 
+    public installDirectory: string = '$LOCALAPPDATA\\${_APPNAME}';
+
     public diffUpdaters: boolean = false;
     public hashCalculation: boolean = true;
 

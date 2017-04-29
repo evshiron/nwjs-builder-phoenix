@@ -33,6 +33,7 @@
       "icon": "./assets/pd.icns"
     },
     "nsis": {
+      "installDirectory": "$PROGRAMFILES\\${_COMPANYNAME}\\${_APPNAME}",
       "diffUpdaters": true
     }
   },

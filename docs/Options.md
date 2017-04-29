@@ -49,5 +49,6 @@ Name | Type | Description
 icon | string | .ico icon file for NSIS installers relative to the project root. Defaults to `undefined`.
 unIcon | string | .ico icon file for NSIS uninstallers relative to the project root. Defaults to `undefined`.
 languages | string[] | Languages for NSIS installers. Multiple languages will result in a language selection dialog on startup. See [/assets/nsis/Contrib/Language files/](../assets/nsis/Contrib/Language%20files/) for available values. Defaults to `[ 'English' ]`.
+installDirectory | string | Default installation directory. Allow using NSIS variables. See [/src/lib/nsis-gen/NsisComposer.ts](../src/lib/nsis-gen/NsisComposer.ts) for a list of self-defined constants. Defaults to `$LOCALAPPDATA\\${_APPNAME}`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.

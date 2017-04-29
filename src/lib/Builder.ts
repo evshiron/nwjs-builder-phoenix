@@ -429,6 +429,7 @@ export class Builder {
             solid: true,
 
             languages: config.nsis.languages,
+            installDirectory: config.nsis.installDirectory,
 
             // Output.
             output: diffNsis,
@@ -556,6 +557,7 @@ export class Builder {
             solid: true,
 
             languages: config.nsis.languages,
+            installDirectory: config.nsis.installDirectory,
 
             // Output.
             output: targetNsis,
@@ -620,6 +622,7 @@ export class Builder {
             solid: true,
 
             languages: config.nsis.languages,
+            installDirectory: config.nsis.installDirectory,
 
             // Output.
             output: targetNsis,
