@@ -92,10 +92,14 @@ export class Builder {
 
                 const started = Date.now();
 
+                if(!this.options.mute) {
+                    console.info(`Building for ${ platform }, ${ arch } starts...`);
+                }
+
                 await builder.build();
 
                 if(!this.options.mute) {
-                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }ms.`);
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }s.`);
                 }
 
             });
@@ -112,10 +116,14 @@ export class Builder {
 
                 const started = Date.now();
 
+                if(!this.options.mute) {
+                    console.info(`Building for ${ platform }, ${ arch } starts...`);
+                }
+
                 await this.buildTask(platform, arch, pkg, config);
 
                 if(!this.options.mute) {
-                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }ms.`);
+                    console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }s.`);
                 }
 
             }
@@ -683,10 +691,14 @@ export class Builder {
 
         const started = Date.now();
 
+        if(!this.options.mute) {
+            console.info(`Building directory target starts...`);
+        }
+
         const targetDir = await this.buildDirTarget(platform, arch, runtimeDir, pkg, config);
 
         if(!this.options.mute) {
-            console.info(`Building directory target ends within ${ this.getTimeDiff(started) }ms.`);
+            console.info(`Building directory target ends within ${ this.getTimeDiff(started) }s.`);
         }
 
         // TODO: Consider using `Bluebird.map` to enable concurrent target building.
@@ -697,21 +709,30 @@ export class Builder {
             switch(target) {
             case 'zip':
             case '7z':
+                if(!this.options.mute) {
+                    console.info(`Building ${ target } archive target starts...`);
+                }
                 await this.buildArchiveTarget(target, targetDir);
                 if(!this.options.mute) {
-                    console.info(`Building ${ target } archive target ends within ${ this.getTimeDiff(started) }ms.`);
+                    console.info(`Building ${ target } archive target ends within ${ this.getTimeDiff(started) }s.`);
                 }
                 break;
             case 'nsis':
+                if(!this.options.mute) {
+                    console.info(`Building nsis target starts...`);
+                }
                 await this.buildNsisTarget(platform, arch, targetDir, pkg, config);
                 if(!this.options.mute) {
-                    console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }ms.`);
+                    console.info(`Building nsis target ends within ${ this.getTimeDiff(started) }s.`);
                 }
                 break;
             case 'nsis7z':
+                if(!this.options.mute) {
+                    console.info(`Building nsis7z target starts...`);
+                }
                 await this.buildNsis7zTarget(platform, arch, targetDir, pkg, config);
                 if(!this.options.mute) {
-                    console.info(`Building nsis7z target ends within ${ this.getTimeDiff(started) }ms.`);
+                    console.info(`Building nsis7z target ends within ${ this.getTimeDiff(started) }s.`);
                 }
                 break;
             default:
