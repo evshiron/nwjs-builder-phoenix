@@ -343,7 +343,9 @@ export class Builder {
             case 'win32':
             case 'win':
             case 'linux':
-                const nwFile = await tmpName();
+                const nwFile = await tmpName({
+                    postfix: '.zip',
+                });
                 await compress(this.dir, files, 'zip', nwFile);
                 const executable = await findExecutable(platform, targetDir);
                 await this.combineExecutable(executable, nwFile);

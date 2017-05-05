@@ -12,6 +12,7 @@
   "build": {
     "appId": "io.github.evshiron.nwjs-builder-phoenix.project",
     "nwVersion": "lts",
+    "packed": false,
     "targets": [
       "zip",
       "nsis7z"
