@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.11.1"></a>
+## [1.11.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.11.0...v1.11.1) (2017-05-05)
+
+
+### Bug Fixes
+
+* **Builder:** fix packed app building ([c8fc86f](https://github.com/evshiron/nwjs-builder-phoenix/commit/c8fc86f))
+
+
+
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.10.3...v1.11.0) (2017-04-29)
 
