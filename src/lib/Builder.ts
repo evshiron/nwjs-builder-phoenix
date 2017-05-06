@@ -136,6 +136,20 @@ export class Builder {
         return ((Date.now() - started) / 1000).toFixed(2);
     }
 
+    protected async writeStrippedManifest(path: string, pkg: any, config: BuildConfig) {
+
+        const json: any = {};
+
+        for(const key in pkg) {
+            if(pkg.hasOwnProperty(key) && config.strippedProperties.indexOf(key) === -1) {
+                json[key] = pkg[key];
+            }
+        }
+
+        await writeFile(path, JSON.stringify(json));
+
+    }
+
     protected combineExecutable(executable: string, nwFile: string) {
         return new Promise((resolve, reject) => {
 
@@ -343,13 +357,23 @@ export class Builder {
             case 'win32':
             case 'win':
             case 'linux':
+
                 const nwFile = await tmpName({
                     postfix: '.zip',
                 });
+
                 await compress(this.dir, files, 'zip', nwFile);
+
+                const { path: tempDir } = await tmpDir();
+                await this.writeStrippedManifest(resolve(tempDir, 'package.json'), pkg, config);
+                await compress(tempDir, [ './package.json' ], 'zip', nwFile);
+                await remove(tempDir);
+
                 const executable = await findExecutable(platform, targetDir);
                 await this.combineExecutable(executable, nwFile);
+
                 await remove(nwFile);
+
                 break;
             case 'darwin':
             case 'osx':
@@ -369,23 +393,9 @@ export class Builder {
                 await copyFileAsync(resolve(this.dir, file), resolve(appRoot, file));
             }
 
+            await this.writeStrippedManifest(resolve(appRoot, 'package.json'), pkg, config);
+
         }
-
-        // Here we overwrite `package.json` with a stripped one.
-
-        await writeFile(resolve(appRoot, 'package.json'), (() => {
-
-            const json: any = {};
-
-            for(const key in pkg) {
-                if(pkg.hasOwnProperty(key) && config.strippedProperties.indexOf(key) == -1) {
-                    json[key] = pkg[key];
-                }
-            }
-
-            return JSON.stringify(json);
-
-        })());
 
     }
 
