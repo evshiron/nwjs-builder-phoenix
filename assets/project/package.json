@@ -12,7 +12,7 @@
   "build": {
     "appId": "io.github.evshiron.nwjs-builder-phoenix.project",
     "nwVersion": "lts",
-    "packed": false,
+    "packed": true,
     "targets": [
       "zip",
       "nsis7z"
@@ -31,7 +31,11 @@
     "mac": {
       "displayName": "Project",
       "copyright": "copyright",
-      "icon": "./assets/pd.icns"
+      "icon": "./assets/pd.icns",
+      "plistStrings": {
+        "CFBundleIdentifier": "io.github.evshiron.nwjs-builder-phoenix.project.modified",
+        "CFBundleDocumentTypes": []
+      }
     },
     "nsis": {
       "installDirectory": "$PROGRAMFILES\\${_COMPANYNAME}\\${_APPNAME}",

@@ -7,6 +7,7 @@ export class MacConfig {
     public description: string = '';
     public copyright: string = '';
     public icon: string = undefined;
+    public plistStrings: any = {};
 
     constructor(options: any = {}) {
 

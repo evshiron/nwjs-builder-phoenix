@@ -220,6 +220,12 @@ export class Builder {
         plist.CFBundleVersion = config.mac.version;
         plist.CFBundleShortVersionString = config.mac.version;
 
+        for(const key in config.mac.plistStrings) {
+            if(config.mac.plistStrings.hasOwnProperty(key)) {
+                plist[key] = config.mac.plistStrings[key];
+            }
+        }
+
         await this.writePlist(path, plist);
 
     }
