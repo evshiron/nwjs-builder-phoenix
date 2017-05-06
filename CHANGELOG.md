@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.12.0"></a>
+# [1.12.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.11.1...v1.12.0) (2017-05-06)
+
+
+### Bug Fixes
+
+* **Builder:** fix stripping for packed apps ([bc5f68e](https://github.com/evshiron/nwjs-builder-phoenix/commit/bc5f68e))
+
+
+### Features
+
+* **Builder:** allow custom plist strings ([66f1464](https://github.com/evshiron/nwjs-builder-phoenix/commit/66f1464))
+
+
+
 <a name="1.11.1"></a>
 ## [1.11.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.11.0...v1.11.1) (2017-05-05)
 
