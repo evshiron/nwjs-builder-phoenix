@@ -3,7 +3,7 @@ import { dirname, basename, resolve } from 'path';
 
 import * as request from 'request';
 import * as ProgressBar from 'progress';
-import { ensureDirSync, exists, lstatAsync, writeFile } from 'fs-extra-promise';
+import { ensureDirSync, exists, lstat, writeFile } from 'fs-extra';
 
 const debug = require('debug')('build:downloader');
 const progress = require('request-progress');
@@ -100,7 +100,7 @@ export abstract class DownloaderBase {
     }
 
     protected getLocalSize(path: string): Promise<number> {
-        return lstatAsync(path)
+        return lstat(path)
         .then(stat => stat.size);
     }
 

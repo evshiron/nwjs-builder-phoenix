@@ -1,7 +1,7 @@
 
 import { dirname, basename, join, resolve, normalize } from 'path';
 
-import { removeAsync, writeFileAsync } from 'fs-extra-promise';
+import { remove, writeFile } from 'fs-extra';
 import { path7za } from '7zip-bin';
 
 const debug = require('debug')('build:archive');
@@ -43,7 +43,7 @@ async function extractTarGz(archive: string, dest: string = dirname(archive), op
 
     await extract(tar, dest);
 
-    await removeAsync(tar);
+    await remove(tar);
 
     return dest;
 
@@ -80,7 +80,7 @@ export async function compress(dir: string, files: string[], type: string, archi
 
     debug('in compress', 'listfiles', listfiles);
 
-    await writeFileAsync(listfiles, files.map(file => normalize(file)).join('\r\n'));
+    await writeFile(listfiles, files.map(file => normalize(file)).join('\r\n'));
 
     const { code, signal } = await spawnAsync(path7za, [ 'a', `-t${ type }`, resolve(archive), `@${ resolve(listfiles) }` ], {
         cwd: dir,

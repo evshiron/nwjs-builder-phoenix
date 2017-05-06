@@ -1,7 +1,7 @@
 
 import { relative, resolve, win32 } from 'path';
 
-import { readdirAsync, lstatAsync } from 'fs-extra-promise';
+import { readdir, lstat } from 'fs-extra';
 
 import { fixWindowsVersion } from '../util';
 

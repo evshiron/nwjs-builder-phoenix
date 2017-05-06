@@ -3,7 +3,6 @@ import { dirname, basename, resolve } from 'path';
 
 import * as request from 'request';
 import * as ProgressBar from 'progress';
-import { ensureDirSync, exists, writeFile } from 'fs-extra-promise';
 
 const debug = require('debug')('build:ffmpegDownloader');
 const progress = require('request-progress');

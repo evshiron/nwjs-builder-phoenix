@@ -2,7 +2,7 @@
 import { resolve } from 'path';
 import { spawn } from 'child_process';
 
-import { copyAsync, readJsonAsync, chmodAsync } from 'fs-extra-promise';
+import { copy, readJson, chmod } from 'fs-extra';
 
 const debug = require('debug')('build:runner');
 
@@ -49,7 +49,7 @@ export class Runner {
         ? (this.options.x86 ? 'ia32' : 'x64')
         : process.arch;
 
-        const pkg: any = await readJsonAsync(resolve(this.args[0], this.options.chromeApp ? 'manifest.json' : 'package.json'));
+        const pkg: any = await readJson(resolve(this.args[0], this.options.chromeApp ? 'manifest.json' : 'package.json'));
         const config = new BuildConfig(pkg);
 
         debug('in run', 'config', config);
@@ -87,7 +87,7 @@ export class Runner {
 
         const executable = await findExecutable(platform, runtimeDir);
 
-        await chmodAsync(executable, 0o555);
+        await chmod(executable, 0o555);
 
         if(!this.options.mute) {
             console.info('Launching NW.js app...');
@@ -138,7 +138,7 @@ export class Runner {
         const src = await findFFmpeg(platform, ffmpegDir);
         const dest = await findFFmpeg(platform, runtimeDir);
 
-        await copyAsync(src, dest);
+        await copy(src, dest);
 
     }
 

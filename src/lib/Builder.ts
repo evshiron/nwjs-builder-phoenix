@@ -2,7 +2,7 @@
 import { dirname, basename, resolve } from 'path';
 
 import * as semver from 'semver';
-import { ensureDirAsync, emptyDir, readFileAsync, readJsonAsync, writeFileAsync, copyAsync, removeAsync, createReadStream, createWriteStream, renameAsync } from 'fs-extra-promise';
+import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, createReadStream, createWriteStream, rename } from 'fs-extra';
 import * as Bluebird from 'bluebird';
 
 const debug = require('debug')('build:builder');
@@ -107,7 +107,7 @@ export class Builder {
         }
         else {
 
-            const pkg: any = await readJsonAsync(resolve(this.dir, this.options.chromeApp ? 'manifest.json' : 'package.json'));
+            const pkg: any = await readJson(resolve(this.dir, this.options.chromeApp ? 'manifest.json' : 'package.json'));
             const config = new BuildConfig(pkg);
 
             debug('in build', 'config', config);
@@ -155,14 +155,14 @@ export class Builder {
     }
 
     protected readPlist(path: string): Promise<any> {
-        return readFileAsync(path, {
+        return readFile(path, {
                 encoding: 'utf-8',
         })
         .then(data => plist.parse(data));
     }
 
     protected writePlist(path: string, p: any) {
-        return writeFileAsync(path, plist.build(p));
+        return writeFile(path, plist.build(p));
     }
 
     protected updateWinResources(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
@@ -190,7 +190,7 @@ export class Builder {
         const src = resolve(targetDir, 'nw.exe');
         const dest = resolve(targetDir, `${ config.win.versionStrings.ProductName }.exe`);
 
-        return renameAsync(src, dest);
+        return rename(src, dest);
 
     }
 
@@ -218,7 +218,7 @@ export class Builder {
             return;
         }
 
-        await copyAsync(resolve(this.dir, config.mac.icon), path);
+        await copy(resolve(this.dir, config.mac.icon), path);
 
     }
 
@@ -234,7 +234,7 @@ export class Builder {
 
             // Different versions has different encodings for `InforPlist.strings`.
             // We determine encoding by evaluating bytes of `CF` here.
-            const data = await readFileAsync(path);
+            const data = await readFile(path);
             const encoding = data.indexOf(Buffer.from('43004600', 'hex')) >= 0
             ? 'ucs2' : 'utf-8';
 
@@ -257,7 +257,7 @@ export class Builder {
                 }
             });
 
-            await writeFileAsync(path, Buffer.from(newStrings, encoding));
+            await writeFile(path, Buffer.from(newStrings, encoding));
 
         }
 
@@ -268,7 +268,7 @@ export class Builder {
             const src = resolve(targetDir, 'nwjs.app');
             const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
 
-            return renameAsync(src, dest);
+            return rename(src, dest);
 
     }
 
@@ -277,7 +277,7 @@ export class Builder {
         const src = resolve(targetDir, 'nw');
         const dest = resolve(targetDir, `${ pkg.name }`);
 
-        return renameAsync(src, dest);
+        return rename(src, dest);
 
     }
 
@@ -349,7 +349,7 @@ export class Builder {
                 await compress(this.dir, files, 'zip', nwFile);
                 const executable = await findExecutable(platform, targetDir);
                 await this.combineExecutable(executable, nwFile);
-                await removeAsync(nwFile);
+                await remove(nwFile);
                 break;
             case 'darwin':
             case 'osx':
@@ -373,7 +373,7 @@ export class Builder {
 
         // Here we overwrite `package.json` with a stripped one.
 
-        await writeFileAsync(resolve(appRoot, 'package.json'), (() => {
+        await writeFile(resolve(appRoot, 'package.json'), (() => {
 
             const json: any = {};
 
@@ -411,7 +411,7 @@ export class Builder {
         const src = await findFFmpeg(platform, ffmpegDir);
         const dest = await findFFmpeg(platform, targetDir);
 
-        await copyAsync(src, dest);
+        await copy(src, dest);
 
     }
 
@@ -447,13 +447,13 @@ export class Builder {
         })).make();
 
         const script = await tmpName();
-        await writeFileAsync(script, data);
+        await writeFile(script, data);
 
         await nsisBuild(toDir, script, {
             mute: this.options.mute,
         });
 
-        await removeAsync(script);
+        await remove(script);
 
         await versionInfo.addUpdater(toVersion, fromVersion, arch, diffNsis);
 
@@ -478,11 +478,9 @@ export class Builder {
             }
         })());
 
-        await new Promise((resolve, reject) => {
-            emptyDir(targetDir, err => err ? reject(err) : resolve());
-        });
+        await emptyDir(targetDir);
 
-        await copyAsync(runtimeRoot, targetDir, {
+        await copy(runtimeRoot, targetDir, {
             //dereference: true,
         });
 
@@ -490,7 +488,7 @@ export class Builder {
             await this.integrateFFmpeg(platform, arch, targetDir, pkg, config);
         }
 
-        await ensureDirAsync(appRoot);
+        await ensureDir(appRoot);
 
         // Copy before refining might void the effort.
 
@@ -525,7 +523,7 @@ export class Builder {
 
         const targetArchive = resolve(dirname(sourceDir), `${ basename(sourceDir) }.${ type }`);
 
-        await removeAsync(targetArchive);
+        await remove(targetArchive);
 
         const files = await globby([ '**/*' ], {
             cwd: sourceDir,
@@ -575,13 +573,13 @@ export class Builder {
         })).make();
 
         const script = await tmpName();
-        await writeFileAsync(script, data);
+        await writeFile(script, data);
 
         await nsisBuild(sourceDir, script, {
             mute: this.options.mute,
         });
 
-        await removeAsync(script);
+        await remove(script);
 
         await versionInfo.addVersion(pkg.version, '', sourceDir);
         await versionInfo.addInstaller(pkg.version, arch, targetNsis);
@@ -640,13 +638,13 @@ export class Builder {
         })).make();
 
         const script = await tmpName();
-        await writeFileAsync(script, data);
+        await writeFile(script, data);
 
         await nsisBuild(sourceDir, script, {
             mute: this.options.mute,
         });
 
-        await removeAsync(script);
+        await remove(script);
 
         await versionInfo.addVersion(pkg.version, '', sourceDir);
         await versionInfo.addInstaller(pkg.version, arch, targetNsis);

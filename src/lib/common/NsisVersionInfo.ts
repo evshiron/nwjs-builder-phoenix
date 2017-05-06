@@ -2,7 +2,7 @@
 import { basename, dirname, relative } from 'path';
 import { createHash } from 'crypto';
 
-import { exists, readJsonAsync, writeJsonAsync, createReadStream } from 'fs-extra-promise';
+import { exists, readJson, writeJson, createReadStream } from 'fs-extra';
 import * as semver from 'semver';
 
 interface IInstaller {
@@ -134,14 +134,14 @@ export class NsisVersionInfo {
     }
 
     public async save() {
-        await writeJsonAsync(this.path, this.data);
+        await writeJson(this.path, this.data);
     }
 
     protected async getData() {
 
         if(!this.data) {
             this.data = (await new Promise((resolve, reject) => exists(this.path, resolve)))
-            ? await readJsonAsync(this.path)
+            ? await readJson(this.path)
             : {
                 latest: undefined,
                 versions: [],

@@ -1,7 +1,7 @@
 
 import { test } from 'ava';
 
-import { removeAsync } from 'fs-extra-promise';
+import { remove } from 'fs-extra';
 
 import { mergeOptions, tmpName, tmpFile, tmpDir, compress } from '../dist/lib/util';
 
@@ -34,6 +34,6 @@ test('compress', async (t) => {
     const code = await compress('./assets/', [ './project/index.html', './project/package.json' ], 'zip', path);
     t.is(code, 0);
 
-    await removeAsync(path);
+    await remove(path);
 
 });

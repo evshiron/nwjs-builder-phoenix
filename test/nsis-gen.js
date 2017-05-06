@@ -1,7 +1,7 @@
 
 import { test } from 'ava';
 
-import { writeFileAsync, removeAsync } from 'fs-extra-promise';
+import { writeFile, remove } from 'fs-extra';
 
 import { NsisComposer, NsisDiffer, nsisBuild } from '../dist/lib/nsis-gen';
 import { tmpName, tmpFile, tmpDir } from '../dist/lib/util';
@@ -40,11 +40,11 @@ test('build', async (t) => {
         postfix: '.nsi',
     });
 
-    await writeFileAsync(script, data);
+    await writeFile(script, data);
     await nsisBuild('./src/', script);
 
-    await removeAsync(output);
-    await removeAsync(script);
+    await remove(output);
+    await remove(script);
 
 });
 
@@ -63,10 +63,10 @@ test('diff', async (t) => {
         postfix: '.nsi',
     });
 
-    await writeFileAsync(script, data);
+    await writeFile(script, data);
     await nsisBuild('./dist/', script);
 
-    await removeAsync(output);
-    await removeAsync(script);
+    await remove(output);
+    await remove(script);
 
 });
