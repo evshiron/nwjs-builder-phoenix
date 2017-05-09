@@ -384,9 +384,13 @@ export class Builder {
             case 'darwin':
             case 'osx':
             case 'mac':
+
                 for(const file of files) {
                     await copyFileAsync(resolve(this.dir, file), resolve(appRoot, file));
                 }
+
+                await this.writeStrippedManifest(resolve(appRoot, 'package.json'), pkg, config);
+
                 break;
             default:
                 throw new Error('ERROR_UNKNOWN_PLATFORM');
