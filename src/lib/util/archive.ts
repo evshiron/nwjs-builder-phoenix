@@ -21,12 +21,8 @@ async function extract(archive: string, dest: string = dirname(archive), options
 
     const { code, signal } = await spawnAsync(path7za, [ 'x', '-y', `-ao${ options.overwrite ? 'a' : 's' }`, `-o${ resolve(dest) }`, resolve(archive) ]);
 
-    if(code == 2) {
-        throw new Error(`ERROR_PATH_NOT_FOUND path = ${ archive }`);
-    }
-
     if(code != 0) {
-        throw new Error(`ERROR_EXIT_CODE code = ${ code }`);
+        throw new Error(`ERROR_EXTRACTING path = ${ archive }`);
     }
 
     return dest;

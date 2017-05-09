@@ -52,3 +52,7 @@ Also configurations should be set in `manifest.json` instead of `package.json` b
 `nsis` target will build NSIS installers (and updaters when `package.json:build.nsis.diffUpdaters` is `true`) for Windows.
 
 `nsis7z` target will use `7za` to compress and [Nsis7z plug-in](http://nsis.sourceforge.net/Nsis7z_plug-in) to extract, instead of the built-in LZMA compression, resulting in a better and faster compression. But it doesn't list installed files, only a percentage indicating the progress of extraction when installing.
+
+> `Error: ERROR_EXTRACTING archive = xxx`?
+
+Remove the archive and try again. Usually it's because of the broken extracted `.tar`. If removing doesn't fix, feel free to post issues.
