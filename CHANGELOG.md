@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.12.1"></a>
+## [1.12.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.12.0...v1.12.1) (2017-05-09)
+
+
+### Bug Fixes
+
+* **Builder:** fix missing package.json for packed mac app ([a76e6e2](https://github.com/evshiron/nwjs-builder-phoenix/commit/a76e6e2))
+* **Builder:** skip mac x86 builds for modern NW.js versions ([058e4c9](https://github.com/evshiron/nwjs-builder-phoenix/commit/058e4c9))
+* **util:** fix wrong error hints in extracting ([80e7e3b](https://github.com/evshiron/nwjs-builder-phoenix/commit/80e7e3b))
+
+
+
 <a name="1.12.0"></a>
 # [1.12.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.11.1...v1.12.0) (2017-05-06)
 
