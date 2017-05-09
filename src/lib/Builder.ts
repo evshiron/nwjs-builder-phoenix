@@ -120,7 +120,12 @@ export class Builder {
                     console.info(`Building for ${ platform }, ${ arch } starts...`);
                 }
 
-                await this.buildTask(platform, arch, pkg, config);
+                try {
+                    await this.buildTask(platform, arch, pkg, config);
+                }
+                catch(err) {
+                    console.warn(err);
+                }
 
                 if(!this.options.mute) {
                     console.info(`Building for ${ platform }, ${ arch } ends within ${ this.getTimeDiff(started) }s.`);
@@ -684,6 +689,13 @@ export class Builder {
     }
 
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {
+
+        if(platform === 'mac' && arch === 'x86' && !config.nwVersion.includes('0.12.3')) {
+            if(!this.options.mute) {
+                console.info(`The NW.js binary for ${ platform }, ${ arch } isn't available for ${ config.nwVersion }, skipped.`);
+            }
+            throw new Error('ERROR_TASK_MAC_X86_SKIPPED');
+        }
 
         const downloader = new Downloader({
             platform, arch,
