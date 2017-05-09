@@ -387,7 +387,7 @@ export class Builder {
 
         debug('in copyFiles', 'ignore', ignore);
 
-        const files = await globby(config.files, {
+        const files: string[] = await globby(config.files, {
             cwd: this.dir,
             // TODO: https://github.com/isaacs/node-glob#options, warn for cyclic links.
             follow: true,
@@ -409,7 +409,7 @@ export class Builder {
                     postfix: '.zip',
                 });
 
-                await compress(this.dir, files, 'zip', nwFile);
+                await compress(this.dir, files.filter((file) => !file.endsWith('/')), 'zip', nwFile);
 
                 const { path: tempDir } = await tmpDir();
                 await this.writeStrippedManifest(resolve(tempDir, 'package.json'), pkg, config);
