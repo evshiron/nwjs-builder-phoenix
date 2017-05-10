@@ -33,10 +33,11 @@ async function extractTarGz(archive: string, dest: string = dirname(archive), op
     overwrite: false,
 }) {
 
-    await extract(archive, dest);
-
     const tar = join(dest, basename(archive.slice(0, -3)));
 
+    await extract(archive, dest, {
+        overwrite: true,
+    });
     await extract(tar, dest);
 
     await remove(tar);
