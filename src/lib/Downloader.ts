@@ -61,8 +61,18 @@ export class Downloader extends DownloaderBase {
         debug('in fetch', 'filename', filename);
         debug('in fetch', 'path', path);
 
-        if(await this.isFileExists(path) && await this.isFileSynced(url, path)) {
-            return path;
+        try {
+            if(await this.isFileExists(path) && await this.isFileSynced(url, path)) {
+                return path;
+            }
+        }
+        catch(err) {
+            if(err.code === 'ENOTFOUND' && this.options.useCaches) {
+                return path;
+            }
+            else {
+                throw err;
+            }
         }
 
         await this.download(url, filename, path, showProgress);
