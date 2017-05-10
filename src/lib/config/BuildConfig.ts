@@ -12,6 +12,7 @@ export class BuildConfig {
     public nwFlavor: string = 'normal';
 
     public output: string = './dist/';
+    public outputPattern: string = '${NAME}-${VERSION}-${PLATFORM}-${ARCH}';
     public packed: boolean = false;
     public targets: string[] = [];
     public files: string[] = [ '**/*' ];

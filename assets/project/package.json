@@ -11,7 +11,7 @@
   "license": "MIT",
   "build": {
     "appId": "io.github.evshiron.nwjs-builder-phoenix.project",
-    "nwVersion": "lts",
+    "nwVersion": "0.14.7",
     "packed": true,
     "targets": [
       "zip",
@@ -20,6 +20,7 @@
     "strippedProperties": [
       "build"
     ],
+    "outputPattern": "${NAME} ${VERSION} ${PLATFORM} ${ARCH}",
     "win": {
       "versionStrings": {
         "ProductName": "Project",

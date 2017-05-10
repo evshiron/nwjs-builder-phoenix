@@ -17,6 +17,13 @@ import { NsisVersionInfo } from './common';
 import { NsisComposer, NsisDiffer, Nsis7Zipper, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
+interface IParseOutputPatternOptions {
+    name: string;
+    version: string;
+    platform: string;
+    arch: string;
+}
+
 interface IBuilderOptions {
     win?: boolean;
     mac?: boolean;
@@ -152,6 +159,25 @@ export class Builder {
         }
 
         await writeFile(path, JSON.stringify(json));
+
+    }
+
+    protected parseOutputPattern(pattern: string, options: IParseOutputPatternOptions, pkg: any, config: BuildConfig) {
+
+        return pattern.replace(/\$\{\s*(\w+)\s*\}/g, (match: string, key: string) => {
+            switch(key.toLowerCase()) {
+            case 'name':
+                return options.name;
+            case 'version':
+                return options.version;
+            case 'platform':
+                return options.platform;
+            case 'arch':
+                return options.arch;
+            default:
+                throw new Error('ERROR_KEY_UNKNOWN');
+            }
+        });
 
     }
 
@@ -486,7 +512,11 @@ export class Builder {
 
     protected async buildDirTarget(platform: string, arch: string, runtimeDir: string, pkg: any, config: BuildConfig): Promise<string> {
 
-        const targetDir = resolve(this.dir, config.output, `${ pkg.name }-${ pkg.version }-${ platform }-${ arch }`);
+        const targetDir = resolve(this.dir, config.output, this.parseOutputPattern(config.outputPattern, {
+            name: pkg.name,
+            version: pkg.version,
+            platform, arch,
+        }, pkg, config));
         const runtimeRoot = await findRuntimeRoot(platform, runtimeDir);
         const appRoot = resolve(targetDir, (() => {
             switch(platform) {
