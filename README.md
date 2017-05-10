@@ -58,7 +58,7 @@ This will specify the NW.js version we are using. See more in the following Opti
 
 * Add some helper npm scripts, for example:
 
-```json
+```javascript
 // package.json
 {
     "scripts": {
