@@ -2,7 +2,7 @@
 import { dirname, basename, resolve } from 'path';
 
 import * as semver from 'semver';
-import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, createReadStream, createWriteStream, rename } from 'fs-extra';
+import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, rename, chmod, createReadStream, createWriteStream } from 'fs-extra';
 import * as Bluebird from 'bluebird';
 
 const debug = require('debug')('build:builder');
@@ -316,10 +316,18 @@ export class Builder {
 
     protected renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-            const src = resolve(targetDir, 'nwjs.app');
-            const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
+        const src = resolve(targetDir, 'nwjs.app');
+        const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
 
-            return rename(src, dest);
+        return rename(src, dest);
+
+    }
+
+    protected async fixLinuxMode(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+
+        const path = resolve(targetDir, 'nw');
+
+        await chmod(path, 0o744);
 
     }
 
@@ -347,6 +355,8 @@ export class Builder {
     }
 
     protected async prepareLinuxBuild(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+
+        await this.fixLinuxMode(targetDir, appRoot, pkg, config);
 
     }
 
