@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.13.0"></a>
+# [1.13.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.12.1...v1.13.0) (2017-05-10)
+
+
+### Bug Fixes
+
+* **Builder:** fix executing permission for Linux ([1841dba](https://github.com/evshiron/nwjs-builder-phoenix/commit/1841dba))
+* **Downloaders:** fix useCaches option ([f831d93](https://github.com/evshiron/nwjs-builder-phoenix/commit/f831d93))
+* **util:** fix extracting for Linux when interrupted before ([98cb1e4](https://github.com/evshiron/nwjs-builder-phoenix/commit/98cb1e4))
+
+
+### Features
+
+* **Builder:** allow changing output naming pattern ([905a448](https://github.com/evshiron/nwjs-builder-phoenix/commit/905a448))
+
+
+
 <a name="1.12.1"></a>
 ## [1.12.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.12.0...v1.12.1) (2017-05-09)
 
