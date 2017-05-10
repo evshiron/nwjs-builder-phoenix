@@ -30,6 +30,7 @@ interface IBuilderOptions {
     linux?: boolean;
     x86?: boolean;
     x64?: boolean;
+    tasks?: string[];
     chromeApp?: boolean;
     mirror?: string;
     concurrent?: boolean;
@@ -44,6 +45,7 @@ export class Builder {
         linux: false,
         x86: false,
         x64: false,
+        tasks: [],
         chromeApp: false,
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         concurrent: false,
@@ -72,6 +74,18 @@ export class Builder {
                 }
             });
         });
+
+        for(const task of this.options.tasks) {
+
+            const [ platform, arch ] = task.split('-');
+
+            if([ 'win', 'mac', 'linux' ].indexOf(platform) >= 0) {
+                if([ 'x86', 'x64' ].indexOf(arch) >= 0) {
+                    tasks.push([ platform, arch ]);
+                }
+            }
+
+        }
 
         if(!this.options.mute) {
             console.info('Starting building tasks...', {

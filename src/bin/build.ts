@@ -35,6 +35,11 @@ const argv = require('yargs')
     describe: 'Build for x64 arch',
     default: Builder.DEFAULT_OPTIONS.x64,
 })
+.option('tasks', {
+    type: 'string',
+    describe: 'List of <PLATFORM>-<ARCH> to build, separated by comma.',
+    default: '',
+})
 .option('chrome-app', {
     type: 'boolean',
     describe: 'Build from Chrome App',
@@ -62,6 +67,7 @@ const argv = require('yargs')
         linux: argv.linux,
         x86: argv.x86,
         x64: argv.x64,
+        tasks: argv.tasks.split(','),
         chromeApp: argv['chrome-app'],
         mirror: argv.mirror,
         concurrent: argv.concurrent,

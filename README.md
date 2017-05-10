@@ -62,7 +62,8 @@ This will specify the NW.js version we are using. See more in the following Opti
 // package.json
 {
     "scripts": {
-        "dist": "build --win --mac --linux --x86 --x64 --mirror https://dl.nwjs.io/ .",
+        // Deprecated. "dist": "build --win --mac --linux --x86 --x64 --mirror https://dl.nwjs.io/ .",
+        "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
         "start": "run --x86 --mirror https://dl.nwjs.io/ ."
     }
 }
