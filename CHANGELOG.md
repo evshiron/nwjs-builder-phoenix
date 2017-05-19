@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.1"></a>
+## [1.14.1](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.0...v1.14.1) (2017-05-19)
+
+
+### Bug Fixes
+
+* **util:** fix symlink support in copyFileAsync ([508c304](https://github.com/evshiron/nwjs-builder-phoenix/commit/508c304))
+
+
+
 <a name="1.14.0"></a>
 # [1.14.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.13.1...v1.14.0) (2017-05-10)
 
