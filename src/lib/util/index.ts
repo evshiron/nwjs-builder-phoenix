@@ -4,7 +4,7 @@ import { spawn, exec } from 'child_process';
 
 import * as tmp from 'tmp';
 tmp.setGracefulCleanup();
-import { lstat, ensureDir, readFile, outputFile } from 'fs-extra';
+import { realpath, lstat, ensureDir, readFile, outputFile } from 'fs-extra';
 
 const debug = require('debug')('build:util');
 const globby = require('globby');
@@ -231,13 +231,15 @@ export function fixWindowsVersion(version: string, build: number = 0) {
 
 export async function copyFileAsync(src: string, dest: string) {
 
-    const stats = await lstat(src);
+    const rsrc = await realpath(src);
 
-    if(stats.isDirectory() || stats.isSymbolicLink()) {
+    const stats = await lstat(rsrc);
+
+    if(stats.isDirectory()) {
         //await ensureDirAsync(dest);
     }
     else {
-        await outputFile(dest, await readFile(src));
+        await outputFile(dest, await readFile(rsrc));
     }
 
 }
