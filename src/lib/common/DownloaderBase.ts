@@ -108,7 +108,7 @@ export abstract class DownloaderBase {
         return new Promise((resolve, reject) => {
             request.head(url)
             .on('error', reject)
-            .on('response', res => resolve(parseInt(res.headers['content-length'], 10)));
+            .on('response', res => resolve(parseInt(<string>(res.headers['content-length']), 10)));
         });
     }
 
