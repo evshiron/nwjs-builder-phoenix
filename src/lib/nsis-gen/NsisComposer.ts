@@ -34,6 +34,21 @@ export class NsisComposer {
 
     public static DIVIDER = '################################################################################';
 
+    public static STRINGS: any = {
+        'English': `
+LangString CREATE_DESKTOP_SHORTCUT 1033 "Create Desktop Shortcut"
+LangString INSTALLING 1033 "Installing"
+        `,
+        'SimpChinese': `
+LangString CREATE_DESKTOP_SHORTCUT 2052 "创建桌面快捷方式"
+LangString INSTALLING 2052 "正在安装"
+        `,
+        'TradChinese': `
+LangString CREATE_DESKTOP_SHORTCUT 1028 "建立桌面捷徑"
+LangString INSTALLING 1028 "安裝中"
+        `,
+    };
+
     protected fixedVersion: string;
 
     constructor(protected options: INsisComposerOptions) {
@@ -104,15 +119,9 @@ ${ NsisComposer.DIVIDER }
 !define _COPYRIGHT "${ this.options.copyright }"
 !define _OUTPUT "${ win32.normalize(resolve(this.options.output)) }"
 
-# FIXME: More translations.
-
-LangString CREATE_DESKTOP_SHORTCUT 1033 "Create Desktop Shortcut"
-LangString CREATE_DESKTOP_SHORTCUT 2052 "创建桌面快捷方式"
-LangString CREATE_DESKTOP_SHORTCUT 1028 "建立桌面捷徑"
-
-LangString INSTALLING 1033 "Installing"
-LangString INSTALLING 2052 "正在安装"
-LangString INSTALLING 1028 "安裝中"`;
+${ this.options.languages.map((language) => {
+    return NsisComposer.STRINGS[language] ? NsisComposer.STRINGS[language] : '';
+}) }`;
     }
 
     protected async makeGeneral(): Promise<string> {
