@@ -235,7 +235,13 @@ export class Builder {
             const rc = {
                 'product-version': fixWindowsVersion(config.win.productVersion),
                 'file-version': fixWindowsVersion(config.win.fileVersion),
-                'version-string': config.win.versionStrings,
+                'version-string': {
+                    ProductName: config.win.productName,
+                    CompanyName: config.win.companyName,
+                    FileDescription: config.win.fileDescription,
+                    LegalCopyright: config.win.copyright,
+                    ...config.win.versionStrings,
+                },
                 'icon': config.win.icon ? pathResolve(this.dir, config.win.icon) : undefined,
             };
 
@@ -247,7 +253,7 @@ export class Builder {
     protected renameWinApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
         const src = resolve(targetDir, 'nw.exe');
-        const dest = resolve(targetDir, `${ config.win.versionStrings.ProductName }.exe`);
+        const dest = resolve(targetDir, `${ config.win.productName }.exe`);
 
         return rename(src, dest);
 
@@ -500,11 +506,11 @@ export class Builder {
         const data = await (new NsisDiffer(fromDir, toDir, {
 
             // Basic.
-            appName: config.win.versionStrings.ProductName,
-            companyName: config.win.versionStrings.CompanyName,
-            description: config.win.versionStrings.FileDescription,
+            appName: config.win.productName,
+            companyName: config.win.companyName,
+            description: config.win.fileDescription,
             version: fixWindowsVersion(config.win.productVersion),
-            copyright: config.win.versionStrings.LegalCopyright,
+            copyright: config.win.copyright,
 
             icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
             unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
@@ -630,11 +636,11 @@ export class Builder {
         const data = await (new NsisComposer({
 
             // Basic.
-            appName: config.win.versionStrings.ProductName,
-            companyName: config.win.versionStrings.CompanyName,
-            description: config.win.versionStrings.FileDescription,
+            appName: config.win.productName,
+            companyName: config.win.companyName,
+            description: config.win.fileDescription,
             version: fixWindowsVersion(config.win.productVersion),
-            copyright: config.win.versionStrings.LegalCopyright,
+            copyright: config.win.copyright,
 
             icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
             unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
@@ -695,11 +701,11 @@ export class Builder {
         const data = await (new Nsis7Zipper(sourceArchive, {
 
             // Basic.
-            appName: config.win.versionStrings.ProductName,
-            companyName: config.win.versionStrings.CompanyName,
-            description: config.win.versionStrings.FileDescription,
+            appName: config.win.productName,
+            companyName: config.win.companyName,
+            description: config.win.fileDescription,
             version: fixWindowsVersion(config.win.productVersion),
-            copyright: config.win.versionStrings.LegalCopyright,
+            copyright: config.win.copyright,
 
             icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
             unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,

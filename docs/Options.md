@@ -23,9 +23,13 @@ strippedProperties | string[] | Properties to be stripped from `package.json`. D
 
 Name | Type | Description
 --- | --- | ---
+productName | string | Product name. Defaults to `${ name }`.
+companyName | string | Company name. Defaults to `${ productName }`.
+fileDescription | string | File description. Defaults to `${ description }`.
+copyright | string | Copyright. Defaults to `''`.
 productVersion | string | Product version. Defaults to `${ version }`.
 fileVersion | string | File version. Defaults to `${ productVersion }`
-versionStrings | { [key: string]: string } | `rcedit` version strings. Defaults to `{ ProductName: "${ name }", FileDescription: "${ description }" }`.
+versionStrings | { [key: string]: string } | `rcedit` version strings. Defaults to `{}`.
 icon | string | .ico icon file relative to the project root. Defaults to `undefined`.
 
 ## build.mac <- [MacConfig](../src/lib/config/MacConfig.ts)
@@ -36,7 +40,7 @@ name | string | Name in `Info.plist`. Defaults to `${ name }`.
 displayName | string | DisplayName in `Info.plist`. Defaults to `${ name }`.
 version | string | Version in `Info.plist`. Defaults to `${ version }`.
 description | string | Description in `InfoPlist.strings`. Defaults to `${ description }`.
-copyright | string | Copyright in `InfoPlist.strings`. Defaults to `""`.
+copyright | string | Copyright in `InfoPlist.strings`. Defaults to `''`.
 icon | string | .icns icon file relative to the project root. Defaults to `undefined`.
 plistStrings | { [key: string]: string } | `plist` strings. Defaults to `{}`.
 

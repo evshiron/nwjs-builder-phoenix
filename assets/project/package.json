@@ -22,11 +22,9 @@
     ],
     "outputPattern": "${NAME} ${VERSION} ${PLATFORM} ${ARCH}",
     "win": {
-      "versionStrings": {
-        "ProductName": "Project",
-        "CompanyName": "nwjs-builder-phoenix",
-        "LegalCopyright": "copyright"
-      },
+      "productName": "Project",
+      "companyName": "nwjs-builder-phoenix",
+      "copyright": "copyright",
       "icon": "./assets/pd.ico"
     },
     "mac": {

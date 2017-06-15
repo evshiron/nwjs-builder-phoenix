@@ -1,8 +1,12 @@
 
 export class WinConfig {
 
+    public productName: string = '';
+    public companyName: string = '';
+    public fileDescription: string = '';
     public productVersion: string = '';
     public fileVersion: string = '';
+    public copyright: string = '';
     public versionStrings: {
         ProductName?: undefined,
         CompanyName?: undefined,
