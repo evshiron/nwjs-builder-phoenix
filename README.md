@@ -36,6 +36,9 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 * Install `nwjs-builder-phoenix` as a `devDependencies` of your NW.js project as follows:
 
 ```shell
+# Optional wine for building for Windows on other platforms.
+# The command may differ in different Linux distributions.
+#sudo apt-get install wine
 npm install nwjs-builder-phoenix --save-dev
 ```
 
