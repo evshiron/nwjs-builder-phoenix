@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.4"></a>
+## [1.14.4](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.3...v1.14.4) (2017-08-21)
+
+
+### Bug Fixes
+
+* **Downloaders:** tolerate DNS lookup timeout and use caches ([434aea4](https://github.com/evshiron/nwjs-builder-phoenix/commit/434aea4))
+
+
+
 <a name="1.14.3"></a>
 ## [1.14.3](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.2...v1.14.3) (2017-06-16)
 
