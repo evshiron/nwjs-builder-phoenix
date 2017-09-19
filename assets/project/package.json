@@ -1,0 +1,51 @@
+{
+  "name": "project",
+  "version": "0.1.0",
+  "description": "description",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "build --mac --x64 --mirror https://npm.taobao.org/mirrors/nwjs/ ."
+  },
+  "author": "evshiron",
+  "license": "MIT",
+  "build": {
+    "appId": "io.github.evshiron.nwjs-builder-phoenix.project",
+    "nwVersion": "0.14.7",
+    "packed": true,
+    "targets": [
+      "zip",
+      "nsis7z"
+    ],
+    "strippedProperties": [
+      "build"
+    ],
+    "outputPattern": "${NAME} ${VERSION} ${PLATFORM} ${ARCH}",
+    "win": {
+      "productName": "Project",
+      "companyName": "nwjs-builder-phoenix",
+      "copyright": "copyright",
+      "icon": "./assets/pd.ico"
+    },
+    "mac": {
+      "displayName": "Project",
+      "copyright": "copyright",
+      "icon": "./assets/pd.icns",
+      "plistStrings": {
+        "CFBundleIdentifier": "io.github.evshiron.nwjs-builder-phoenix.project.modified",
+        "CFBundleDocumentTypes": []
+      }
+    },
+    "nsis": {
+      "installDirectory": "$PROGRAMFILES\\${_COMPANYNAME}\\${_APPNAME}",
+      "diffUpdaters": true
+    }
+  },
+  "devDependencies": {
+    "nwjs-builder-phoenix": "^1.9.3",
+    "typescript": "^2.2.1"
+  },
+  "window": {
+    "icon": "./assets/pd.png"
+  }
+}

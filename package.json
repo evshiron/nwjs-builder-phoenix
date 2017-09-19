@@ -1,0 +1,66 @@
+{
+  "name": "nwjs-builder-phoenix",
+  "version": "1.14.5",
+  "description": "",
+  "main": "./dist/lib/index.js",
+  "bin": {
+    "build": "./dist/bin/build.js",
+    "run": "./dist/bin/run.js"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "test": "npm run build && ava",
+    "coverage": "nyc ava",
+    "build": "tsc",
+    "release": "npm test && standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evshiron/nwjs-builder-phoenix.git"
+  },
+  "author": "evshiron",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evshiron/nwjs-builder-phoenix/issues"
+  },
+  "homepage": "https://github.com/evshiron/nwjs-builder-phoenix#readme",
+  "devDependencies": {
+    "@types/bluebird": "^3.5.3",
+    "@types/debug": "0.0.29",
+    "@types/es6-shim": "^0.31.32",
+    "@types/fs-extra": "^3.0.0",
+    "@types/node": "^7.0.5",
+    "@types/progress": "^1.1.28",
+    "@types/request": "0.0.45",
+    "@types/semver": "^5.3.31",
+    "@types/tmp": "0.0.32",
+    "@types/yargs": "^6.6.0",
+    "ava": "^0.18.2",
+    "cross-env": "^3.2.3",
+    "lerna": "^2.0.0-rc.3",
+    "nyc": "^10.1.2",
+    "standard-version": "^4.0.0",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  },
+  "dependencies": {
+    "7zip-bin": "^2.0.4",
+    "bluebird": "^3.5.0",
+    "debug": "^2.6.1",
+    "dir-compare": "^1.3.0",
+    "fs-extra": "^3.0.1",
+    "globby": "^6.1.0",
+    "plist": "^2.0.1",
+    "progress": "^1.1.8",
+    "rcedit": "^0.8.0",
+    "request": "^2.80.0",
+    "request-progress": "^3.0.0",
+    "semver": "^5.3.0",
+    "source-map-support": "^0.4.11",
+    "tmp": "0.0.31",
+    "yargs": "^7.0.1"
+  },
+  "engines": {
+    "node": ">=5.10.0"
+  }
+}

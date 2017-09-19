@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-default/index.css" />
+    <style type="text/css">
+
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+
+    #buttons {
+        margin: 8px;
+    }
+
+    #progress {
+        margin: 8px;
+    }
+
+    </style>
+    <script type="text/javascript" src="./node_modules/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="./node_modules/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="root">
+    <div id="buttons">
+        <el-button :loading="checking" @click="checkForUpdates">Check for updates</el-button>
+    </div>
+    <div id="progress" v-if="downloading">
+        <el-progress :text-inside="true" :stroke-width="18" :percentage="progress"></el-progress>
+    </div>
+</div>
+<script type="text/javascript">
+
+const { NsisCompatUpdater } = require('nsis-compat-updater');
+
+document.title = `${ nw.App.manifest.name } - ${ nw.App.manifest.version }`;
+
+const app = new Vue({
+    el: '#root',
+    data: function() {
+        return {
+            checking: false,
+            downloading: false,
+            progress: 0,
+        };
+    },
+    methods: {
+        checkForUpdates() {
+
+            const updater = new NsisCompatUpdater('http://127.0.0.1:8080/versions.nsis.json', nw.App.manifest.version, 'x86');
+
+            this.checking = true;
+
+            updater.checkForUpdates()
+            .then((version) => {
+
+                this.checking = false;
+
+                if(version) {
+
+                    return this.$confirm(`New version of ${ version.version } is available, download now?`)
+                    .then((confirm) => {
+
+                        if(confirm) {
+
+                            this.downloading = true;
+                            this.progress = 0;
+
+                            const handleDownloadProgress = (state) => {
+                                this.progress = state.percentage;
+                            };
+
+                            updater.onDownloadProgress.subscribe(handleDownloadProgress);
+
+                            return updater.downloadUpdate(version.version)
+                            .then((path) => {
+
+                                updater.onDownloadProgress.unsubscribe(handleDownloadProgress);
+                                this.downloading = false;
+                                this.progress = 0;
+
+                                return this.$confirm(`New version of ${ version.version } is downloaded, install now?`)
+                                .then((confirm) => {
+
+                                    if(confirm) {
+                                        return updater.quitAndInstall(path);
+                                    }
+                                    else {
+                                        this.$message(`Installing cancelled.`);
+                                    }
+
+                                });
+
+                            })
+                            .catch((err) => {
+
+                                updater.onDownloadProgress.unsubscribe(handleDownloadProgress);
+                                this.downloading = false;
+                                this.progress = 0;
+
+                                throw err;
+
+                            });
+
+                        }
+                        else {
+                            this.$message(`Downloading cancelled.`);
+                        }
+
+                    });
+                }
+                else {
+                    return this.$alert(`No new version available, the current version is ${ nw.App.manifest.version }.`);
+                }
+            })
+            .catch((err) => {
+
+                this.checking = false;
+
+                this.$message.error(err.toString());
+
+            });
+
+        },
+    },
+});
+
+</script>
+</body>
+</html>
