@@ -14,6 +14,13 @@ export class WinConfig {
         LegalCopyright?: undefined,
     } = {};
     public icon: string = undefined;
+    public signing: {
+        cliArgs: string,
+        signtoolPath: string,
+    } = {
+        cliArgs: '',
+        signtoolPath: '',
+    };
 
     constructor(options: any = {}) {
 

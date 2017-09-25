@@ -1,21 +1,44 @@
-
-import { dirname, basename, resolve } from 'path';
+import * as Bluebird from 'bluebird';
+import {
+    chmod,
+    copy,
+    createReadStream,
+    createWriteStream,
+    emptyDir,
+    ensureDir,
+    readFile,
+    readJson,
+    remove,
+    rename,
+    writeFile,
+} from 'fs-extra';
+import {basename, dirname, resolve} from 'path';
 
 import * as semver from 'semver';
-import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, rename, chmod, createReadStream, createWriteStream } from 'fs-extra';
-import * as Bluebird from 'bluebird';
+import {NsisVersionInfo} from './common';
+import {BuildConfig} from './config';
+import {Downloader} from './Downloader';
+import {FFmpegDownloader} from './FFmpegDownloader';
+import {Nsis7Zipper, nsisBuild, NsisComposer, NsisDiffer} from './nsis-gen';
+import {
+    compress,
+    copyFileAsync,
+    fileExistsAsync,
+    findExcludableDependencies,
+    findExecutable,
+    findFFmpeg,
+    findRuntimeRoot,
+    fixWindowsVersion,
+    mergeOptions,
+    spawnAsync,
+    tmpDir,
+    tmpName,
+} from './util';
 
 const debug = require('debug')('build:builder');
 const globby = require('globby');
 const rcedit = require('rcedit');
 const plist = require('plist');
-
-import { Downloader } from './Downloader';
-import { FFmpegDownloader } from './FFmpegDownloader';
-import { BuildConfig } from './config';
-import { NsisVersionInfo } from './common';
-import { NsisComposer, NsisDiffer, Nsis7Zipper, nsisBuild } from './nsis-gen';
-import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
 interface IParseOutputPatternOptions {
     name: string;
@@ -257,6 +280,29 @@ export class Builder {
 
         return rename(src, dest);
 
+    }
+
+    protected async signWinApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+
+        const { signtoolPath, cliArgs } = config.win.signing;
+
+        if (signtoolPath && cliArgs) {
+            const resolvedSigntool = resolve(signtoolPath);
+            if ( await fileExistsAsync(resolvedSigntool) ) {
+                debug(`signWinApp: signtool ${resolvedSigntool} exists`);
+                const filesToSign = await globby(['**/*.+(exe|dll)']);
+                const cliArgsArr = cliArgs.split(' ').concat(filesToSign);
+                debug(`signWinApp: filesToSign: `, filesToSign);
+                debug(`signWinApp: cliArgs: `, cliArgsArr);
+                const { code, signal } = await spawnAsync(resolvedSigntool, cliArgsArr);
+
+                if(code !== 0) {
+                    throw new Error(`ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);
+                }
+            } else {
+                debug(`signtool ${resolvedSigntool} does NOT exist`);
+            }
+        }
     }
 
     protected async updatePlist(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
@@ -583,6 +629,7 @@ export class Builder {
             await this.prepareWinBuild(targetDir, appRoot, pkg, config);
             await this.copyFiles(platform, targetDir, appRoot, pkg, config);
             await this.renameWinApp(targetDir, appRoot, pkg, config);
+            await this.signWinApp(targetDir, appRoot, pkg, config);
             break;
         case 'darwin':
         case 'osx':

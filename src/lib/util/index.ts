@@ -1,10 +1,11 @@
-
-import { join, dirname, relative } from 'path';
-import { spawn, exec } from 'child_process';
+import {exec, spawn} from 'child_process';
+import {exists} from 'fs';
+import {lstat, outputFile, readFile, realpath} from 'fs-extra';
+import {dirname, join, relative} from 'path';
 
 import * as tmp from 'tmp';
+
 tmp.setGracefulCleanup();
-import { realpath, lstat, ensureDir, readFile, outputFile } from 'fs-extra';
 
 const debug = require('debug')('build:util');
 const globby = require('globby');
@@ -314,5 +315,11 @@ export function execAsync(command: string, options: any = {}): Promise<{
 
         }
 
+    });
+}
+
+export function fileExistsAsync(path: string) {
+    return new Promise((resolve, reject) => {
+        exists(path, resolve);
     });
 }

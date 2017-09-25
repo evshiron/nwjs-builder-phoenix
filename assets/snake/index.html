@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Snake</title>
+    <link href="app.css" rel="stylesheet" />
+    <script src="app.js"></script>
+</head>
+<body>
+<div id="scoreboard">
+    <span id="label">Score:</span>
+    <span id="score"></span>
+    <div id="bar">
+        <div id="play_menu">
+            <button onclick="pause();">Pause</button>
+        </div>
+        <div id="pause_menu">
+            <button onclick="play();">Resume</button>
+            <button onclick="restart();">Restart</button>
+        </div>
+        <div id="restart_menu">
+            <button onclick="restart();">Restart</button>
+        </div>
+    </div>
+</div>
+<canvas></canvas>
+</body>
+</html>
