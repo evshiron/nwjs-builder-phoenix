@@ -76,12 +76,21 @@ export class FFmpegDownloader extends DownloaderBase {
             }
         }
         catch(err) {
+
+            debug('in fetch', 'err', err);
+
             if(err.code === 'ENOTFOUND' && this.options.useCaches) {
+                console.info('DNS lookup fails, use local caches at this time.');
+                return path;
+            }
+            else if(err.code === 'EAI_AGAIN' && this.options.useCaches) {
+                console.info('DNS lookup timeout, use local caches at this time.');
                 return path;
             }
             else {
                 throw err;
             }
+
         }
 
         await this.download(url, filename, path, showProgress);
