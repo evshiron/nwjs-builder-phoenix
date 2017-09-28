@@ -1,4 +1,5 @@
 import * as Bluebird from 'bluebird';
+import * as dotenv from 'dotenv';
 import {
     chmod,
     copy,
@@ -29,7 +30,7 @@ import {
     findFFmpeg,
     findRuntimeRoot,
     fixWindowsVersion,
-    mergeOptions,
+    mergeOptions, parseTmpl,
     spawnAsync,
     tmpDir,
     tmpName,
@@ -284,17 +285,17 @@ export class Builder {
 
     protected async signWinApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
-        const { signtoolPath, cliArgs } = config.win.signing;
+        const { signtoolPath, cliArgsInterpolated, cliArgs } = config.win.signing;
 
-        if (signtoolPath && cliArgs) {
+        if (signtoolPath && cliArgsInterpolated) {
             const resolvedSigntool = resolve(signtoolPath);
             if ( await fileExistsAsync(resolvedSigntool) ) {
                 debug(`signWinApp: signtool ${resolvedSigntool} exists`);
                 const filesToSign = await globby(['**/*.+(exe|dll)']);
-                const cliArgsArr = cliArgs.split(' ').concat(filesToSign);
-                debug(`signWinApp: filesToSign: `, filesToSign);
-                debug(`signWinApp: cliArgs: `, cliArgsArr);
-                const { code, signal } = await spawnAsync(resolvedSigntool, cliArgsArr);
+                const cliArgsArr = cliArgsInterpolated.split(' ').concat(filesToSign);
+                const usingInterpolated = cliArgsInterpolated !== cliArgs;
+                debug(`signWinApp: cliArgs (will be interpolated? ${usingInterpolated}): `, cliArgsArr);
+                const { code } = await spawnAsync(resolvedSigntool, cliArgsArr);
 
                 if(code !== 0) {
                     throw new Error(`ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);

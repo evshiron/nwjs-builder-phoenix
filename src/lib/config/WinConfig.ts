@@ -16,9 +16,13 @@ export class WinConfig {
     public icon: string = undefined;
     public signing: {
         cliArgs: string,
+        cliArgsInterpolated?: string,
+        cliArgsVarsFile?: string,
         signtoolPath: string,
     } = {
         cliArgs: '',
+        cliArgsInterpolated: '',
+        cliArgsVarsFile: '',
         signtoolPath: '',
     };
 

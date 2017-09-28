@@ -323,3 +323,20 @@ export function fileExistsAsync(path: string) {
         exists(path, resolve);
     });
 }
+
+function getPathFromObj(path: string, obj: object, fb = `$\{${path}}`) {
+    return path.split('.').reduce((res, key) => (<any>res)[key] || fb, obj);
+}
+
+/**
+ * Parse a JS template given a scope object
+ * @param template
+ * @param obj
+ * @param fallback
+ */
+export function parseTmpl(template: string, obj: object) {
+    return template.replace(/\$\{.+?}/g, (match) => {
+        const path = match.substr(2, match.length - 3).trim();
+        return getPathFromObj(path, obj);
+    });
+}
