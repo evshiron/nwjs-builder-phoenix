@@ -283,22 +283,24 @@ export class Builder {
 
     }
 
-    protected async signWinApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+    protected async signWinApp(config: BuildConfig, filesToSignGlob: string = 'dist/*/**/*.+(exe|dll)') {
 
         const { signtoolPath, cliArgsInterpolated, cliArgs } = config.win.signing;
 
         if (signtoolPath && cliArgsInterpolated) {
             const resolvedSigntool = resolve(signtoolPath);
-            if ( await fileExistsAsync(resolvedSigntool) ) {
-                debug(`signWinApp: signtool ${resolvedSigntool} exists`);
-                const filesToSign = await globby(['**/*.+(exe|dll)']);
-                const cliArgsArr = cliArgsInterpolated.split(' ').concat(filesToSign);
-                const usingInterpolated = cliArgsInterpolated !== cliArgs;
-                debug(`signWinApp: cliArgs (will be interpolated? ${usingInterpolated}): `, cliArgsArr);
-                const { code } = await spawnAsync(resolvedSigntool, cliArgsArr);
+            if ( await fileExistsAsync(resolvedSigntool) && filesToSignGlob) {
+                debug(`signWinApp: searching for files to sign with pattern ${filesToSignGlob}`);
+                const filesToSign = await globby(filesToSignGlob);
+                if (filesToSign) {
+                    const cliArgsArr = cliArgsInterpolated.split(' ').concat(filesToSign);
+                    const usingInterpolated = cliArgsInterpolated !== cliArgs;
+                    debug(`signWinApp: cliArgs (will be interpolated? ${usingInterpolated}): `, cliArgsArr);
+                    const { code } = await spawnAsync(resolvedSigntool, cliArgsArr);
 
-                if(code !== 0) {
-                    throw new Error(`ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);
+                    if(code !== 0) {
+                        throw new Error(`ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);
+                    }
                 }
             } else {
                 debug(`signtool ${resolvedSigntool} does NOT exist`);
@@ -630,7 +632,7 @@ export class Builder {
             await this.prepareWinBuild(targetDir, appRoot, pkg, config);
             await this.copyFiles(platform, targetDir, appRoot, pkg, config);
             await this.renameWinApp(targetDir, appRoot, pkg, config);
-            await this.signWinApp(targetDir, appRoot, pkg, config);
+            await this.signWinApp(config);
             break;
         case 'darwin':
         case 'osx':
@@ -728,6 +730,7 @@ export class Builder {
         }
 
         await versionInfo.save();
+        await this.signWinApp(config, `dist/*.+(exe|dll)`);
 
     }
 
@@ -793,7 +796,7 @@ export class Builder {
         }
 
         await versionInfo.save();
-
+        await this.signWinApp(config, `dist/*.+(exe|dll)`);
     }
 
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {
