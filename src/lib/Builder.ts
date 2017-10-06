@@ -1,5 +1,4 @@
 import * as Bluebird from 'bluebird';
-import * as dotenv from 'dotenv';
 import {
     chmod,
     copy,
@@ -7,6 +6,7 @@ import {
     createWriteStream,
     emptyDir,
     ensureDir,
+    outputFile,
     readFile,
     readJson,
     remove,
@@ -20,7 +20,9 @@ import {NsisVersionInfo} from './common';
 import {BuildConfig} from './config';
 import {Downloader} from './Downloader';
 import {FFmpegDownloader} from './FFmpegDownloader';
-import {Nsis7Zipper, nsisBuild, NsisComposer, NsisDiffer} from './nsis-gen';
+import {Nsis7Zipper, nsisBuild, NsisDiffer} from './nsis-gen';
+import {INsisComposerOptions, NsisComposer} from './nsis-gen/NsisComposer';
+import {SignableNsisInstaller} from './nsis-gen/SignableNsisInstaller';
 import {
     compress,
     copyFileAsync,
@@ -30,7 +32,7 @@ import {
     findFFmpeg,
     findRuntimeRoot,
     fixWindowsVersion,
-    mergeOptions, parseTmpl,
+    mergeOptions,
     spawnAsync,
     tmpDir,
     tmpName,
@@ -283,24 +285,30 @@ export class Builder {
 
     }
 
-    protected async signWinApp(config: BuildConfig, filesToSignGlob: string = 'dist/*/**/*.+(exe|dll)') {
+    protected async signWinApp(config: BuildConfig, cwd: string, filesToSignGlobs: string[] = ['**/*.+(exe|dll)'],
+                               ignore: string[] = []) {
 
         const { signtoolPath, cliArgsInterpolated, cliArgs } = config.win.signing;
 
         if (signtoolPath && cliArgsInterpolated) {
             const resolvedSigntool = resolve(signtoolPath);
-            if ( await fileExistsAsync(resolvedSigntool) && filesToSignGlob) {
-                debug(`signWinApp: searching for files to sign with pattern ${filesToSignGlob}`);
-                const filesToSign = await globby(filesToSignGlob);
+            if ( await fileExistsAsync(resolvedSigntool) && filesToSignGlobs) {
+                debug(`signWinApp: searching for files to sign with pattern ${filesToSignGlobs}`);
+                // ignore EPERM issues with scandir
+                // https://github.com/isaacs/node-glob/issues/284
+                const nodeGlobArgs = {strict: false, cwd, ignore};
+                const filesToSign = await globby(filesToSignGlobs, nodeGlobArgs);
                 if (filesToSign) {
                     const cliArgsArr = cliArgsInterpolated.split(' ').concat(filesToSign);
                     const usingInterpolated = cliArgsInterpolated !== cliArgs;
                     debug(`signWinApp: cliArgs (will be interpolated? ${usingInterpolated}): `, cliArgsArr);
-                    const { code } = await spawnAsync(resolvedSigntool, cliArgsArr);
+                    const { code } = await spawnAsync(resolvedSigntool, cliArgsArr, {cwd});
 
                     if(code !== 0) {
                         throw new Error(`ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);
                     }
+                } else {
+                    debug(`signWinApp: no files to sign matched ${filesToSignGlobs}`);
                 }
             } else {
                 debug(`signtool ${resolvedSigntool} does NOT exist`);
@@ -632,7 +640,6 @@ export class Builder {
             await this.prepareWinBuild(targetDir, appRoot, pkg, config);
             await this.copyFiles(platform, targetDir, appRoot, pkg, config);
             await this.renameWinApp(targetDir, appRoot, pkg, config);
-            await this.signWinApp(config);
             break;
         case 'darwin':
         case 'osx':
@@ -678,46 +685,11 @@ export class Builder {
             }
             return;
         }
+        const installerNsisTarget = await this.buildNsisTargetSigned(sourceDir, config);
 
         const versionInfo = new NsisVersionInfo(resolve(this.dir, config.output, 'versions.nsis.json'));
-
-        const targetNsis = resolve(dirname(sourceDir), `${ basename(sourceDir) }-Setup.exe`);
-
-        const data = await (new NsisComposer({
-
-            // Basic.
-            appName: config.win.productName,
-            companyName: config.win.companyName,
-            description: config.win.fileDescription,
-            version: fixWindowsVersion(config.win.productVersion),
-            copyright: config.win.copyright,
-
-            icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
-            unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
-
-            // Compression.
-            compression: 'lzma',
-            solid: true,
-
-            languages: config.nsis.languages,
-            installDirectory: config.nsis.installDirectory,
-
-            // Output.
-            output: targetNsis,
-
-        })).make();
-
-        const script = await tmpName();
-        await writeFile(script, data);
-
-        await nsisBuild(sourceDir, script, {
-            mute: this.options.mute,
-        });
-
-        await remove(script);
-
         await versionInfo.addVersion(pkg.version, '', sourceDir);
-        await versionInfo.addInstaller(pkg.version, arch, targetNsis);
+        await versionInfo.addInstaller(pkg.version, arch, installerNsisTarget);
 
         if(config.nsis.diffUpdaters) {
 
@@ -730,8 +702,75 @@ export class Builder {
         }
 
         await versionInfo.save();
-        await this.signWinApp(config, `dist/*.+(exe|dll)`);
 
+    }
+
+    protected async buildNsisTargetSigned(sourceDir: string, config: BuildConfig) {
+        const distDir = resolve(dirname(sourceDir));
+        const appname = basename(sourceDir);
+        const installerFileName = `${ appname }-Setup.exe`;
+        const installerNsisTarget = resolve(distDir, installerFileName);
+        const doSigning = config.win.signing.signtoolPath && config.win.signing.cliArgsInterpolated;
+
+        const nsisComposerOptions = {
+
+            // Basic.
+            appName: config.win.productName,
+            companyName: config.win.companyName,
+            copyright: config.win.copyright,
+            description: config.win.fileDescription,
+            version: fixWindowsVersion(config.win.productVersion),
+
+            icon: config.nsis.icon ? resolve(this.dir, config.nsis.icon) : undefined,
+            unIcon: config.nsis.unIcon ? resolve(this.dir, config.nsis.unIcon) : undefined,
+
+            // Compression.
+            compression: 'lzma',
+            solid: true,
+
+            languages: config.nsis.languages,
+            installDirectory: config.nsis.installDirectory,
+
+            output: installerNsisTarget,
+
+        } as INsisComposerOptions;
+
+        let installerComposer = new NsisComposer(nsisComposerOptions);
+        if (doSigning) {
+            const uninstallerComposer = new SignableNsisInstaller(true, { ...nsisComposerOptions,
+                output: resolve(sourceDir, 'make-Uninstall.exe')});
+            const uninstallerGeneratorPath = await this.doNsisBuild(sourceDir, uninstallerComposer,
+                '-uninstaller-generator');
+            // generate the uninstaller by executing the generated fake installer
+            await spawnAsync(uninstallerGeneratorPath, []);
+            // remove the uninstaller generator
+            await remove(uninstallerGeneratorPath);
+            // sign the generated installer
+            await this.signWinApp(config, sourceDir, ['**/*.+(exe|dll)'],
+                [basename(uninstallerGeneratorPath)]);
+
+            installerComposer = new SignableNsisInstaller(false, nsisComposerOptions);
+        }
+
+        await this.doNsisBuild(sourceDir, installerComposer);
+
+        if (doSigning) {
+            await this.signWinApp(config, distDir, [installerFileName]);
+        }
+
+        return installerNsisTarget;
+    }
+
+    protected async doNsisBuild(sourceDir: string, composer: NsisComposer,
+                                nsisScriptSuffix: string = '' ) {
+        const distDir = resolve(dirname(sourceDir));
+        const scriptContents = await composer.make();
+        const scriptPath = resolve(distDir, `make-${basename(sourceDir)}${nsisScriptSuffix}.nsi`);
+        await outputFile(scriptPath, scriptContents);
+        await nsisBuild(sourceDir, scriptPath, {
+            mute: this.options.mute,
+        });
+        return resolve(composer.options.output);
     }
 
     protected async buildNsis7zTarget(platform: string, arch: string, sourceDir: string, pkg: any, config: BuildConfig) {
@@ -796,7 +835,7 @@ export class Builder {
         }
 
         await versionInfo.save();
-        await this.signWinApp(config, `dist/*.+(exe|dll)`);
+        await this.signWinApp(config, sourceDir, ['*.+(exe|dll)']);
     }
 
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {

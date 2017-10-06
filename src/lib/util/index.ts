@@ -204,7 +204,7 @@ export function tmpFile(options: any = {}): Promise<{
 }> {
     return new Promise((resolve, reject) => {
         tmp.file(Object.assign({}, {
-            //discardDescriptor: true,
+            // discardDescriptor: true,
         }, options), (err, path, fd, cleanup) => err ? reject(err) : resolve({
             path, fd, cleanup,
         }));
