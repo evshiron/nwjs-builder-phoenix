@@ -300,8 +300,7 @@ export class Builder {
                 const filesToSign = await globby(filesToSignGlobs, nodeGlobArgs);
                 if (filesToSign) {
                     const cliArgsArr = cliArgsInterpolated.split(' ').concat(filesToSign);
-                    const usingInterpolated = cliArgsInterpolated !== cliArgs;
-                    debug(`signWinApp: cliArgs (will be interpolated? ${usingInterpolated}): `, cliArgsArr);
+                    debug(`signWinApp: cliArgs (will be interpolated? ${cliArgsInterpolated !== cliArgs}): `, cliArgsArr);
                     const { code } = await spawnAsync(resolvedSigntool, cliArgsArr, {cwd});
 
                     if(code !== 0) {
@@ -705,7 +704,8 @@ export class Builder {
 
     }
 
-    protected async buildNsisTargetSigned(sourceDir: string, config: BuildConfig) {
+    protected async buildNsisTargetSigned(sourceDir: string, config: BuildConfig,
+                                          compressonType: string = '') {
         const distDir = resolve(dirname(sourceDir));
         const appname = basename(sourceDir);
         const installerFileName = `${ appname }-Setup.exe`;

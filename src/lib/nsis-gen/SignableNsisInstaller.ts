@@ -37,7 +37,6 @@ Section Install
 SectionEnd
         `;
         return this.uninstallerOnly ? await dummyInstallerSection : await super.makeInstallSection();
-        // return await super.makeInstallSection();
     }
 
     protected async makeInstallSectionEnd(): Promise<string> {
