@@ -469,6 +469,9 @@ export class Builder {
             follow: true,
             mark: true,
             ignore,
+            // ignore EPERM issues with scandir in windows
+            // https://github.com/isaacs/node-glob/issues/284
+            strict: false
         });
 
         debug('in copyFiles', 'config.files', config.files);
@@ -622,7 +625,7 @@ export class Builder {
         await emptyDir(targetDir);
 
         await copy(runtimeRoot, targetDir, {
-            //dereference: true,
+            // dereference: true,
         });
 
         if(config.ffmpegIntegration) {
@@ -835,7 +838,6 @@ export class Builder {
         }
 
         await versionInfo.save();
-        await this.signWinApp(config, sourceDir, ['*.+(exe|dll)']);
     }
 
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {
