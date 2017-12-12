@@ -95,8 +95,17 @@ export class BuildConfig {
             if (config.signing.cliArgsVarsFile) {
                 const {cliArgs, cliArgsVarsFile} = config.signing;
                 const cliArgsVarsFileAbsolutePath = resolve(process.cwd(), cliArgsVarsFile);
-                const envVars = dotenv.parse(readFileSync(cliArgsVarsFileAbsolutePath));
-                config.signing.cliArgsInterpolated = parseTmpl(cliArgs, envVars);
+                try {
+                    const actualArgsVarsFile = readFileSync(cliArgsVarsFileAbsolutePath);
+                    const envVars = dotenv.parse(actualArgsVarsFile);
+                    config.signing.cliArgsInterpolated = parseTmpl(cliArgs, envVars);
+                } catch (err) {
+                    if (err.code === 'ENOENT') {
+                        debug(`args vars file not found: ${cliArgsVarsFile}`)
+                    } else {
+                        throw err;
+                    }
+                }
             }
         }
 
