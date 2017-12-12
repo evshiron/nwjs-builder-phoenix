@@ -285,8 +285,9 @@ export class Builder {
 
     }
 
-    protected async signWinApp(config: BuildConfig, cwd: string, filesToSignGlobs: string[] = ['**/*.+(exe|dll)'],
-                               ignore: string[] = []) {
+    protected async signApp(config: BuildConfig, cwd: string,
+                            filesToSignGlobs: string[] = config.signing.filesToSignGlobs,
+                            ignore: string[] = []) {
 
         const { signtoolPath, cliArgsInterpolated, cliArgs } = config.win.signing;
 
@@ -310,7 +311,7 @@ export class Builder {
                     debug(`signWinApp: no files to sign matched ${filesToSignGlobs}`);
                 }
             } else {
-                debug(`signtool ${resolvedSigntool} does NOT exist`);
+                debug(`signWinApp: ${resolvedSigntool} does NOT exist`);
             }
         }
     }
@@ -649,6 +650,7 @@ export class Builder {
             await this.prepareMacBuild(targetDir, appRoot, pkg, config);
             await this.copyFiles(platform, targetDir, appRoot, pkg, config);
             await this.renameMacApp(targetDir, appRoot, pkg, config);
+            await this.signApp(config, targetDir, ['**/*.+(|)']);
             break;
         case 'linux':
             await this.prepareLinuxBuild(targetDir, appRoot, pkg, config);
@@ -749,7 +751,7 @@ export class Builder {
             // remove the uninstaller generator
             await remove(uninstallerGeneratorPath);
             // sign the generated installer
-            await this.signWinApp(config, sourceDir, ['**/*.+(exe|dll)'],
+            await this.signApp(config, sourceDir, ['**/*.+(exe|dll)'],
                 [basename(uninstallerGeneratorPath)]);
 
             installerComposer = new SignableNsisInstaller(false, nsisComposerOptions);
@@ -758,7 +760,7 @@ export class Builder {
         await this.doNsisBuild(sourceDir, installerComposer);
 
         if (doSigning) {
-            await this.signWinApp(config, distDir, [installerFileName]);
+            await this.signApp(config, distDir, [installerFileName]);
         }
 
         return installerNsisTarget;

@@ -1,5 +1,6 @@
+import {SignableConfig} from './SignableConfig';
 
-export class WinConfig {
+export class WinConfig extends SignableConfig {
 
     public productName: string = '';
     public companyName: string = '';
@@ -14,26 +15,18 @@ export class WinConfig {
         LegalCopyright?: undefined,
     } = {};
     public icon: string = undefined;
-    public signing: {
-        cliArgs: string,
-        cliArgsInterpolated?: string,
-        cliArgsVarsFile?: string,
-        signtoolPath: string,
-    } = {
-        cliArgs: '',
-        cliArgsInterpolated: '',
-        cliArgsVarsFile: '',
-        signtoolPath: '',
-    };
 
     constructor(options: any = {}) {
+        super(options);
+        // default filesToSign for Windows
+        this.signing.filesToSignGlobs = ['**/*.+(exe|dll)'];
 
         Object.keys(this).map((key) => {
-            if(options[key] !== undefined) {
-                switch(key) {
-                default:
-                    (<any>this)[key] = options[key];
-                    break;
+            if (options[key] !== undefined) {
+                switch (key) {
+                    default:
+                        (<any>this)[key] = options[key];
+                        break;
                 }
             }
         });

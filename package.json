@@ -12,6 +12,7 @@
     "test": "npm run build && ava",
     "coverage": "nyc ava",
     "build": "tsc",
+    "watch": "tsc -w",
     "release": "npm test && standard-version"
   },
   "repository": {

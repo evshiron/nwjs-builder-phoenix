@@ -32,6 +32,8 @@ export class BuildConfig {
     public ffmpegIntegration: boolean = false;
     public strippedProperties: string[] = [ 'scripts', 'devDependencies', 'build' ];
 
+    public filesToSignGlobs: [string] = [''];
+
     constructor(pkg: any = {}) {
 
         const options = pkg.build ? pkg.build : {};
@@ -87,12 +89,15 @@ export class BuildConfig {
         this.win.fileDescription = this.win.fileDescription ? this.win.fileDescription : pkg.description;
         this.win.productVersion = this.win.productVersion ? this.win.productVersion : pkg.version;
         this.win.fileVersion = this.win.fileVersion ? this.win.fileVersion : this.win.productVersion;
-        this.win.signing.cliArgsInterpolated = this.win.signing.cliArgs;
-        if (this.win.signing.cliArgsVarsFile) {
-            const {cliArgs, cliArgsVarsFile} = this.win.signing;
-            const cliArgsVarsFileAbsolutePath = resolve(process.cwd(), cliArgsVarsFile);
-            const envVars = dotenv.parse(readFileSync(cliArgsVarsFileAbsolutePath));
-            this.win.signing.cliArgsInterpolated = parseTmpl(cliArgs, envVars);
+
+        for (let config of [this.win, this.mac]) {
+            config.signing.cliArgsInterpolated = config.signing.cliArgs;
+            if (config.signing.cliArgsVarsFile) {
+                const {cliArgs, cliArgsVarsFile} = config.signing;
+                const cliArgsVarsFileAbsolutePath = resolve(process.cwd(), cliArgsVarsFile);
+                const envVars = dotenv.parse(readFileSync(cliArgsVarsFileAbsolutePath));
+                config.signing.cliArgsInterpolated = parseTmpl(cliArgs, envVars);
+            }
         }
 
         this.mac.name = this.mac.name ? this.mac.name : pkg.name;
