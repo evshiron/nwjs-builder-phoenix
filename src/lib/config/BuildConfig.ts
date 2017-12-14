@@ -91,17 +91,20 @@ export class BuildConfig {
         this.win.fileVersion = this.win.fileVersion ? this.win.fileVersion : this.win.productVersion;
 
         for (let config of [this.win, this.mac]) {
-            config.signing.cliArgsInterpolated = config.signing.cliArgs;
+            config.signing.cliArgsInterpolated = config.signing.cliArgs.split(' ');
             if (config.signing.cliArgsVarsFile) {
-                const {cliArgs, cliArgsVarsFile} = config.signing;
+                const {cliArgsVarsFile} = config.signing;
                 const cliArgsVarsFileAbsolutePath = resolve(process.cwd(), cliArgsVarsFile);
                 try {
                     const actualArgsVarsFile = readFileSync(cliArgsVarsFileAbsolutePath);
                     const envVars = dotenv.parse(actualArgsVarsFile);
-                    config.signing.cliArgsInterpolated = parseTmpl(cliArgs, envVars);
+                    const interpolatedCliArgs = config.signing.cliArgsInterpolated.map(
+                        (arg) => parseTmpl(arg, envVars));
+                    debug(`using interpolatedCliArgs CLI args: `, interpolatedCliArgs);
+                    config.signing.cliArgsInterpolated = interpolatedCliArgs;
                 } catch (err) {
                     if (err.code === 'ENOENT') {
-                        debug(`args vars file not found: ${cliArgsVarsFile}`)
+                        debug(`args vars file not found: ${cliArgsVarsFile}`);
                     } else {
                         throw err;
                     }

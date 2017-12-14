@@ -1,13 +1,15 @@
 import {exec, spawn} from 'child_process';
 import {exists} from 'fs';
 import {lstat, outputFile, readFile, realpath} from 'fs-extra';
-import {dirname, join, relative} from 'path';
+import {dirname, join, relative, sep} from 'path';
 
 import * as tmp from 'tmp';
 
 tmp.setGracefulCleanup();
 
+// noinspection TsLint
 const debug = require('debug')('build:util');
+// noinspection TsLint
 const globby = require('globby');
 
 export * from './archive';
@@ -258,11 +260,12 @@ export function spawnAsync(executable: string, args: string[], options: any = {}
         const child = spawn(executable, args, options);
 
         if(child.stdout) {
-            child.stdout.on('data', chunk => debug('in spawnAsync', 'stdout', chunk.toString()));
+            child.stdout.on('data', (chunk) => debug('in spawnAsync', 'stdout', chunk.toString()));
         }
 
         if(child.stderr) {
-            child.stderr.on('data', chunk => debug('in spawnAsync', 'stderr', chunk.toString()));
+            child.stderr.on(
+                'data', (chunk) => debug('in spawnAsync', 'stderr', chunk.toString(), executable, args));
         }
 
         child.on('close', (code, signal) => {
@@ -309,8 +312,8 @@ export function execAsync(command: string, options: any = {}): Promise<{
             child.unref();
 
             resolve({
-                stdout: null,
                 stderr: null,
+                stdout: null,
             });
 
         }
@@ -339,4 +342,19 @@ export function parseTmpl(template: string, obj: object) {
         const path = match.substr(2, match.length - 3).trim();
         return getPathFromObj(path, obj);
     });
+}
+
+/**
+ * Sort paths from depest to shallowest
+ * @param {string[]} pathList
+ * @returns {string[]} paths sorted from deepest to shallowest
+ */
+export function sortByDepth(pathList: string[]): string[] {
+    const depths = pathList.map((pathElement: string): [number, string] => {
+        return [pathElement.split(sep).length, pathElement];
+    });
+    const sortedDepths = depths.sort(([countA, pathElementA], [countB, pathElementB]) => {
+        return countA > countB ? -1 : countA < countB ? 1 : 0;
+    });
+    return sortedDepths.map((elem: [number, string]) => elem[1]);
 }

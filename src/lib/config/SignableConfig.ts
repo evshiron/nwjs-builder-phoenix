@@ -3,14 +3,14 @@ export class SignableConfig {
 
     public signing: {
         cliArgs: string,
-        cliArgsInterpolated?: string,
+        cliArgsInterpolated?: string[],
         cliArgsVarsFile?: string,
         filesToSignGlobs: [string],
         signtoolPath: string,
     } = {
         cliArgs: '',
-        cliArgsInterpolated: '',
-        cliArgsVarsFile: '',
+        cliArgsInterpolated: [''],
+        cliArgsVarsFile: '.env',
         filesToSignGlobs: [''],
         signtoolPath: '',
     };
