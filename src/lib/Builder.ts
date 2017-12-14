@@ -15,7 +15,6 @@ import {
 } from 'fs-extra';
 import {basename, dirname, resolve} from 'path';
 
-import * as Appdmg from 'appdmg';
 import * as semver from 'semver';
 import {NsisVersionInfo} from './common';
 import {BuildConfig} from './config';
@@ -882,55 +881,6 @@ export class Builder {
         await versionInfo.save();
     }
 
-    protected async buildDmgTarget(platform: string, arch: string, sourceDir: string, pkg: any, config: BuildConfig) {
-
-        if (platform !== 'mac') {
-            if (!this.options.mute) {
-                // noinspection TsLint
-                console.info(`Skip building dmg target for ${ platform }.`);
-            }
-            return;
-        }
-        if (!config.mac.appdmg) {
-            if (!this.options.mute) {
-                // noinspection TsLint
-                console.info(`Skipping .dmg creation, since appdmg config was not found`);
-            }
-            return;
-        }
-
-        const appdmgConfig = config.mac.appdmg as Appdmg.Options;
-        const containingFolderName = basename(sourceDir);
-        const destFile = resolve(this.dir, config.output, `${containingFolderName}.dmg`);
-        const appDmgConfig = {
-            ...appdmgConfig,
-            basepath: sourceDir,
-            target: destFile,
-        };
-        debug(`using target path for dmg: `, destFile);
-        debug(`using appDmg config options: `, appDmgConfig);
-
-        const dmgPromise = new Promise((resolve, reject) => {
-            const dmgCreator = Appdmg(appDmgConfig);
-
-            dmgCreator.on('finish', () => {
-                if (!this.options.mute) {
-                    // noinspection TsLint
-                    console.info('dmg target: end');
-                }
-                resolve();
-            });
-
-            dmgCreator.on('error', (err) => {
-                console.error(`error while creating dmg: `, err);
-                reject(err);
-            });
-        });
-
-        await dmgPromise;
-
-    }
-
     protected async buildTask(platform: string, arch: string, pkg: any, config: BuildConfig) {
 
         if (platform === 'mac' && arch === 'x86' && !config.nwVersion.includes('0.12.3')) {
@@ -1008,15 +958,6 @@ export class Builder {
                     await this.buildNsis7zTarget(platform, arch, targetDir, pkg, config);
                     if (!this.options.mute) {
                         console.info(`Building nsis7z target ends within ${ this.getTimeDiff(started) }s.`);
-                    }
-                    break;
-                case 'dmg':
-                    if (!this.options.mute) {
-                        console.info(`Building dmg target starts...`);
-                    }
-                    await this.buildDmgTarget(platform, arch, targetDir, pkg, config);
-                    if (!this.options.mute) {
-                        console.info(`Building dmg target ends within ${ this.getTimeDiff(started) }s.`);
                     }
                     break;
                 default:
