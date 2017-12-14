@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "7zip-bin": "^2.0.4",
-    "appdmg": "^0.5.2",
     "bluebird": "^3.5.0",
     "debug": "^2.6.1",
     "dir-compare": "^1.3.0",
