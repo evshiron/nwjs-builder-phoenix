@@ -128,12 +128,14 @@ export function findRuntimeRoot(platform: string, runtimeDir: string): Promise<s
         })();
 
         // FIXME: globby.d.ts.
-        globby([ pattern ], {
-            cwd: runtimeDir,
-        })
+        debug('findRuntimeRoot: pattern ', pattern);
+        const options = { cwd: runtimeDir, nodir: false };
+        debug('findRuntimeRoot: options ', options);
+        globby([ pattern ], options)
         .then((matches: string[]) => {
 
             if(matches.length == 0) {
+                debug('findRuntimeRoot: matches', matches);
                 const err = new Error('ERROR_EMPTY_MATCHES');
                 return reject(err);
             }
