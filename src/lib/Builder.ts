@@ -295,21 +295,24 @@ export class Builder {
         if (signtoolPath && cliArgsInterpolated) {
             const resolvedSigntool = resolve(signtoolPath);
             if (await fileExistsAsync(resolvedSigntool) && filesToSignGlobs) {
-                debug(`signApp: searching for files to sign with pattern ${filesToSignGlobs}`);
                 // ignore EPERM issues with scandir
                 // https://github.com/isaacs/node-glob/issues/284
                 const nodeGlobArgs = {strict: false, cwd, ignore};
+                debug(`signApp: about to use glob to search for files:`, filesToSignGlobs, nodeGlobArgs);
                 const filesToSign = await globby(filesToSignGlobs, nodeGlobArgs);
                 if (filesToSign) {
+                    debug(`signApp: found files to sign:`, filesToSign);
                     if (isWin) {
+                        const cliArgsArr = cliArgsInterpolated.concat(filesToSign);
+                        debug(`signWinApp: before signing, cliArgs will be`, cliArgsArr);
                         const {code} = await spawnAsync(
-                            resolvedSigntool, cliArgsInterpolated, {cwd});
+                            resolvedSigntool, cliArgsArr, {cwd});
                         if (code !== 0) {
                             throw new Error(
-                                `ERROR_SIGNING args = ${ cliArgsInterpolated.join(' ') }`);
+                                `ERROR_SIGNING args = ${ cliArgsArr.join(' ') }`);
                         }
                     } else {
-                        // on mac, sign from inside out / from deepest to shallowest path
+                        // on mac, sign from from deepest to shallowest path
                         const depthSortedFiles = sortByDepth(filesToSign);
                         debug(`signApp: Mac - about to sign: `, depthSortedFiles, nodeGlobArgs, cliArgsInterpolated);
                         // noinspection TsLint
@@ -340,9 +343,9 @@ export class Builder {
                             // noinspection TsLint
                             console.log(`SignApp: run build with DEBUG=build* to see error details`);
                         }
-                        // noinspection TsLint
-                        console.log(`signApp: signing ends-----------------`);
                     }
+                    // noinspection TsLint
+                    console.log(`signApp: signing ends-----------------`);
                 } else {
                     debug(`signWinApp: no files to sign matched ${filesToSignGlobs}`);
                 }
@@ -781,7 +784,7 @@ export class Builder {
         if (doSigning) {
             const uninstallerComposer = new SignableNsisInstaller(true, {
                 ...nsisComposerOptions,
-                output: resolve(sourceDir, 'make-Uninstall.exe')
+                output: resolve(sourceDir, 'make-Uninstall.exe'),
             });
             const uninstallerGeneratorPath = await this.doNsisBuild(sourceDir, uninstallerComposer,
                 '-uninstaller-generator');
@@ -790,8 +793,13 @@ export class Builder {
             // remove the uninstaller generator
             await remove(uninstallerGeneratorPath);
             // sign the generated installer
-            await this.signApp(config.win, sourceDir, ['**/*.+(exe|dll)'],
-                [basename(uninstallerGeneratorPath)]);
+            debug('signApp: before signing installer contents including uninstaller');
+            await this.signApp(config.win, sourceDir,
+                ['**/*.+(exe|dll)'],
+                [
+                    basename(uninstallerGeneratorPath),
+                    uninstallerGeneratorPath.replace('\\\\', '\\')],
+            );
 
             installerComposer = new SignableNsisInstaller(false, nsisComposerOptions);
         }
@@ -799,6 +807,7 @@ export class Builder {
         await this.doNsisBuild(sourceDir, installerComposer);
 
         if (doSigning) {
+            debug('signApp: before signing installer');
             await this.signApp(config.win, distDir, [installerFileName]);
         }
 
