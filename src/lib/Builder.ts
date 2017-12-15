@@ -340,6 +340,11 @@ export class Builder {
                             console.log(`SignApp: encountered ${uniqueErrs.length} errors`);
                             // noinspection TsLint
                             uniqueErrs.map((err) => console.log(`SignApp: err - ${err}`));
+
+                            // noinspection TsLint
+                            console.log("SignApp: it's possible that if there is a single null error " +
+                                "then this is a recoverable error.");
+
                             // noinspection TsLint
                             console.log(`SignApp: run build with DEBUG=build* to see error details`);
                         }
