@@ -27,7 +27,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 * `nwjs-ffmpeg-prebuilt` integration
 * [Auto Updater](./packages/nsis-compat-tester/)
 * TODO Rebuilding native modules
-* TODO Code signing
+* Code signing (Windows only for now; see [Windows build options](./docs/Options.md#buildwin---winconfig))
 * Ideas appreciated :)
 
 ## Getting Started
