@@ -1,5 +1,4 @@
 
-import { dirname } from 'path';
 import { resolve as urlResolve } from 'url';
 import { lstat, readFile, createReadStream, createWriteStream, Stats, ReadStream } from 'fs';
 import { IncomingMessage } from 'http';
@@ -90,7 +89,7 @@ export class NsisCompatUpdater {
 
             if(updater) {
                 return {
-                    url: `${ urlResolve(dirname(this.seed), updater.path) }`,
+                    url: `${ urlResolve(urlResolve(this.seed, './'), updater.path) }`,
                     hash: updater.hash,
                 };
             }
@@ -99,7 +98,7 @@ export class NsisCompatUpdater {
 
             if(installer) {
                 return {
-                    url: `${ urlResolve(dirname(this.seed), installer.path) }`,
+                    url: `${ urlResolve(urlResolve(this.seed, './'), installer.path) }`,
                     hash: installer.hash,
                 };
             }
