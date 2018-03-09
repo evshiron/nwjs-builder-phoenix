@@ -63,6 +63,7 @@ export class Downloader extends DownloaderBase {
 
         try {
             if(await this.isFileExists(path) && await this.isFileSynced(url, path)) {
+                console.log(path, url)
                 return path;
             }
         }
@@ -79,7 +80,8 @@ export class Downloader extends DownloaderBase {
                 return path;
             }
             else {
-                throw err;
+                console.info('DNS lookup timeout, use local caches at this time.');
+                return path
             }
 
         }
