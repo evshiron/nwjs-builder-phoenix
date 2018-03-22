@@ -47,6 +47,10 @@ LangString INSTALLING 2052 "正在安装"
 LangString CREATE_DESKTOP_SHORTCUT 1028 "建立桌面捷徑"
 LangString INSTALLING 1028 "安裝中"
         `,
+        'PortugueseBR': `
+LangString CREATE_DESKTOP_SHORTCUT 1046 "Criar atalho na área de trabalho"
+LangString INSTALLING 1046 "Instalando"
+        `,
     };
 
     protected fixedVersion: string;
