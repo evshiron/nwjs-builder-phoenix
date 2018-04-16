@@ -5,8 +5,7 @@ A possible solution to build and package a ready for distribution NW.js app for 
 
 ## Why Bother?
 
-We already has official `nw-builder` and `nwjs-builder`, which was built as an alternative before `nw-builder` would support 0.13.x and later versions.
-`nw-builder` has made little progress on the way, and `nwjs-builder` has been hard to continue due to personal and historic reasons.
+We already had `nw-builder`, but it has made little progress on the way, and `nwjs-builder` has been hard to continue due to personal and historic reasons.
 
 `electron-builder` inspired me when I became an Electron user later, loose files excluding, various target formats, auto updater, artifacts publishing and code signing, amazing!
 
