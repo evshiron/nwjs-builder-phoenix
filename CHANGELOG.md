@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.7"></a>
+## [1.14.7](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.6...v1.14.7) (2018-02-04)
+
+
+### Bug Fixes
+
+* **nsis-compat-tester:** fix progress ([9e09d85](https://github.com/evshiron/nwjs-builder-phoenix/commit/9e09d85))
+* **nsis-compat-updater:** fix misuse of dirname path ([0719638](https://github.com/evshiron/nwjs-builder-phoenix/commit/0719638))
+
+
+
+<a name="1.14.6"></a>
+## [1.14.6](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.5...v1.14.6) (2017-09-19)
+
+
+### Bug Fixes
+
+* **assets:** improve Belarusian translation ([c23be97](https://github.com/evshiron/nwjs-builder-phoenix/commit/c23be97)), closes [#84](https://github.com/evshiron/nwjs-builder-phoenix/issues/84)
+
+
+
 <a name="1.14.5"></a>
 ## [1.14.5](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.4...v1.14.5) (2017-09-06)
 
