@@ -42,6 +42,7 @@ version | string | Version in `Info.plist`. Defaults to `${ version }`.
 description | string | Description in `InfoPlist.strings`. Defaults to `${ description }`.
 copyright | string | Copyright in `InfoPlist.strings`. Defaults to `''`.
 icon | string | .icns icon file relative to the project root. Defaults to `undefined`.
+documentIcon | string | .icns icon file relative to the project root. Defaults to `undefined`.
 plistStrings | { [key: string]: string } | `plist` strings. Defaults to `{}`.
 
 ## build.linux <- [LinuxConfig](../src/lib/config/LinuxConfig.ts)
