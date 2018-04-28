@@ -281,16 +281,18 @@ export class Builder {
 
     }
 
-    protected async updateMacIcon(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+    protected async updateMacIcons(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        const copyIcon = async (iconPath: string, dest: string) => {
+            if(!iconPath) {
+                // use the default
+                return;
+            }
 
-        const path = resolve(targetDir, './nwjs.app/Contents/Resources/app.icns');
+            await copy(resolve(this.dir, iconPath), dest);
+        };
 
-        if(!config.mac.icon) {
-            return;
-        }
-
-        await copy(resolve(this.dir, config.mac.icon), path);
-
+        await copyIcon(config.mac.icon, resolve(targetDir, './nwjs.app/Contents/Resources/app.icns'));
+        await copyIcon(config.mac.documentIcon, resolve(targetDir, './nwjs.app/Contents/Resources/document.icns'));
     }
 
     protected async fixMacMeta(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
@@ -369,7 +371,7 @@ export class Builder {
     protected async prepareMacBuild(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
         await this.updatePlist(targetDir, appRoot, pkg, config);
-        await this.updateMacIcon(targetDir, appRoot, pkg, config);
+        await this.updateMacIcons(targetDir, appRoot, pkg, config);
         await this.fixMacMeta(targetDir, appRoot, pkg, config);
 
     }
