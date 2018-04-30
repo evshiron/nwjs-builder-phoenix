@@ -282,8 +282,7 @@ export class Builder {
     }
 
     protected async updateHelperPlist(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
-        if (!pkg.product_string) {
-            // we can't rename the Helper app as we don't have a new name.
+        if (!this.canRenameMacHelperApp(pkg, config)) {
             return;
         }
 
@@ -366,8 +365,7 @@ export class Builder {
     }
 
     protected async renameMacHelperApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
-        if (!pkg.product_string) {
-            // we can't rename the Helper because we don't know what to rename it to.
+        if (!this.canRenameMacHelperApp(pkg, config)) {
             return;
         }
 
@@ -381,6 +379,20 @@ export class Builder {
         dest = app.replace(/nwjs Helper\.app$/, `${pkg.product_string} Helper.app`);
 
         return rename(app, dest);
+    }
+
+    protected canRenameMacHelperApp(pkg: any, config: BuildConfig): boolean {
+      if (semver.lt(config.nwVersion, '0.24.4')) {
+        // this version doesn't support Helper app renaming.
+        return false;
+      }
+
+      if (!pkg.product_string) {
+        // we can't rename the Helper app as we don't have a new name.
+        return false;
+      }
+
+      return true;
     }
 
     protected async findMacHelperApp(targetDir: string): Promise<string> {
