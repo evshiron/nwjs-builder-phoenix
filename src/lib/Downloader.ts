@@ -6,7 +6,7 @@ const debug = require('debug')('build:downloader');
 import { DownloaderBase } from './common/DownloaderBase';
 import { mergeOptions } from './util';
 
-interface IDownloaderOptions {
+export interface IDownloaderOptions {
     platform?: string;
     arch?: string;
     version?: string;

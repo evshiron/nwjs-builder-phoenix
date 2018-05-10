@@ -14,7 +14,7 @@ import { mergeOptions, extractGeneric } from '../util';
 const DIR_CACHES = resolve(dirname(module.filename), '..', '..', '..', 'caches');
 ensureDirSync(DIR_CACHES);
 
-interface IRequestProgress {
+export interface IRequestProgress {
     percent: number;
     speed: number;
     size: {

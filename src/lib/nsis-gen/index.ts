@@ -9,7 +9,7 @@ export * from './Nsis7Zipper';
 const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');
 
-interface INsisBuildOptions {
+export interface INsisBuildOptions {
     mute: boolean;
 }
 
