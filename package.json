@@ -3,6 +3,7 @@
   "version": "1.14.7",
   "description": "",
   "main": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
   "bin": {
     "build": "./dist/bin/build.js",
     "run": "./dist/bin/run.js"
@@ -11,7 +12,7 @@
     "prepublish": "npm run build",
     "test": "npm run build && ava",
     "coverage": "nyc ava",
-    "build": "tsc",
+    "build": "tsc --declaration",
     "release": "npm test && standard-version"
   },
   "repository": {
