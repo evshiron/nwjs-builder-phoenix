@@ -17,14 +17,14 @@ import { NsisVersionInfo } from './common';
 import { NsisComposer, NsisDiffer, Nsis7Zipper, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
-interface IParseOutputPatternOptions {
+export interface IParseOutputPatternOptions {
     name: string;
     version: string;
     platform: string;
     arch: string;
 }
 
-interface IBuilderOptions {
+export interface IBuilderOptions {
     win?: boolean;
     mac?: boolean;
     linux?: boolean;

@@ -10,7 +10,7 @@ const progress = require('request-progress');
 import { Event, DownloaderBase } from './common';
 import { mergeOptions, extractGeneric } from './util';
 
-interface IRequestProgress {
+export interface IRequestProgress {
     percent: number;
     speed: number;
     size: {
@@ -23,7 +23,7 @@ interface IRequestProgress {
     };
 }
 
-interface IFFmpegDownloaderOptions {
+export interface IFFmpegDownloaderOptions {
     platform?: string;
     arch?: string;
     version?: string;
