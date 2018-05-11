@@ -14,6 +14,7 @@ interface IDownloaderOptions {
     mirror?: string;
     useCaches?: boolean;
     showProgress?: boolean;
+    destination?: string;
 }
 
 export class Downloader extends DownloaderBase {
@@ -26,6 +27,7 @@ export class Downloader extends DownloaderBase {
         mirror: 'https://dl.nwjs.io/',
         useCaches: true,
         showProgress: true,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IDownloaderOptions;
@@ -34,6 +36,10 @@ export class Downloader extends DownloaderBase {
         super();
 
         this.options = mergeOptions(Downloader.DEFAULT_OPTIONS, options);
+
+        if(this.options.destination !== this.destination) {
+            this.setDestination(this.options.destination);
+        }
 
         if(process.env.NWJS_MIRROR) {
             this.options.mirror = process.env.NWJS_MIRROR;
