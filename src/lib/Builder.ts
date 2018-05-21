@@ -267,6 +267,7 @@ export class Builder {
 
         plist.CFBundleIdentifier = config.appId;
         plist.CFBundleName = config.mac.name;
+        plist.CFBundleExecutable = config.mac.displayName;
         plist.CFBundleDisplayName = config.mac.displayName;
         plist.CFBundleVersion = config.mac.version;
         plist.CFBundleShortVersionString = config.mac.version;
@@ -355,13 +356,16 @@ export class Builder {
 
     }
 
-    protected renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+    protected async renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        const app = resolve(targetDir, 'nwjs.app');
+        const bin = resolve(app, './Contents/MacOS/nwjs');
+        let dest = bin.replace(/nwjs$/, config.mac.displayName);
 
-        const src = resolve(targetDir, 'nwjs.app');
-        const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
+        await rename(bin, dest);
 
-        return rename(src, dest);
+        dest = app.replace(/nwjs\.app$/, `${config.mac.displayName}.app`);
 
+        return rename(app, dest);
     }
 
     protected async renameMacHelperApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
