@@ -47,6 +47,10 @@ LangString INSTALLING 2052 "正在安装"
 LangString CREATE_DESKTOP_SHORTCUT 1028 "建立桌面捷徑"
 LangString INSTALLING 1028 "安裝中"
         `,
+        'German': `
+        LangString CREATE_DESKTOP_SHORTCUT 1031 "Verknüpfung auf Desktop anlegen"
+        LangString INSTALLING 1031 "Installiere"
+        `,
     };
 
     protected fixedVersion: string;
