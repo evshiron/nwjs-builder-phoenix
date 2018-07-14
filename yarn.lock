@@ -54,12 +54,6 @@
     ansi-styles "^2.2.1"
     esutils "^2.0.2"
 
-"@types/appdmg@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@types/appdmg/-/appdmg-0.5.0.tgz#41f0849c6467e49f6fca95cef7e8d1e3ff1c4493"
-  dependencies:
-    "@types/node" "*"
-
 "@types/bluebird@^3.5.3":
   version "3.5.16"
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.16.tgz#d65dbbf3bc62a0b3dd145f48dc6511b1ed8cc6bb"
