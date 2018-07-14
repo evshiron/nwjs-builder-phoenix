@@ -70,7 +70,7 @@ const app = new Vue({
                             this.progress = 0;
 
                             const handleDownloadProgress = (state) => {
-                                this.progress = state.percentage;
+                                this.progress = state.percentage || 0;
                             };
 
                             updater.onDownloadProgress.subscribe(handleDownloadProgress);

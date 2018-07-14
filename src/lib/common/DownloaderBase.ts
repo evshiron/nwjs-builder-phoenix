@@ -106,7 +106,9 @@ export abstract class DownloaderBase {
 
     protected getRemoteSize(url: string): Promise<number> {
         return new Promise((resolve, reject) => {
-            request.head(url)
+            request.head(url, {
+                followAllRedirects: true,
+            })
             .on('error', reject)
             .on('response', res => resolve(parseInt(<string>(res.headers['content-length']), 10)));
         });
