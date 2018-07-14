@@ -1,16 +1,22 @@
+# nwsign - test signing nw.js app
 
 # nwjs-builder-phoenix [![npm version](https://img.shields.io/npm/v/nwjs-builder-phoenix.svg)](https://npmjs.org/package/nwjs-builder-phoenix) [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
-A possible solution to build and package a ready for distribution NW.js app for Windows, macOS and Linux.
+A possible solution to build and package a ready for distribution `nw.js`
+app for Windows, macOS and Linux.
 
 ## Why Bother?
 
-We already has official `nw-builder` and `nwjs-builder`, which was built as an alternative before `nw-builder` would support 0.13.x and later versions.
-`nw-builder` has made little progress on the way, and `nwjs-builder` has been hard to continue due to personal and historic reasons.
+`nw-builder` and `nwjs-builder` were built before `nw-builder` supported
+0.13.x and later versions. Both have stalled along the way.
 
-`electron-builder` inspired me when I became an Electron user later, loose files excluding, various target formats, auto updater, artifacts publishing and code signing, amazing!
+When I became an Electron user, `electron-builder` inspired me: one can
+exclude files, support various targets, support auto-updating, publish
+artifacts, and support code signing. It really is a step ahead of `nw.js`.
 
-Although NW.js has much lesser popularity than Electron, and is really troubled by historic headaches, let's have something modern.
+`nw.js` still supports many use cases not supported by Electron, so we
+need something more modern like `electron-builder`, but for `nw.js`.
+That's why `nwjs-builder-phoenix` exists.
 
 ## Features
 
@@ -26,7 +32,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 * `nwjs-ffmpeg-prebuilt` integration
 * [Auto Updater](./packages/nsis-compat-tester/)
 * TODO Rebuilding native modules
-* TODO Code signing
+* Code signing (mac and windows)
 * Ideas appreciated :)
 
 ## Getting Started

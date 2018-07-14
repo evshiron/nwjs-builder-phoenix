@@ -31,6 +31,9 @@ productVersion | string | Product version. Defaults to `${ version }`.
 fileVersion | string | File version. Defaults to `${ productVersion }`
 versionStrings | { [key: string]: string } | `rcedit` version strings. Defaults to `{}`.
 icon | string | .ico icon file relative to the project root. Defaults to `undefined`.
+signing | `{}` | contains parameters for Microsoft Authenticode signing (optional). If any parameters are included, all parameters are required.
+signing.signtoolPath | string | Absolute path to signing tool, e.g. `"C:\\Program Files (x86)\\Windows Kits\\8.1\\bin\\x64\\signtool.exe"` on windows or `/usr/bin/codesign` on mac. The idea is to provide the full path to the signing executable, and all of the items will be added as arguments to that executable.
+signing.cliArgs | string | Args to pass to the binary at `signing.signtoolPath` EXCEPT for executables to sign. Windows example: `"sign /debug /f E:\\codesigning.crt.pfx /p top$3c37pa$$ /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /fd sha256 /v"`. Mac example: `--force --verify --sign ${MY_SIGNING_IDENTITY}`
 
 ## build.mac <- [MacConfig](../src/lib/config/MacConfig.ts)
 

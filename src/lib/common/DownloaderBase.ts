@@ -1,15 +1,13 @@
-
-import { dirname, basename, resolve } from 'path';
+import {ensureDirSync, lstat, writeFile} from 'fs-extra';
+import {dirname, resolve} from 'path';
+import * as ProgressBar from 'progress';
 
 import * as request from 'request';
-import * as ProgressBar from 'progress';
-import { ensureDirSync, exists, lstat, writeFile } from 'fs-extra';
+import {extractGeneric, fileExistsAsync} from '../util';
+import {Event} from './Event';
 
 const debug = require('debug')('build:downloader');
 const progress = require('request-progress');
-
-import { Event } from './Event';
-import { mergeOptions, extractGeneric } from '../util';
 
 const DIR_CACHES = resolve(dirname(module.filename), '..', '..', '..', 'caches');
 ensureDirSync(DIR_CACHES);
@@ -115,9 +113,7 @@ export abstract class DownloaderBase {
     }
 
     protected isFileExists(path: string) {
-        return new Promise((resolve, reject) => {
-            exists(path, resolve);
-        });
+        return fileExistsAsync(path);
     }
 
     protected async isFileSynced(url: string, path: string) {

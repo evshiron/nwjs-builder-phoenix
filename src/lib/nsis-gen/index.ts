@@ -1,11 +1,13 @@
 
-import { dirname, resolve, win32 } from 'path';
 import { spawn } from 'child_process';
+import * as Debug from 'debug';
+import { dirname, resolve, win32 } from 'path';
 
 export * from './NsisComposer';
 export * from './NsisDiffer';
 export * from './Nsis7Zipper';
 
+const debug = Debug('nwjs-builder-phoenix:nsis-gen:downloader');
 const DIR_ASSETS = resolve(dirname(module.filename), '../../../assets/');
 const DIR_NSIS = resolve(DIR_ASSETS, 'nsis');
 
@@ -18,6 +20,8 @@ export async function nsisBuild(cwd: string, script: string, options: INsisBuild
 }) {
 
     const args = [ win32.normalize(resolve(DIR_NSIS, 'makensis.exe')), '/NOCD', '/INPUTCHARSET', 'UTF8', win32.normalize(resolve(script)) ];
+
+    debug(`spawning command ${args.join(' ')} with cwd ${cwd}`);
     if(process.platform != 'win32') {
         args.unshift('wine');
     }

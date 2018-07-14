@@ -1,10 +1,15 @@
+import * as Debug from 'debug';
+import * as dotenv from 'dotenv';
 
-import { normalize } from 'path';
+import {readFileSync} from 'fs-extra';
+import {normalize, resolve} from 'path';
+import {parseTmpl} from '../util/index';
+import {LinuxConfig} from './LinuxConfig';
+import {MacConfig} from './MacConfig';
+import {NsisConfig} from './NsisConfig';
+import {WinConfig} from './WinConfig';
 
-import { WinConfig } from './WinConfig';
-import { MacConfig } from './MacConfig';
-import { LinuxConfig } from './LinuxConfig';
-import { NsisConfig } from './NsisConfig';
+const debug = Debug('nwjs-builder-phoenix:BuildConfig');
 
 export class BuildConfig {
 
@@ -26,6 +31,8 @@ export class BuildConfig {
     public appId: string = undefined;
     public ffmpegIntegration: boolean = false;
     public strippedProperties: string[] = [ 'scripts', 'devDependencies', 'build' ];
+
+    public filesToSignGlobs: [string] = [''];
 
     constructor(pkg: any = {}) {
 
@@ -82,6 +89,28 @@ export class BuildConfig {
         this.win.fileDescription = this.win.fileDescription ? this.win.fileDescription : pkg.description;
         this.win.productVersion = this.win.productVersion ? this.win.productVersion : pkg.version;
         this.win.fileVersion = this.win.fileVersion ? this.win.fileVersion : this.win.productVersion;
+
+        for (let config of [this.win, this.mac]) {
+            config.signing.cliArgsInterpolated = config.signing.cliArgs.split(' ');
+            if (config.signing.cliArgsVarsFile) {
+                const {cliArgsVarsFile} = config.signing;
+                const cliArgsVarsFileAbsolutePath = resolve(process.cwd(), cliArgsVarsFile);
+                try {
+                    const actualArgsVarsFile = readFileSync(cliArgsVarsFileAbsolutePath);
+                    const envVars = dotenv.parse(actualArgsVarsFile);
+                    const interpolatedCliArgs = config.signing.cliArgsInterpolated.map(
+                        (arg) => parseTmpl(arg, envVars));
+                    debug(`using interpolatedCliArgs CLI args: `, interpolatedCliArgs);
+                    config.signing.cliArgsInterpolated = interpolatedCliArgs;
+                } catch (err) {
+                    if (err.code === 'ENOENT') {
+                        debug(`args vars file not found: ${cliArgsVarsFile}`);
+                    } else {
+                        throw err;
+                    }
+                }
+            }
+        }
 
         this.mac.name = this.mac.name ? this.mac.name : pkg.name;
         this.mac.displayName = this.mac.displayName ? this.mac.displayName : this.mac.name;
