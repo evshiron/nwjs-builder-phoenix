@@ -51,6 +51,10 @@ LangString INSTALLING 1028 "安裝中"
 LangString CREATE_DESKTOP_SHORTCUT 1046 "Criar atalho na área de trabalho"
 LangString INSTALLING 1046 "Instalando"
         `,
+        'German': `
+LangString CREATE_DESKTOP_SHORTCUT 1031 "Verknüpfung auf Desktop anlegen"
+LangString INSTALLING 1031 "Installiere"
+        `,
     };
 
     protected fixedVersion: string;
