@@ -1,6 +1,6 @@
 {
   "name": "nwjs-builder-phoenix",
-  "version": "1.14.7",
+  "version": "1.14.8",
   "description": "",
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
