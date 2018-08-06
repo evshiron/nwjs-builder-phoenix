@@ -18,6 +18,8 @@ excludes | string[] | Glob patterns for excluded files. Defaults to `[]`.
 appId | string | App identity URI. Defaults to `io.github.nwjs.${ name }`.
 ffmpegIntegration | boolean | Whether to integrate `iteufel/nwjs-ffmpeg-prebuilt`. If `true`, you can NOT use symbols in `nwVersion`. Defaults to `false`.
 strippedProperties | string[] | Properties to be stripped from `package.json`. Defaults to `[ 'scripts', 'devDependencies', 'build' ]`.
+prettyPropertiesSpace | string or number | Prettify properties in `package.json`. A number is setups count of spaces, else - specifiied tab symbol. Defaults to `0`.
+
 
 ## build.win <- [WinConfig](../src/lib/config/WinConfig.ts)
 

@@ -172,7 +172,7 @@ export class Builder {
             }
         }
 
-        await writeFile(path, JSON.stringify(json));
+        await writeFile(path, JSON.stringify(json, null, config.prettyPropertiesSpace));
 
     }
 
