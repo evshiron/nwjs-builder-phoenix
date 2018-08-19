@@ -18,6 +18,7 @@ excludes | string[] | Glob patterns for excluded files. Defaults to `[]`.
 appId | string | App identity URI. Defaults to `io.github.nwjs.${ name }`.
 ffmpegIntegration | boolean | Whether to integrate `iteufel/nwjs-ffmpeg-prebuilt`. If `true`, you can NOT use symbols in `nwVersion`. Defaults to `false`.
 strippedProperties | string[] | Properties to be stripped from `package.json`. Defaults to `[ 'scripts', 'devDependencies', 'build' ]`.
+overriddenProperties | object | Reassigns the value of a property at the root of the `package.json` with the value given. Example: `"overriddenProperties": { "chromium-args": "--mixed-context" }`. In your build this would replace whatever chromium-args you were using during development. 
 
 ## build.win <- [WinConfig](../src/lib/config/WinConfig.ts)
 
