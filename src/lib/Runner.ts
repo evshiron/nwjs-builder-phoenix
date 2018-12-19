@@ -10,6 +10,7 @@ import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
 import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync, extractGeneric } from './util';
+import { DownloaderBase } from './common';
 
 export interface IRunnerOptions {
     x86?: boolean;
@@ -18,6 +19,7 @@ export interface IRunnerOptions {
     mirror?: string;
     detached?: boolean;
     mute?: boolean;
+    destination?: string;
 }
 
 export class Runner {
@@ -29,6 +31,7 @@ export class Runner {
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         detached: false,
         mute: true,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IRunnerOptions;
@@ -61,6 +64,7 @@ export class Runner {
             mirror: this.options.mirror,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {
@@ -123,6 +127,7 @@ export class Runner {
             version: config.nwVersion,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {

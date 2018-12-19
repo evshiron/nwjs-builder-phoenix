@@ -13,7 +13,7 @@ const plist = require('plist');
 import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
-import { NsisVersionInfo } from './common';
+import { NsisVersionInfo, DownloaderBase } from './common';
 import { NsisComposer, NsisDiffer, Nsis7Zipper, nsisBuild } from './nsis-gen';
 import { mergeOptions, findExecutable, findFFmpeg, findRuntimeRoot, findExcludableDependencies, tmpName, tmpFile, tmpDir, fixWindowsVersion, copyFileAsync, extractGeneric, compress } from './util';
 
@@ -35,6 +35,7 @@ export interface IBuilderOptions {
     mirror?: string;
     concurrent?: boolean;
     mute?: boolean;
+    destination?: string;
 }
 
 export class Builder {
@@ -50,6 +51,7 @@ export class Builder {
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         concurrent: false,
         mute: true,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IBuilderOptions;
@@ -551,6 +553,7 @@ export class Builder {
             version: config.nwVersion,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {
@@ -840,6 +843,7 @@ export class Builder {
             mirror: this.options.mirror,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {

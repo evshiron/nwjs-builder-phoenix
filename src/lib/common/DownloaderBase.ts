@@ -31,7 +31,9 @@ export abstract class DownloaderBase {
 
     public onProgress: Event<IRequestProgress> = new Event('progress');
 
-    protected destination: string = DIR_CACHES;
+    public static readonly DEFAULT_DESTINATION: string = DIR_CACHES;
+
+    protected destination: string = DownloaderBase.DEFAULT_DESTINATION;
 
     public abstract async fetch(): Promise<string>;
 
