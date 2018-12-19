@@ -168,7 +168,11 @@ export class Builder {
 
         for(const key in pkg) {
             if(pkg.hasOwnProperty(key) && config.strippedProperties.indexOf(key) === -1) {
-                json[key] = pkg[key];
+                if (config.overriddenProperties && config.overriddenProperties.hasOwnProperty(key) ) {
+                    json[key] = config.overriddenProperties[key];
+                } else {
+                    json[key] = pkg[key];
+                }
             }
         }
 
