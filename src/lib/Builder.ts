@@ -2,7 +2,7 @@
 import { dirname, basename, resolve } from 'path';
 
 import * as semver from 'semver';
-import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, rename, chmod, createReadStream, createWriteStream } from 'fs-extra';
+import { ensureDir, emptyDir, readFile, readJson, writeFile, copy, remove, rename, chmod, createReadStream, createWriteStream, readdir } from 'fs-extra';
 import * as Bluebird from 'bluebird';
 
 const debug = require('debug')('build:builder');
@@ -271,6 +271,7 @@ export class Builder {
 
         plist.CFBundleIdentifier = config.appId;
         plist.CFBundleName = config.mac.name;
+        plist.CFBundleExecutable = config.mac.displayName;
         plist.CFBundleDisplayName = config.mac.displayName;
         plist.CFBundleVersion = config.mac.version;
         plist.CFBundleShortVersionString = config.mac.version;
@@ -285,16 +286,37 @@ export class Builder {
 
     }
 
-    protected async updateMacIcon(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
-
-        const path = resolve(targetDir, './nwjs.app/Contents/Resources/app.icns');
-
-        if(!config.mac.icon) {
+    protected async updateHelperPlist(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        if (!this.canRenameMacHelperApp(pkg, config)) {
             return;
         }
 
-        await copy(resolve(this.dir, config.mac.icon), path);
+        const helperPath = await this.findMacHelperApp(targetDir);
+        const path = resolve(helperPath, 'Contents/Info.plist');
 
+        const plist = await this.readPlist(path);
+        const bin = pkg.product_string + ' Helper';
+
+        plist.CFBundleIdentifier = config.appId + '.helper';
+        plist.CFBundleDisplayName = bin;
+        plist.CFBundleExecutable = bin;
+        plist.CFBundleName = bin;
+
+        await this.writePlist(path, plist);
+    }
+
+    protected async updateMacIcons(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        const copyIcon = async (iconPath: string, dest: string) => {
+            if(!iconPath) {
+                // use the default
+                return;
+            }
+
+            await copy(resolve(this.dir, iconPath), dest);
+        };
+
+        await copyIcon(config.mac.icon, resolve(targetDir, './nwjs.app/Contents/Resources/app.icns'));
+        await copyIcon(config.mac.documentIcon, resolve(targetDir, './nwjs.app/Contents/Resources/document.icns'));
     }
 
     protected async fixMacMeta(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
@@ -338,13 +360,60 @@ export class Builder {
 
     }
 
-    protected renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+    protected async renameMacApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        const app = resolve(targetDir, 'nwjs.app');
+        const bin = resolve(app, './Contents/MacOS/nwjs');
+        let dest = bin.replace(/nwjs$/, config.mac.displayName);
 
-        const src = resolve(targetDir, 'nwjs.app');
-        const dest = resolve(targetDir, `${ config.mac.displayName }.app`);
+        await rename(bin, dest);
 
-        return rename(src, dest);
+        dest = app.replace(/nwjs\.app$/, `${config.mac.displayName}.app`);
 
+        return rename(app, dest);
+    }
+
+    protected async renameMacHelperApp(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
+        if (!this.canRenameMacHelperApp(pkg, config)) {
+            return;
+        }
+
+        const app = await this.findMacHelperApp(targetDir);
+
+        const bin = resolve(app, './Contents/MacOS/nwjs Helper');
+        let dest = bin.replace(/nwjs Helper$/, `${pkg.product_string} Helper`);
+
+        await rename(bin, dest);
+
+        dest = app.replace(/nwjs Helper\.app$/, `${pkg.product_string} Helper.app`);
+
+        return rename(app, dest);
+    }
+
+    protected canRenameMacHelperApp(pkg: any, config: BuildConfig): boolean {
+      if (semver.lt(config.nwVersion, '0.24.4')) {
+        // this version doesn't support Helper app renaming.
+        return false;
+      }
+
+      if (!pkg.product_string) {
+        // we can't rename the Helper app as we don't have a new name.
+        return false;
+      }
+
+      return true;
+    }
+
+    protected async findMacHelperApp(targetDir: string): Promise<string> {
+        const path = resolve(targetDir, './nwjs.app/Contents/Versions');
+
+        // what version are we actually dealing with?
+        const versions = await readdir(path);
+
+        if (!versions || versions.length !== 1) {
+            throw new Error("Can't rename the Helper as we can't find it");
+        }
+
+        return resolve(path, versions[0], 'nwjs Helper.app');
     }
 
     protected async fixLinuxMode(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
@@ -372,8 +441,9 @@ export class Builder {
 
     protected async prepareMacBuild(targetDir: string, appRoot: string, pkg: any, config: BuildConfig) {
 
+        await this.updateHelperPlist(targetDir, appRoot, pkg, config);
         await this.updatePlist(targetDir, appRoot, pkg, config);
-        await this.updateMacIcon(targetDir, appRoot, pkg, config);
+        await this.updateMacIcons(targetDir, appRoot, pkg, config);
         await this.fixMacMeta(targetDir, appRoot, pkg, config);
 
     }
@@ -593,6 +663,8 @@ export class Builder {
         case 'mac':
             await this.prepareMacBuild(targetDir, appRoot, pkg, config);
             await this.copyFiles(platform, targetDir, appRoot, pkg, config);
+            // rename Helper before main app rename.
+            await this.renameMacHelperApp(targetDir, appRoot, pkg, config);
             await this.renameMacApp(targetDir, appRoot, pkg, config);
             break;
         case 'linux':
