@@ -266,7 +266,7 @@ export class NsisCompatUpdater {
             stream.on('error', reject);
             stream.on('response', resolve);
         })
-        .then((res: IncomingMessage) => res.headers['content-type']);
+        .then((res: IncomingMessage) => res.headers['content-length']);
 
         const progress = progressStream({
             length: size,

@@ -6,7 +6,7 @@ const debug = require('debug')('build:downloader');
 import { DownloaderBase } from './common/DownloaderBase';
 import { mergeOptions } from './util';
 
-interface IDownloaderOptions {
+export interface IDownloaderOptions {
     platform?: string;
     arch?: string;
     version?: string;
@@ -15,6 +15,7 @@ interface IDownloaderOptions {
     useCaches?: boolean;
     showProgress?: boolean;
     forceCaches?: boolean;
+    destination?: string;
 }
 
 export class Downloader extends DownloaderBase {
@@ -28,6 +29,7 @@ export class Downloader extends DownloaderBase {
         useCaches: true,
         showProgress: true,
         forceCaches: false,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IDownloaderOptions;
@@ -36,6 +38,10 @@ export class Downloader extends DownloaderBase {
         super();
 
         this.options = mergeOptions(Downloader.DEFAULT_OPTIONS, options);
+
+        if(this.options.destination !== this.destination) {
+            this.setDestination(this.options.destination);
+        }
 
         if(process.env.NWJS_MIRROR) {
             this.options.mirror = process.env.NWJS_MIRROR;

@@ -10,8 +10,9 @@ import { Downloader } from './Downloader';
 import { FFmpegDownloader } from './FFmpegDownloader';
 import { BuildConfig } from './config';
 import { mergeOptions, findExecutable, findFFmpeg, tmpDir, spawnAsync, extractGeneric } from './util';
+import { DownloaderBase } from './common';
 
-interface IRunnerOptions {
+export interface IRunnerOptions {
     x86?: boolean;
     x64?: boolean;
     chromeApp?: boolean;
@@ -19,6 +20,7 @@ interface IRunnerOptions {
     detached?: boolean;
     mute?: boolean;
     forceCaches?: boolean;
+    destination?: string;
 }
 
 export class Runner {
@@ -31,6 +33,7 @@ export class Runner {
         detached: false,
         mute: true,
         forceCaches: Downloader.DEFAULT_OPTIONS.forceCaches,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IRunnerOptions;
@@ -64,6 +67,7 @@ export class Runner {
             useCaches: true,
             showProgress: this.options.mute ? false : true,
             forceCaches: this.options.forceCaches,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {
@@ -127,6 +131,7 @@ export class Runner {
             useCaches: true,
             showProgress: this.options.mute ? false : true,
             forceCaches: this.options.forceCaches,
+            destination: this.options.destination,
         });
 
         if(!this.options.mute) {

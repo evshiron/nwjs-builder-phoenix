@@ -14,7 +14,7 @@ import { mergeOptions, extractGeneric } from '../util';
 const DIR_CACHES = resolve(dirname(module.filename), '..', '..', '..', 'caches');
 ensureDirSync(DIR_CACHES);
 
-interface IRequestProgress {
+export interface IRequestProgress {
     percent: number;
     speed: number;
     size: {
@@ -31,7 +31,9 @@ export abstract class DownloaderBase {
 
     public onProgress: Event<IRequestProgress> = new Event('progress');
 
-    protected destination: string = DIR_CACHES;
+    public static readonly DEFAULT_DESTINATION: string = DIR_CACHES;
+
+    protected destination: string = DownloaderBase.DEFAULT_DESTINATION;
 
     public abstract async fetch(): Promise<string>;
 

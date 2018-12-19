@@ -5,14 +5,14 @@ import { createHash } from 'crypto';
 import { exists, readJson, writeJson, createReadStream } from 'fs-extra';
 import * as semver from 'semver';
 
-interface IInstaller {
+export interface IInstaller {
     arch: string;
     path: string;
     hash: string;
     created: number;
 }
 
-interface IUpdater {
+export interface IUpdater {
     arch: string;
     fromVersion: string;
     path: string;
@@ -20,7 +20,7 @@ interface IUpdater {
     created: number;
 }
 
-interface IVersion {
+export interface IVersion {
     version: string;
     changelog: string;
     source: string;
@@ -28,7 +28,7 @@ interface IVersion {
     updaters: IUpdater[];
 }
 
-interface IVersionInfoData {
+export interface IVersionInfoData {
     latest: string;
     versions: IVersion[];
 }

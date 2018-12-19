@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.8"></a>
+## [1.14.8](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.7...v1.14.8) (2018-07-23)
+
+
+### Bug Fixes
+
+* **DownloaderBase:** head request follows redirects ([7f9dcfd](https://github.com/evshiron/nwjs-builder-phoenix/commit/7f9dcfd))
+
+
+
 <a name="1.14.7"></a>
 ## [1.14.7](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.6...v1.14.7) (2018-02-04)
 

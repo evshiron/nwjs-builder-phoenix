@@ -10,7 +10,7 @@ const progress = require('request-progress');
 import { Event, DownloaderBase } from './common';
 import { mergeOptions, extractGeneric } from './util';
 
-interface IRequestProgress {
+export interface IRequestProgress {
     percent: number;
     speed: number;
     size: {
@@ -23,7 +23,7 @@ interface IRequestProgress {
     };
 }
 
-interface IFFmpegDownloaderOptions {
+export interface IFFmpegDownloaderOptions {
     platform?: string;
     arch?: string;
     version?: string;
@@ -31,6 +31,7 @@ interface IFFmpegDownloaderOptions {
     useCaches?: boolean;
     showProgress?: boolean;
     forceCaches?: boolean;
+    destination?: string;
 }
 
 export class FFmpegDownloader extends DownloaderBase {
@@ -43,6 +44,7 @@ export class FFmpegDownloader extends DownloaderBase {
         useCaches: true,
         showProgress: true,
         forceCaches: false,
+        destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
     public options: IFFmpegDownloaderOptions;
@@ -51,6 +53,10 @@ export class FFmpegDownloader extends DownloaderBase {
         super();
 
         this.options = mergeOptions(FFmpegDownloader.DEFAULT_OPTIONS, options);
+
+        if(this.options.destination !== this.destination) {
+            this.setDestination(this.options.destination);
+        }
 
         debug('in constructor', 'options', options);
 
