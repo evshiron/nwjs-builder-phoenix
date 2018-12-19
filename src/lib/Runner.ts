@@ -19,6 +19,7 @@ export interface IRunnerOptions {
     mirror?: string;
     detached?: boolean;
     mute?: boolean;
+    forceCaches?: boolean;
     destination?: string;
 }
 
@@ -31,6 +32,7 @@ export class Runner {
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         detached: false,
         mute: true,
+        forceCaches: Downloader.DEFAULT_OPTIONS.forceCaches,
         destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
@@ -64,6 +66,7 @@ export class Runner {
             mirror: this.options.mirror,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            forceCaches: this.options.forceCaches,
             destination: this.options.destination,
         });
 
@@ -127,6 +130,7 @@ export class Runner {
             version: config.nwVersion,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            forceCaches: this.options.forceCaches,
             destination: this.options.destination,
         });
 

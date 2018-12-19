@@ -35,6 +35,7 @@ export interface IBuilderOptions {
     mirror?: string;
     concurrent?: boolean;
     mute?: boolean;
+    forceCaches?: boolean;
     destination?: string;
 }
 
@@ -51,6 +52,7 @@ export class Builder {
         mirror: Downloader.DEFAULT_OPTIONS.mirror,
         concurrent: false,
         mute: true,
+        forceCaches: Downloader.DEFAULT_OPTIONS.forceCaches,
         destination: DownloaderBase.DEFAULT_DESTINATION,
     };
 
@@ -843,6 +845,7 @@ export class Builder {
             mirror: this.options.mirror,
             useCaches: true,
             showProgress: this.options.mute ? false : true,
+            forceCaches: this.options.forceCaches,
             destination: this.options.destination,
         });
 
