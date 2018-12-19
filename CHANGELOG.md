@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.15.0"></a>
+# [1.15.0](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.7...v1.15.0) (2018-12-19)
+
+
+### Bug Fixes
+
+* **DownloaderBase:** head request follows redirects ([7f9dcfd](https://github.com/evshiron/nwjs-builder-phoenix/commit/7f9dcfd))
+
+
+### Features
+
+* **destination:** add a destination option to configure cache directory ([#112](https://github.com/evshiron/nwjs-builder-phoenix/issues/112)) ([87bc791](https://github.com/evshiron/nwjs-builder-phoenix/commit/87bc791))
+
+
+
 <a name="1.14.8"></a>
 ## [1.14.8](https://github.com/evshiron/nwjs-builder-phoenix/compare/v1.14.7...v1.14.8) (2018-07-23)
 
