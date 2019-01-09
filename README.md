@@ -35,7 +35,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 2. Navigate to `myapp` directory using `cd D:\Users\Projects\NW\myapp` | `cd /Users/Projects/NW/myapp`.
 
-3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). Check this beautiful [Sample package.json (before)](./docs/package-json-v1.md) for a clear view.
+3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). Check this beautiful [sample package.json (before)](./docs/package-json-v1.md) for a clear view.
 
 Here is the minimal one.
 
@@ -46,7 +46,7 @@ Here is the minimal one.
         }
 
 
-4. Install `nwjs-builder-phoenix` locally using `npm install nwjs-builder-phoenix --save-dev`. Once updated the package,json will look something like this. Check the updated version of last beautiful package.json [here](./docs/package-json-v2.md). 
+4. Install `nwjs-builder-phoenix` locally using `npm install nwjs-builder-phoenix --save-dev`. Once updated the package,json will look something like this. Check the updated version of last beautiful [sample package.json (after)](./docs/package-json-v2.md). 
 
 Below is the minimal one.
 
