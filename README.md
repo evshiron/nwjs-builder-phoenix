@@ -38,31 +38,32 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). Check this beautiful [sample package.json (before)](./docs/package-json-v1.md) for a clear view.
 
 Here is the minimal one:
-
-        {
-          "name": "generator",
-          "version": "1.0.0",
-          "description": "An NW based desktop application",
-        }
-
+        ```javascript
+                {
+                  "name": "generator",
+                  "version": "1.0.0",
+                  "description": "An NW based desktop application",
+                }
+        ```
 
 4. Install `nwjs-builder-phoenix` locally using `npm install nwjs-builder-phoenix --save-dev`. Once updated the package,json will look something like this. Check the updated version of last beautiful [sample package.json (after)](./docs/package-json-v2.md). 
 
 Below is the minimal one:
-
-        {
-          "name": "generator",
-          "version": "1.0.0",
-          "description": "An NW based desktop application",
-          "build": {
-            "nwVersion": "0.35.1"
-          },
-          "scripts": {
-            "test": "node ./test/test_any.js",
-            "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
-            "start": "run --x86 --mirror https://dl.nwjs.io/ ."
-          }
-        }
+      ```javascript
+              {
+                "name": "generator",
+                "version": "1.0.0",
+                "description": "An NW based desktop application",
+                "build": {
+                  "nwVersion": "0.35.1"
+                },
+                "scripts": {
+                  "test": "node ./test/test_any.js",
+                  "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
+                  "start": "run --x86 --mirror https://dl.nwjs.io/ ."
+                }
+              }
+      ```
 
 5. Update your package.json to add 2 more keys `build` and `scripts`.
 
