@@ -33,7 +33,7 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 1. Open terminal ( CMD/BASH ).
 
-2. Navigate to **myapp** directory using **cd D:\Users\Projects\NW\myapp** (Windows) | **cd /Users/Projects/NW/myapp** (Linux/MAC OS X).
+2. Navigate to **myapp** directory using **cd D:\Users\Projects\NW\myapp** (in Windows) | **cd /Users/Projects/NW/myapp** (in Linux/MAC OS X).
 
 3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using **npm init** command (provide proper values as it asks) instead of creating it manually (as using **npm init** will add set most of the keys needed). 
 
@@ -74,16 +74,16 @@ Below is the minimal one:
     }
 ```
 
-5. Install **nwjs-builder-phoenix** locally using **npm install nwjs-builder-phoenix --save-dev**.
+5. Install **nwjs-builder-phoenix**.
 
 ```bash
-npm install nwjs-builder-phoenix --save-dev
+    npm install nwjs-builder-phoenix --save-dev
 ```
 
-6. Finally, run **npm run dist**.
+6. Finally, run
 
 ```bash
-npm run dist
+    npm run dist
 ```
 
 That's it. 
