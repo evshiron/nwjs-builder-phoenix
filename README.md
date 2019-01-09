@@ -1,4 +1,3 @@
-
 # nwjs-builder-phoenix [![npm version](https://img.shields.io/npm/v/nwjs-builder-phoenix.svg)](https://npmjs.org/package/nwjs-builder-phoenix) [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 A possible solution to build and package a ready for distribution NW.js app for Windows, macOS and Linux.
@@ -27,6 +26,49 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 * TODO Rebuilding native modules
 * TODO Code signing
 * Ideas appreciated :)
+
+## Quick start
+
+> Let suppose, path to your app is `D:\Users\Projects\NW\myapp` (Windows) and `/Users/Projects/NW/myapp` (Linux/MAC OS X).
+
+1. Open terminal (CMD/BASH).
+
+2. Navigate to `myapp` directory using `cd D:\Users\Projects\NW\myapp` | `cd /Users/Projects/NW/myapp`.
+
+3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). Check this beautiful [Sample package.json (before)](./docs/package-json-v1.md) for a clear view.
+
+Here is the minimal one.
+
+        {
+          "name": "generator",
+          "version": "1.0.0",
+          "description": "An NW based desktop application",
+        }
+
+
+4. Install `nwjs-builder-phoenix` locally using `npm install nwjs-builder-phoenix --save-dev`. Once updated the package,json will look something like this. Check the updated version of last beautiful package.json [here](./docs/package-json-v2.md). 
+
+Below is the minimal one.
+
+        {
+          "name": "generator",
+          "version": "1.0.0",
+          "description": "An NW based desktop application",
+          "build": {
+            "nwVersion": "0.35.1"
+          },
+          "scripts": {
+            "test": "node ./test/test_any.js",
+            "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
+            "start": "run --x86 --mirror https://dl.nwjs.io/ ."
+          }
+        }
+
+5. Update your package.json to add 2 more keys `build` and `scripts`.
+
+6. Finally, run `npm run dist`.
+
+That's it. Just wait for packaging process as it depends on speed of Network and number of selected target platforms. 
 
 ## Getting Started
 
