@@ -29,13 +29,15 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 ## Quick start
 
-> Let suppose, path to your app is `D:\Users\Projects\NW\myapp` (Windows) and `/Users/Projects/NW/myapp` (Linux/MAC OS X).
+> Let suppose, path to your app is **D:\Users\Projects\NW\myapp** (Windows) and **/Users/Projects/NW/myapp** (Linux/MAC OS X).
 
 1. Open terminal (CMD/BASH).
 
-2. Navigate to `myapp` directory using `cd D:\Users\Projects\NW\myapp` | `cd /Users/Projects/NW/myapp`.
+2. Navigate to **myapp** directory using **cd D:\Users\Projects\NW\myapp** (Windows)| **cd /Users/Projects/NW/myapp** (Linux/MAC OS X).
 
-3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). Check this beautiful [sample package.json (before)](./docs/package-json-v1.md) for a clear view.
+3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using `npm init` command (provide proper values as it asks) instead of creating it manually (as using command will add set most of the keys needed). 
+
+> Check this beautiful [sample package.json (before)](./docs/package-json-v1.md) for a clear view.
 
 Here is the minimal one:
 
@@ -47,7 +49,9 @@ Here is the minimal one:
     }
 ```
 
-4. Install `nwjs-builder-phoenix` locally using `npm install nwjs-builder-phoenix --save-dev`. Once updated the package,json will look something like this. Check the updated version of last beautiful [sample package.json (after)](./docs/package-json-v2.md). 
+4. Now add **build** key and also update **scripts**. 
+
+> Check the updated version of last beautiful [sample package.json (after)](./docs/package-json-v2.md). 
 
 Below is the minimal one:
       
@@ -67,11 +71,13 @@ Below is the minimal one:
     }
 ```
 
-5. Update your package.json to add 2 more keys `build` and `scripts`.
+5. Install **nwjs-builder-phoenix** locally using **npm install nwjs-builder-phoenix --save-dev**.
 
-6. Finally, run `npm run dist`.
+6. Finally, run **npm run dist**.
 
-That's it. Just wait for packaging process as it depends on speed of Network and number of selected target platforms. 
+That's it. 
+
+> **Note:** Just wait for packaging process as it depends on speed of Network and number of selected target platforms. 
 
 ## Getting Started
 
