@@ -28,6 +28,7 @@ export interface INsisComposerOptions {
     // Output.
     output: string;
 
+    requestExecutionLevel: string;
 }
 
 export class NsisComposer {
@@ -161,7 +162,7 @@ OutFile "\${_OUTPUT}"
 InstallDir "${ this.options.installDirectory }"
 InstallDirRegKey HKCU "Software\\\${_APPNAME}" "InstallDir"
 
-RequestExecutionLevel user
+RequestExecutionLevel ${this.options.requestExecutionLevel}
 XPStyle on`;
     }
 

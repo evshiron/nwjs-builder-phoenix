@@ -603,7 +603,7 @@ export class Builder {
 
             // Output.
             output: diffNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();
@@ -735,7 +735,7 @@ export class Builder {
 
             // Output.
             output: targetNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();
@@ -800,7 +800,7 @@ export class Builder {
 
             // Output.
             output: targetNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();

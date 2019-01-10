@@ -60,3 +60,4 @@ languages | string[] | Languages for NSIS installers. Multiple languages will re
 installDirectory | string | Default installation directory. Allow using NSIS variables. See [/src/lib/nsis-gen/NsisComposer.ts](../src/lib/nsis-gen/NsisComposer.ts) for a list of self-defined constants. Defaults to `$LOCALAPPDATA\\${_APPNAME}`.
 diffUpdaters | boolean | Whether to build diff updaters. Defaults to `false`.
 hashCalculation | boolean | Whether to calculate hashes for installers and updaters. Defaults to `true`.
+requestExecutionLevel | string | `user` , `admin`

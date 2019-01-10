@@ -10,7 +10,7 @@ export class NsisConfig {
 
     public diffUpdaters: boolean = false;
     public hashCalculation: boolean = true;
-
+    public requestExecutionLevel: string   = 'user';
     constructor(options: any = {}) {
 
         Object.keys(this).map((key) => {
