@@ -37,8 +37,6 @@ Although NW.js has much lesser popularity than Electron, and is really troubled 
 
 3. Check package.json to have at least `name`, `description`, `version`, `scripts` fields. If you don't have package.json, please create it using **npm init** command (provide proper values as it asks) instead of creating it manually (as using **npm init** will add set most of the keys needed). 
 
-> Check this beautiful [sample package.json (before)](./docs/package-json-v1.md) for a detailed and clear view.
-
 Here is the minimal one:
 
 ```javascript
@@ -54,10 +52,6 @@ Here is the minimal one:
 
 4. Now add **build** key and also update **scripts**. 
 
-> Check the updated version of last beautiful [sample package.json (after)](./docs/package-json-v2.md). 
-
-Below is the minimal one:
-      
 ```javascript
     {
       "name": "generator",
