@@ -88,7 +88,7 @@ npm run dist
 
 That's it. 
 
-> **Note:** Just wait for packaging process as it depends on speed of Network and number of selected target platforms. 
+**Note:** Just wait for packaging process as it depends on speed of Network and number of selected target platforms. 
 
 ## Getting Started
 
