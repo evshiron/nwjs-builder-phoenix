@@ -491,6 +491,7 @@ export class Builder {
             follow: true,
             mark: true,
             ignore,
+            dot: true
         });
 
         debug('in copyFiles', 'config.files', config.files);
