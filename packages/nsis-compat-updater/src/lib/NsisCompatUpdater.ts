@@ -169,9 +169,6 @@ export class NsisCompatUpdater {
         if((<any>process.versions).nw) {
             throw new Error('ERROR_UNKNOWN');
         }
-        else if((<any>process.versions).electron) {
-            return require('electron').app.on('quit', () => this.install(path, true));
-        }
         else {
             throw new Error('ERROR_UNKNOWN');
         }
@@ -185,9 +182,6 @@ export class NsisCompatUpdater {
         if((<any>process.versions).nw) {
             this.install(path, false);
             nw.App.quit();
-        }
-        else if((<any>process.versions).electron) {
-            return require('electron').app.quit();
         }
         else {
             throw new Error('ERROR_UNKNOWN');
