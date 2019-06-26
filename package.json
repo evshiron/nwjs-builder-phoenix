@@ -1,6 +1,6 @@
 {
   "name": "nwjs-builder-phoenix-fork",
-  "version": "1.15.1",
+  "version": "1.15.2",
   "description": "",
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
@@ -12,7 +12,7 @@
     "prepublish": "npm run build",
     "test": "npm run build && ava",
     "coverage": "nyc ava",
-    "build": "tsc --declaration",
+    "build": "tsc --declaration --newLine lf",
     "release": "npm test && standard-version"
   },
   "repository": {
