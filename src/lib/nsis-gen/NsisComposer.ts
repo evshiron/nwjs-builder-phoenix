@@ -261,6 +261,7 @@ SetShellVarContext current
 SetOverwrite ifnewer
 
 WriteRegStr HKCU "Software\\\${_APPNAME}" "InstallDir" "$INSTDIR"
+WriteRegStr HKCU "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers" "$INSTDIR\\\${_APPNAME}.exe" "RUNASADMIN"
 
 ${ await this.makeInstallerFiles() }
 
