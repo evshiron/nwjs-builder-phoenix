@@ -1,6 +1,6 @@
 {
   "name": "nwjs-builder-phoenix-fork",
-  "version": "1.15.3",
+  "version": "1.15.4",
   "description": "",
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",

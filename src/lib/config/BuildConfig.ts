@@ -25,6 +25,7 @@ export class BuildConfig {
 
     public appId: string = undefined;
     public ffmpegIntegration: boolean = false;
+    public ffmpegMirror: string = '';
     public strippedProperties: string[] = [ 'scripts', 'devDependencies', 'build' ];
     public overriddenProperties: any = {};
 
