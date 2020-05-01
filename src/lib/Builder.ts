@@ -556,6 +556,7 @@ export class Builder {
             useCaches: true,
             showProgress: this.options.mute ? false : true,
             destination: this.options.destination,
+            mirror: config.ffmpegMirror,
         });
 
         if(!this.options.mute) {
@@ -603,7 +604,7 @@ export class Builder {
 
             // Output.
             output: diffNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();
@@ -735,7 +736,7 @@ export class Builder {
 
             // Output.
             output: targetNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();
@@ -800,7 +801,7 @@ export class Builder {
 
             // Output.
             output: targetNsis,
-
+            requestExecutionLevel: config.nsis.requestExecutionLevel
         })).make();
 
         const script = await tmpName();

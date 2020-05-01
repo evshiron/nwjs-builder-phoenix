@@ -1,6 +1,6 @@
 {
-  "name": "nwjs-builder-phoenix",
-  "version": "1.15.0",
+  "name": "nwjs-builder-phoenix-fork",
+  "version": "1.15.4",
   "description": "",
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
@@ -12,12 +12,12 @@
     "prepublish": "npm run build",
     "test": "npm run build && ava",
     "coverage": "nyc ava",
-    "build": "tsc --declaration",
+    "build": "tsc --declaration --newLine lf",
     "release": "npm test && standard-version"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evshiron/nwjs-builder-phoenix.git"
+    "url": "git+https://github.com/aofong/nwjs-builder-phoenix"
   },
   "author": "evshiron",
   "license": "MIT",

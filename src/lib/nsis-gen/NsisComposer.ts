@@ -28,6 +28,7 @@ export interface INsisComposerOptions {
     // Output.
     output: string;
 
+    requestExecutionLevel: string;
 }
 
 export class NsisComposer {
@@ -161,7 +162,7 @@ OutFile "\${_OUTPUT}"
 InstallDir "${ this.options.installDirectory }"
 InstallDirRegKey HKCU "Software\\\${_APPNAME}" "InstallDir"
 
-RequestExecutionLevel user
+RequestExecutionLevel ${this.options.requestExecutionLevel}
 XPStyle on`;
     }
 
@@ -260,6 +261,7 @@ SetShellVarContext current
 SetOverwrite ifnewer
 
 WriteRegStr HKCU "Software\\\${_APPNAME}" "InstallDir" "$INSTDIR"
+WriteRegStr HKCU "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers" "$INSTDIR\\\${_APPNAME}.exe" "RUNASADMIN"
 
 ${ await this.makeInstallerFiles() }
 

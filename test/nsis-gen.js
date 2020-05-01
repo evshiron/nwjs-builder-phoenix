@@ -22,7 +22,7 @@ const options = {
     languages: [ 'English' ],
     // FIXME: TradChinese is missing and SimpChinese becomes the default language, what happens?
     //languages: [ 'English', 'SimpChinese', 'TradChinese' ],
-
+    requestExecutionLevel:'admin'
 };
 
 test('build', async (t) => {
